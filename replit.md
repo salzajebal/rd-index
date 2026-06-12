@@ -1,8 +1,8 @@
-# Learn-invest - 글로벌 투자 플랫폼
+# BTK (BizTech Korea) - 글로벌 투자 플랫폼
 
 ## Overview
 
-한국어 이진 옵션 투자 플랫폼. 사용자가 S&P500, 다우존스(DOW), 달러(DXY)의 가격 변동 방향(상승/하락)에 베팅합니다. Finnhub WebSocket API를 통한 실시간 시장 데이터, lightweight-charts 캔들스틱 차트, 계좌 시스템을 제공합니다.
+한국어 이진 옵션 투자 플랫폼. BizTech Korea(BTK) 브랜드. 사용자가 S&P500, 다우존스(DOW), 달러(DXY)의 가격 변동 방향(상승/하락)에 베팅합니다. Finnhub WebSocket API를 통한 실시간 시장 데이터, lightweight-charts 캔들스틱 차트, 계좌 시스템을 제공합니다.
 
 ## Admin Credentials
 - Username: `admin`

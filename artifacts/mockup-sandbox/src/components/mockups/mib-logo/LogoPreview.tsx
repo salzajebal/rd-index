@@ -84,11 +84,11 @@ function CurrentLogo() {
       <rect x="38" y="25" width="7" height="37" rx="1.5" fill="url(#c-bar3)" filter="url(#c-barglow)" />
       <polyline points="19.5,46 30.5,35 41.5,23" stroke="url(#c-gold2)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" filter="url(#c-barglow)" />
       <polygon points="41.5,23 47,27 44,30.5" fill="#F7E08A" opacity="0.95" filter="url(#c-barglow)" />
-      <text x="56" y="55" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="11" fontWeight="800" letterSpacing="0.5" fill="url(#c-gold)" textAnchor="middle" filter="url(#c-textglow)">MIB</text>
+      <text x="56" y="55" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="11" fontWeight="800" letterSpacing="0.5" fill="url(#c-gold)" textAnchor="middle" filter="url(#c-textglow)">BTK</text>
       <line x1="8" y1="66" x2="68" y2="66" stroke="url(#c-gold2)" strokeWidth="0.6" strokeLinecap="round" opacity="0.4" />
       <rect x="1" y="1" width="74" height="74" rx="15" stroke="url(#c-rim)" strokeWidth="1" fill="none" />
       <line x1="88" y1="10" x2="88" y2="66" stroke="#7A4E12" strokeWidth="0.8" opacity="0.5" />
-      <text x="100" y="42" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="32" fontWeight="800" letterSpacing="6" fill="url(#c-textmib)" filter="url(#c-textglow)">MIB</text>
+      <text x="100" y="42" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="32" fontWeight="800" letterSpacing="6" fill="url(#c-textmib)" filter="url(#c-textglow)">BTK</text>
       <line x1="100" y1="50" x2="292" y2="50" stroke="url(#c-divline)" strokeWidth="0.7" />
       <text x="101" y="64" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="9.5" fontWeight="400" letterSpacing="5" fill="url(#c-textsub)" filter="url(#c-subtextglow)">GLOBAL EXCHANGE</text>
     </svg>
@@ -174,8 +174,8 @@ function NewLogo() {
       <polyline points="19.5,46 30.5,35 41.5,23" stroke="url(#n-gold2)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" filter="url(#n-barglow)" />
       <polygon points="41.5,23 47,27 44,30.5" fill="#F7E08A" opacity="0.95" filter="url(#n-barglow)" />
 
-      {/* 아이콘 내 MIB 텍스트 */}
-      <text x="56" y="55" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="11" fontWeight="800" letterSpacing="0.5" fill="url(#n-gold)" textAnchor="middle" filter="url(#n-textglow)">MIB</text>
+      {/* 아이콘 내 BTK 텍스트 */}
+      <text x="56" y="55" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="11" fontWeight="800" letterSpacing="0.5" fill="url(#n-gold)" textAnchor="middle" filter="url(#n-textglow)">BTK</text>
 
       {/* 하단 구분선 */}
       <line x1="8" y1="66" x2="68" y2="66" stroke="url(#n-gold2)" strokeWidth="0.6" strokeLinecap="round" opacity="0.4" />
@@ -186,8 +186,8 @@ function NewLogo() {
       {/* 수직 구분선 */}
       <line x1="92" y1="10" x2="92" y2="66" stroke="#7A4E12" strokeWidth="0.8" opacity="0.5" />
 
-      {/* MIB 대형 텍스트 */}
-      <text x="104" y="40" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="30" fontWeight="900" letterSpacing="5" fill="url(#n-textmib)" filter="url(#n-textglow)">MIB</text>
+      {/* BTK 대형 텍스트 */}
+      <text x="104" y="40" fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif" fontSize="30" fontWeight="900" letterSpacing="5" fill="url(#n-textmib)" filter="url(#n-textglow)">BTK</text>
 
       {/* INDEX 서브텍스트 */}
       <line x1="104" y1="47" x2="315" y2="47" stroke="url(#n-divline)" strokeWidth="0.7" />

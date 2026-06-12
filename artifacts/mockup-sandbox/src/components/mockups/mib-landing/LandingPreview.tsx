@@ -47,7 +47,7 @@ function HeroChart() {
 const SLIDES = [
   {
     badge: "• 실시간 거래",
-    title: "글로벌 시장의 중심,\nMIB에서 투자하세요",
+    title: "글로벌 시장의 중심,\nBTK에서 투자하세요",
     sub: "S&P500 · 다우존스 · 달러지수 5분 거래",
     bg: "linear-gradient(135deg,#1e3a8a 0%,#3b3ac4 55%,#6c63ff 100%)",
     chart: true,
@@ -95,8 +95,8 @@ export function LandingPreview() {
         <div className="max-w-6xl mx-auto px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <a className="flex items-center gap-2 cursor-pointer">
-              <span className="text-2xl font-black" style={{ letterSpacing: "0.04em", color: "#0f172a" }}>MIB</span>
-              <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 500 }}>글로벌 투자 거래소</span>
+              <span className="text-2xl font-black" style={{ letterSpacing: "0.04em", color: "#0f172a" }}>BTK</span>
+              <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 500 }}>BizTech Korea</span>
             </a>
             <nav className="hidden md:flex items-center gap-6">
               {["회사소개", "투자 상품", "실시간 시세", "투자정보", "고객라운지"].map(m => (
@@ -204,7 +204,7 @@ export function LandingPreview() {
             <div>
               <p style={{ fontSize: 10, fontWeight: 800, color: "#6366f1", letterSpacing: "0.15em", marginBottom: 6 }}>01. NOTICE & INSIGHT</p>
               <h2 style={{ fontSize: 26, fontWeight: 900, color: "#0f172a", marginBottom: 4 }}>공지사항 & 투자정보</h2>
-              <p style={{ fontSize: 13, color: "#64748b" }}>MIB의 최신 소식과 글로벌 투자 인사이트를 확인하세요</p>
+              <p style={{ fontSize: 13, color: "#64748b" }}>BTK의 최신 소식과 글로벌 투자 인사이트를 확인하세요</p>
             </div>
             <span style={{ fontSize: 13, color: "#6366f1", fontWeight: 600, cursor: "pointer" }}>전체보기 →</span>
           </div>
@@ -218,7 +218,7 @@ export function LandingPreview() {
                     <polyline points="0,100 40,80 80,85 120,55 160,65 200,45" fill="none" stroke="white" strokeWidth="2" />
                   </svg>
                 </div>
-                <span style={{ fontSize: 36, fontWeight: 900, color: "white", letterSpacing: "0.1em", position: "relative", zIndex: 1 }}>MIB</span>
+                <span style={{ fontSize: 36, fontWeight: 900, color: "white", letterSpacing: "0.1em", position: "relative", zIndex: 1 }}>BTK</span>
               </div>
               <div style={{ padding: 22 }}>
                 <div className="flex items-center gap-2 mb-3">
@@ -251,7 +251,7 @@ export function LandingPreview() {
         <div className="max-w-6xl mx-auto px-8">
           <div className="text-center mb-10">
             <p style={{ fontSize: 10, fontWeight: 800, color: "#818cf8", letterSpacing: "0.15em", marginBottom: 8 }}>Investment Philosophy</p>
-            <h2 style={{ fontSize: 26, fontWeight: 900, color: "white", marginBottom: 8 }}>왜 MIB인가?</h2>
+            <h2 style={{ fontSize: 26, fontWeight: 900, color: "white", marginBottom: 8 }}>왜 BTK인가?</h2>
             <p style={{ fontSize: 13, color: "#94a3b8" }}>신뢰와 투명성을 기반으로 한 글로벌 투자 환경</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
@@ -271,7 +271,7 @@ export function LandingPreview() {
           </div>
           <div className="text-center">
             <button style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", color: "white", fontSize: 13, fontWeight: 600, padding: "12px 32px", borderRadius: 100, cursor: "pointer" }}>
-              MIB 소개 자세히 보기
+              BTK 소개 자세히 보기
             </button>
           </div>
         </div>
@@ -303,8 +303,9 @@ export function LandingPreview() {
         <div className="max-w-6xl mx-auto px-8">
           <div className="flex items-start justify-between mb-5">
             <div>
-              <div style={{ fontSize: 20, fontWeight: 900, color: "white", letterSpacing: "0.08em", marginBottom: 4 }}>MIB</div>
-              <div style={{ fontSize: 12, color: "#64748b" }}>대한민국 대표 글로벌 투자 거래소</div>
+              <div style={{ fontSize: 20, fontWeight: 900, color: "white", letterSpacing: "0.08em", marginBottom: 2 }}>BTK</div>
+              <div style={{ fontSize: 10, color: "#94a3b8", letterSpacing: "0.05em" }}>BizTech Korea</div>
+              <div style={{ fontSize: 11, color: "#64748b", marginTop: 2 }}>대한민국 대표 글로벌 투자 거래소</div>
             </div>
             <div className="flex gap-6">
               {["개인정보처리방침", "이용약관", "고객센터", "1:1 문의"].map(l => (
@@ -313,7 +314,7 @@ export function LandingPreview() {
             </div>
           </div>
           <div style={{ borderTop: "1px solid #1e293b", paddingTop: 20 }}>
-            <p style={{ fontSize: 11, color: "#475569" }}>Copyright © 2026 MIB Global Exchange. All rights reserved.</p>
+            <p style={{ fontSize: 11, color: "#475569" }}>Copyright © 2026 BizTech Korea. All rights reserved.</p>
           </div>
         </div>
       </footer>

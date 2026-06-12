@@ -99,7 +99,7 @@ export function LearnInvestLogo({
           textAnchor="middle"
           filter="url(#mi-itextglow)"
         >
-          MIB
+          BTK
         </text>
 
         <line x1="8" y1="66" x2="68" y2="66" stroke="url(#mi-igold2)" strokeWidth="0.6" strokeLinecap="round" opacity="0.4" />
@@ -226,7 +226,7 @@ export function LearnInvestLogo({
         textAnchor="middle"
         filter="url(#mi-textglow)"
       >
-        MIB
+        BTK
       </text>
 
       <line x1="8" y1="66" x2="68" y2="66" stroke="url(#mi-gold2)" strokeWidth="0.6" strokeLinecap="round" opacity="0.4" />
@@ -254,7 +254,7 @@ export function LearnInvestLogo({
         fill="url(#mi-textmib)"
         filter="url(#mi-textglow)"
       >
-        MIB
+        BTK
       </text>
 
       <line x1="100" y1="50" x2="292" y2="50" stroke="url(#mi-divline)" strokeWidth="0.7" />
@@ -263,13 +263,13 @@ export function LearnInvestLogo({
         x="101"
         y="64"
         fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif"
-        fontSize="13"
-        fontWeight="700"
-        letterSpacing="8"
+        fontSize="10"
+        fontWeight="600"
+        letterSpacing="2"
         fill="url(#mi-textsub)"
         filter="url(#mi-subtextglow)"
       >
-        INDEX
+        BizTech Korea
       </text>
     </svg>
   );
