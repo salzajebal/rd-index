@@ -254,7 +254,7 @@ export function LearnInvestLogo({
         fill="url(#mi-textmib)"
         filter="url(#mi-textglow)"
       >
-        BTK
+        MIB
       </text>
 
       <line x1="100" y1="50" x2="292" y2="50" stroke="url(#mi-divline)" strokeWidth="0.7" />
