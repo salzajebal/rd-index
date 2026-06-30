@@ -2057,6 +2057,53 @@ export async function registerRoutes(
     }
   });
 
+  // Affiliate: Get inquiries from their own members
+  app.get("/api/affiliate/inquiries", requireAffiliate, async (req, res) => {
+    try {
+      const affiliateId = (req.session as any).affiliateId;
+      const affiliateUsers = await storage.getUsersByAffiliateId(affiliateId);
+      if (affiliateUsers.length === 0) return res.json([]);
+      const allInquiries = await Promise.all(
+        affiliateUsers.map(async (u) => {
+          const inqs = await storage.getInquiriesForUser(u.id);
+          return inqs.map(inq => ({ ...inq, username: u.username, userName: u.name }));
+        })
+      );
+      const flat = allInquiries.flat().sort((a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      res.json(flat);
+    } catch (error) {
+      console.error("Get affiliate inquiries error:", error);
+      res.status(500).json({ error: "문의 목록 조회에 실패했습니다" });
+    }
+  });
+
+  // Affiliate: Reply to an inquiry
+  app.post("/api/affiliate/inquiries/:id/reply", requireAffiliate, async (req, res) => {
+    try {
+      const affiliateId = (req.session as any).affiliateId;
+      const { id } = req.params;
+      const { reply } = req.body;
+      if (!reply?.trim()) return res.status(400).json({ error: "답변 내용을 입력해주세요" });
+
+      const inquiry = await storage.getInquiry(parseInt(id));
+      if (!inquiry) return res.status(404).json({ error: "문의를 찾을 수 없습니다" });
+
+      // Verify the inquiry belongs to this affiliate's user
+      const user = await storage.getUser(inquiry.userId);
+      if (!user || user.affiliateId !== affiliateId) {
+        return res.status(403).json({ error: "권한이 없습니다" });
+      }
+
+      const updated = await storage.replyToInquiry(parseInt(id), reply.trim(), `affiliate:${affiliateId}`);
+      res.json(updated);
+    } catch (error) {
+      console.error("Affiliate reply inquiry error:", error);
+      res.status(500).json({ error: "답변 등록에 실패했습니다" });
+    }
+  });
+
   // Admin: Get all affiliates
   app.get("/api/admin/affiliates", requireAdmin, async (req, res) => {
     try {
