@@ -1100,8 +1100,8 @@ export default function Admin() {
     };
   }, []);
 
-  type AdminTab = 'dashboard' | 'users' | 'bets' | 'settings' | 'approvals' | 'messages' | 'announcements' | 'blocked-ips' | 'maintenance' | 'forced-bet' | 'round-forced' | 'deposits' | 'withdrawals' | 'inquiries' | 'branches' | 'order-history';
-  const VALID_TABS: AdminTab[] = ['dashboard', 'users', 'bets', 'settings', 'approvals', 'messages', 'announcements', 'blocked-ips', 'maintenance', 'forced-bet', 'round-forced', 'deposits', 'withdrawals', 'inquiries', 'branches', 'order-history'];
+  type AdminTab = 'dashboard' | 'users' | 'bets' | 'settings' | 'approvals' | 'messages' | 'announcements' | 'blocked-ips' | 'maintenance' | 'forced-bet' | 'round-forced' | 'deposits' | 'withdrawals' | 'inquiries' | 'branches' | 'order-history' | 'affiliates';
+  const VALID_TABS: AdminTab[] = ['dashboard', 'users', 'bets', 'settings', 'approvals', 'messages', 'announcements', 'blocked-ips', 'maintenance', 'forced-bet', 'round-forced', 'deposits', 'withdrawals', 'inquiries', 'branches', 'order-history', 'affiliates'];
   const savedTab = localStorage.getItem('admin_active_tab') as AdminTab | null;
   const [activeTab, setActiveTabState] = useState<AdminTab>(savedTab && VALID_TABS.includes(savedTab) ? savedTab : 'users');
   const setActiveTab = (tab: AdminTab) => {
@@ -2940,6 +2940,18 @@ export default function Admin() {
         서버 점검
       </button>
       <button
+        onClick={() => { setActiveTab('affiliates'); setMobileMenuOpen(false); }}
+        className={cn(
+          "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
+          activeTab === 'affiliates'
+            ? "bg-primary/10 text-primary"
+            : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+        )}
+      >
+        <Users className="w-4 h-4" />
+        총판관리
+      </button>
+      <button
         onClick={() => { setActiveTab('branches'); setMobileMenuOpen(false); }}
         className={cn(
           "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
@@ -3212,6 +3224,18 @@ export default function Admin() {
           >
             <Wrench className="w-4 h-4" />
             서버 점검
+          </button>
+          <button
+            onClick={() => setActiveTab('affiliates')}
+            className={cn(
+              "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
+              activeTab === 'affiliates'
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+            )}
+          >
+            <Users className="w-4 h-4" />
+            총판관리
           </button>
           <button
             onClick={() => setActiveTab('settings')}
