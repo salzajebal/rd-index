@@ -175,14 +175,14 @@ function AffiliateLogin({ onLogin }: { onLogin: () => void }) {
         <Card className="bg-card border-border">
           <CardHeader className="text-center">
             <img
-              src="/value-option-logo.png"
-              alt="Value-Option Logo"
-              className="w-20 h-20 mx-auto rounded-xl mb-4 object-contain bg-black"
+              src="/mib-icon.png"
+              alt="MIB INDEX Logo"
+              className="w-20 h-20 mx-auto rounded-xl mb-4 object-contain"
               onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
             <CardTitle className="text-2xl">총판 로그인</CardTitle>
             <p className="text-muted-foreground text-sm">
-              VALUE-OPTION 총판 관리 시스템
+              MIB INDEX 총판 관리 시스템
             </p>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -456,12 +456,12 @@ export default function AffiliateDashboard() {
         <div className="p-4 border-b border-border">
           <div className="flex items-center gap-2">
             <img
-              src="/value-option-logo.png"
-              alt="Value-Option Logo"
-              className="w-10 h-10 rounded-lg object-contain bg-black"
+              src="/mib-icon.png"
+              alt="MIB INDEX Logo"
+              className="w-10 h-10 rounded-lg object-contain"
             />
             <div>
-              <p className="font-bold text-sm">VALUE-OPTION</p>
+              <p className="font-bold text-sm">MIB INDEX</p>
               <p className="text-xs text-muted-foreground">총판 대시보드</p>
             </div>
           </div>
