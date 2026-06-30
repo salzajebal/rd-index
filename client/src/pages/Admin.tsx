@@ -2526,10 +2526,12 @@ export default function Admin() {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/affiliates"] });
       setCreateAffiliateOpen(false);
       setNewAffiliate({ username: '', password: '', displayName: '', phone: '', commissionRate: '5' });
       toast.success("총판이 생성되었습니다");
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["/api/admin/affiliates"] });
+      }, 300);
     },
     onError: (error: Error) => {
       toast.error(error.message);
