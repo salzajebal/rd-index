@@ -6981,7 +6981,11 @@ export default function Admin() {
                 <label className="text-xs text-muted-foreground">아이디 *</label>
                 <Input
                   value={newAffiliate.username}
-                  onChange={(e) => setNewAffiliate(p => ({ ...p, username: e.target.value }))}
+                  onChange={(e) => setNewAffiliate(p => ({
+                    ...p,
+                    username: e.target.value,
+                    displayName: p.displayName || e.target.value,
+                  }))}
                   placeholder="로그인 아이디"
                 />
               </div>
