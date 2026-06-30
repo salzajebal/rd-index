@@ -1153,6 +1153,7 @@ export default function Admin() {
   const [isManualRefreshing, setIsManualRefreshing] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [userSearchQuery, setUserSearchQuery] = useState("");
+  const [affiliateFilter, setAffiliateFilter] = useState<string>("all");
   const [userSortField, setUserSortField] = useState<string | null>(null);
   const [userSortDirection, setUserSortDirection] = useState<'asc' | 'desc'>('desc');
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
@@ -3583,17 +3584,32 @@ export default function Admin() {
                   </button>
                 )}
               </div>
-              {userSearchQuery && (
+              <select
+                value={affiliateFilter}
+                onChange={(e) => setAffiliateFilter(e.target.value)}
+                className="h-9 px-2 rounded-md border border-border bg-background text-sm text-foreground"
+              >
+                <option value="all">전체 회원</option>
+                <option value="none">총판 없음</option>
+                {affiliatesList.map((a) => (
+                  <option key={a.id} value={a.id}>{a.displayName || a.username}</option>
+                ))}
+              </select>
+              {(userSearchQuery || affiliateFilter !== "all") && (
                 <span className="text-sm text-muted-foreground">
                   {users.filter(user => {
                     const query = userSearchQuery.toLowerCase();
-                    return (
+                    const matchSearch = !userSearchQuery || (
                       user.username.toLowerCase().includes(query) ||
                       (user.name && user.name.toLowerCase().includes(query)) ||
                       (user.accountHolder && user.accountHolder.toLowerCase().includes(query)) ||
                       (user.accountNumber && user.accountNumber.toLowerCase().includes(query)) ||
                       (user.phone && user.phone.toLowerCase().includes(query))
                     );
+                    const matchAffiliate = affiliateFilter === "all" ? true :
+                      affiliateFilter === "none" ? !user.affiliateId :
+                      user.affiliateId === affiliateFilter;
+                    return matchSearch && matchAffiliate;
                   }).length}건 검색됨
                 </span>
               )}
@@ -3654,15 +3670,18 @@ export default function Admin() {
                   <tbody>
                     {users
                       .filter(user => {
-                        if (!userSearchQuery) return true;
                         const query = userSearchQuery.toLowerCase();
-                        return (
+                        const matchSearch = !userSearchQuery || (
                           user.username.toLowerCase().includes(query) ||
                           (user.name && user.name.toLowerCase().includes(query)) ||
                           (user.accountHolder && user.accountHolder.toLowerCase().includes(query)) ||
                           (user.accountNumber && user.accountNumber.toLowerCase().includes(query)) ||
                           (user.phone && user.phone.toLowerCase().includes(query))
                         );
+                        const matchAffiliate = affiliateFilter === "all" ? true :
+                          affiliateFilter === "none" ? !user.affiliateId :
+                          user.affiliateId === affiliateFilter;
+                        return matchSearch && matchAffiliate;
                       })
                       .sort((a, b) => {
                         if (!userSortField) return 0;
