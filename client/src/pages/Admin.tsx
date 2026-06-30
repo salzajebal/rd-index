@@ -4583,9 +4583,6 @@ export default function Admin() {
                       <th className="px-4 py-3 font-medium">표시명</th>
                       <th className="px-4 py-3 font-medium">가입코드</th>
                       <th className="px-4 py-3 font-medium text-center">회원수</th>
-                      <th className="px-4 py-3 font-medium text-right">거래량</th>
-                      <th className="px-4 py-3 font-medium text-center">수수료율</th>
-                      <th className="px-4 py-3 font-medium text-right">정산 예정</th>
                       <th className="px-4 py-3 font-medium text-center">상태</th>
                       <th className="px-4 py-3 font-medium text-center">관리</th>
                     </tr>
@@ -4619,9 +4616,6 @@ export default function Admin() {
                           </div>
                         </td>
                         <td className="px-4 py-3 text-center">{affiliate.userCount}명</td>
-                        <td className="px-4 py-3 text-right">{formatMoney(affiliate.totalVolume)}</td>
-                        <td className="px-4 py-3 text-center">{affiliate.commissionRate}%</td>
-                        <td className="px-4 py-3 text-right">{formatMoney(affiliate.pendingCommission)}</td>
                         <td className="px-4 py-3 text-center">
                           {affiliate.isActive ? (
                             <span className="text-up text-xs bg-up/10 px-2 py-1 rounded">활성</span>
@@ -4682,7 +4676,7 @@ export default function Admin() {
                     ))}
                     {affiliatesList.length === 0 && (
                       <tr>
-                        <td colSpan={9} className="px-4 py-8 text-center text-muted-foreground">
+                        <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">
                           등록된 총판이 없습니다
                         </td>
                       </tr>
