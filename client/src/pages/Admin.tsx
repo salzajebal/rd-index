@@ -4592,8 +4592,7 @@ export default function Admin() {
                   </thead>
                   <tbody className="divide-y divide-border">
                     {affiliatesList.map((affiliate) => (
-                      <React.Fragment key={affiliate.id}>
-                      <tr className="hover:bg-muted/30 transition-colors">
+                      <tr key={affiliate.id} className="hover:bg-muted/30 transition-colors">
                         <td className="px-4 py-3 font-medium">{affiliate.username}</td>
                         <td className="px-4 py-3">{affiliate.displayName}</td>
                         <td className="px-4 py-3">
@@ -4668,9 +4667,9 @@ export default function Admin() {
                             <Button
                               size="sm"
                               variant="ghost"
-                              className={cn("h-7 px-2 text-xs", addMemberAffiliateId === affiliate.id ? "text-primary" : "text-muted-foreground")}
+                              className="h-7 w-7 p-0 text-muted-foreground"
                               onClick={() => {
-                                setAddMemberAffiliateId(addMemberAffiliateId === affiliate.id ? null : affiliate.id);
+                                setAddMemberAffiliateId(affiliate.id);
                                 setAddMemberUsername("");
                               }}
                               title="회원 배정"
@@ -4680,66 +4679,6 @@ export default function Admin() {
                           </div>
                         </td>
                       </tr>
-                      {addMemberAffiliateId === affiliate.id && (
-                        <tr className="bg-muted/20 border-t border-dashed border-border">
-                          <td colSpan={9} className="px-4 py-3">
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-muted-foreground whitespace-nowrap">회원 배정 →</span>
-                              <Input
-                                className="h-8 max-w-[200px] text-sm"
-                                placeholder="회원 아이디 입력"
-                                value={addMemberUsername}
-                                onChange={(e) => setAddMemberUsername(e.target.value)}
-                                onKeyDown={async (e) => {
-                                  if (e.key !== 'Enter') return;
-                                  const target = users.find(u => u.username === addMemberUsername.trim());
-                                  if (!target) { toast.error("존재하지 않는 아이디입니다"); return; }
-                                  const res = await fetch(`/api/admin/users/${target.id}`, {
-                                    method: 'PATCH',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    credentials: 'include',
-                                    body: JSON.stringify({ affiliateId: affiliate.id }),
-                                  });
-                                  if (res.ok) {
-                                    toast.success(`${target.username} → ${affiliate.displayName} 배정 완료`);
-                                    setAddMemberUsername("");
-                                    refetchUsers();
-                                    refetchAffiliates();
-                                  } else {
-                                    toast.error("배정 실패");
-                                  }
-                                }}
-                              />
-                              <Button
-                                size="sm"
-                                className="h-8"
-                                onClick={async () => {
-                                  const target = users.find(u => u.username === addMemberUsername.trim());
-                                  if (!target) { toast.error("존재하지 않는 아이디입니다"); return; }
-                                  const res = await fetch(`/api/admin/users/${target.id}`, {
-                                    method: 'PATCH',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    credentials: 'include',
-                                    body: JSON.stringify({ affiliateId: affiliate.id }),
-                                  });
-                                  if (res.ok) {
-                                    toast.success(`${target.username} → ${affiliate.displayName} 배정 완료`);
-                                    setAddMemberUsername("");
-                                    refetchUsers();
-                                    refetchAffiliates();
-                                  } else {
-                                    toast.error("배정 실패");
-                                  }
-                                }}
-                              >
-                                배정
-                              </Button>
-                              <span className="text-xs text-muted-foreground">현재 소속: {affiliate.userCount}명</span>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                      </React.Fragment>
                     ))}
                     {affiliatesList.length === 0 && (
                       <tr>
@@ -7029,6 +6968,74 @@ export default function Admin() {
                 disabled={createAffiliate.isPending || !newAffiliate.username || !newAffiliate.password || !newAffiliate.displayName}
               >
                 {createAffiliate.isPending ? '생성 중...' : '생성'}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Member to Affiliate Dialog */}
+      <Dialog open={!!addMemberAffiliateId} onOpenChange={(open) => { if (!open) { setAddMemberAffiliateId(null); setAddMemberUsername(""); } }}>
+        <DialogContent className="bg-card border-border max-w-md">
+          <DialogHeader>
+            <DialogTitle>회원 배정 — {affiliatesList.find(a => a.id === addMemberAffiliateId)?.displayName}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div className="space-y-1">
+              <label className="text-xs text-muted-foreground">회원 아이디</label>
+              <Input
+                placeholder="배정할 회원 아이디 입력"
+                value={addMemberUsername}
+                onChange={(e) => setAddMemberUsername(e.target.value)}
+                onKeyDown={async (e) => {
+                  if (e.key !== 'Enter') return;
+                  const target = users.find(u => u.username === addMemberUsername.trim());
+                  if (!target) { toast.error("존재하지 않는 아이디입니다"); return; }
+                  const res = await fetch(`/api/admin/users/${target.id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ affiliateId: addMemberAffiliateId }),
+                  });
+                  if (res.ok) {
+                    const aff = affiliatesList.find(a => a.id === addMemberAffiliateId);
+                    toast.success(`${target.username} → ${aff?.displayName} 배정 완료`);
+                    setAddMemberUsername("");
+                    setAddMemberAffiliateId(null);
+                    refetchUsers();
+                    refetchAffiliates();
+                  } else {
+                    toast.error("배정 실패");
+                  }
+                }}
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => { setAddMemberAffiliateId(null); setAddMemberUsername(""); }}>취소</Button>
+              <Button
+                onClick={async () => {
+                  const target = users.find(u => u.username === addMemberUsername.trim());
+                  if (!target) { toast.error("존재하지 않는 아이디입니다"); return; }
+                  const res = await fetch(`/api/admin/users/${target.id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ affiliateId: addMemberAffiliateId }),
+                  });
+                  if (res.ok) {
+                    const aff = affiliatesList.find(a => a.id === addMemberAffiliateId);
+                    toast.success(`${target.username} → ${aff?.displayName} 배정 완료`);
+                    setAddMemberUsername("");
+                    setAddMemberAffiliateId(null);
+                    refetchUsers();
+                    refetchAffiliates();
+                  } else {
+                    toast.error("배정 실패");
+                  }
+                }}
+                disabled={!addMemberUsername.trim()}
+              >
+                배정
               </Button>
             </div>
           </div>
