@@ -7013,17 +7013,6 @@ export default function Admin() {
                 />
               </div>
             </div>
-            <div className="space-y-1">
-              <label className="text-xs text-muted-foreground">수수료율 (%)</label>
-              <Input
-                type="number"
-                value={newAffiliate.commissionRate}
-                onChange={(e) => setNewAffiliate(p => ({ ...p, commissionRate: e.target.value }))}
-                placeholder="5"
-                min="0"
-                max="100"
-              />
-            </div>
             <p className="text-xs text-muted-foreground">
               가입코드는 총판 생성 시 자동으로 생성됩니다.
             </p>
