@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -171,8 +171,8 @@ export default function AffiliateDashboard() {
       if (!res.ok) throw new Error('Failed');
       return res.json();
     },
-    enabled: !!auth && activeTab === 'inquiries',
-    refetchInterval: 15000,
+    enabled: !!auth,
+    refetchInterval: 10000,
   });
 
   const logout = useMutation({
@@ -219,6 +219,28 @@ export default function AffiliateDashboard() {
   };
 
   const pendingCount = inquiries.filter(i => i.status === 'pending').length;
+
+  const prevPendingRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (!auth) return;
+    if (prevPendingRef.current === null) {
+      prevPendingRef.current = pendingCount;
+      return;
+    }
+    if (pendingCount > prevPendingRef.current) {
+      const diff = pendingCount - prevPendingRef.current;
+      toast.info(`새 1:1 문의가 ${diff}건 접수되었습니다`, { duration: 6000 });
+    }
+    prevPendingRef.current = pendingCount;
+  }, [pendingCount, auth]);
+
+  useEffect(() => {
+    if (!auth) return;
+    document.title = pendingCount > 0
+      ? `(${pendingCount}) MIB INDEX 총판`
+      : 'MIB INDEX 총판';
+    return () => { document.title = 'MIB INDEX'; };
+  }, [pendingCount, auth]);
 
   if (authLoading) {
     return (
