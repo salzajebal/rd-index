@@ -4590,7 +4590,8 @@ export default function Admin() {
                   </thead>
                   <tbody className="divide-y divide-border">
                     {affiliatesList.map((affiliate) => (
-                      <tr key={affiliate.id} className="hover:bg-muted/30 transition-colors">
+                      <React.Fragment key={affiliate.id}>
+                      <tr className="hover:bg-muted/30 transition-colors">
                         <td className="px-4 py-3 font-medium">{affiliate.username}</td>
                         <td className="px-4 py-3">{affiliate.displayName}</td>
                         <td className="px-4 py-3">
@@ -4736,6 +4737,7 @@ export default function Admin() {
                           </td>
                         </tr>
                       )}
+                      </React.Fragment>
                     ))}
                     {affiliatesList.length === 0 && (
                       <tr>
