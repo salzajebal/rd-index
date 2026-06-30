@@ -10,6 +10,7 @@ import Landing from "@/pages/Landing";
 import Home from "@/pages/Home";
 import Admin from "@/pages/Admin";
 import AdminManual from "@/pages/AdminManual";
+import AffiliateDashboard from "@/pages/AffiliateDashboard";
 
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
   const { data: user, isLoading } = useAuth();
@@ -35,6 +36,7 @@ function Router() {
       <Route path="/" component={Landing} />
       <Route path="/admin" component={Admin} />
       <Route path="/admin/manual" component={AdminManual} />
+      <Route path="/affiliate" component={AffiliateDashboard} />
       <Route path="/trade">
         {() => <ProtectedRoute component={Home} />}
       </Route>
