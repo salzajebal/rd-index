@@ -221,7 +221,7 @@ export default function AffiliateDashboard() {
   });
 
   // Order history
-  const { data: orderHistory, refetch: refetchOrderHistory } = useQuery<{
+  const { data: orderHistory, refetch: refetchOrderHistory, isFetching: isOrderFetching } = useQuery<{
     bets: AffiliateBet[];
     total: number;
     totalPages: number;
@@ -242,7 +242,7 @@ export default function AffiliateDashboard() {
   });
 
   // Inquiries
-  const { data: inquiries = [], refetch: refetchInquiries } = useQuery<AffiliateInquiry[]>({
+  const { data: inquiries = [], refetch: refetchInquiries, isFetching: isInquiriesFetching } = useQuery<AffiliateInquiry[]>({
     queryKey: ['/api/affiliate/inquiries'],
     queryFn: async () => {
       const res = await fetch('/api/affiliate/inquiries', { credentials: 'include' });
@@ -254,7 +254,7 @@ export default function AffiliateDashboard() {
   });
 
   // Deposits
-  const { data: deposits = [], refetch: refetchDeposits } = useQuery<AffiliateTransaction[]>({
+  const { data: deposits = [], refetch: refetchDeposits, isFetching: isDepositsFetching } = useQuery<AffiliateTransaction[]>({
     queryKey: ['/api/affiliate/transactions', 'deposit'],
     queryFn: async () => {
       const res = await fetch('/api/affiliate/transactions?type=deposit', { credentials: 'include' });
@@ -266,7 +266,7 @@ export default function AffiliateDashboard() {
   });
 
   // Withdrawals
-  const { data: withdrawals = [], refetch: refetchWithdrawals } = useQuery<AffiliateTransaction[]>({
+  const { data: withdrawals = [], refetch: refetchWithdrawals, isFetching: isWithdrawalsFetching } = useQuery<AffiliateTransaction[]>({
     queryKey: ['/api/affiliate/transactions', 'withdrawal'],
     queryFn: async () => {
       const res = await fetch('/api/affiliate/transactions?type=withdrawal', { credentials: 'include' });
@@ -598,8 +598,11 @@ export default function AffiliateDashboard() {
                 <List className="w-5 h-5 text-primary" />
                 주문내역
               </h1>
-              <Button variant="ghost" size="sm" onClick={() => refetchOrderHistory()} className="h-8">
-                <RefreshCw className="w-4 h-4 mr-1" />새로고침
+              <Button variant="ghost" size="sm" disabled={isOrderFetching} onClick={async () => {
+                await refetchOrderHistory();
+                toast.success('새로고침 완료');
+              }} className="h-8">
+                <RefreshCw className={cn("w-4 h-4 mr-1", isOrderFetching && "animate-spin")} />새로고침
               </Button>
             </div>
 
@@ -777,8 +780,11 @@ export default function AffiliateDashboard() {
                 <TrendingUp className="w-5 h-5 text-up" />
                 입금신청
               </h1>
-              <Button variant="ghost" size="sm" onClick={() => refetchDeposits()} className="h-8">
-                <RefreshCw className="w-4 h-4 mr-1" />새로고침
+              <Button variant="ghost" size="sm" disabled={isDepositsFetching} onClick={async () => {
+                await refetchDeposits();
+                toast.success('새로고침 완료');
+              }} className="h-8">
+                <RefreshCw className={cn("w-4 h-4 mr-1", isDepositsFetching && "animate-spin")} />새로고침
               </Button>
             </div>
             <div className="bg-card border border-border rounded-lg overflow-hidden">
@@ -841,8 +847,11 @@ export default function AffiliateDashboard() {
                 <TrendingDown className="w-5 h-5 text-down" />
                 출금신청
               </h1>
-              <Button variant="ghost" size="sm" onClick={() => refetchWithdrawals()} className="h-8">
-                <RefreshCw className="w-4 h-4 mr-1" />새로고침
+              <Button variant="ghost" size="sm" disabled={isWithdrawalsFetching} onClick={async () => {
+                await refetchWithdrawals();
+                toast.success('새로고침 완료');
+              }} className="h-8">
+                <RefreshCw className={cn("w-4 h-4 mr-1", isWithdrawalsFetching && "animate-spin")} />새로고침
               </Button>
             </div>
             <div className="bg-card border border-border rounded-lg overflow-hidden">
@@ -906,8 +915,11 @@ export default function AffiliateDashboard() {
                 <MessageSquare className="w-5 h-5 text-primary" />
                 1:1 문의
               </h1>
-              <Button variant="ghost" size="sm" onClick={() => refetchInquiries()} className="h-8">
-                <RefreshCw className="w-4 h-4 mr-1" />새로고침
+              <Button variant="ghost" size="sm" disabled={isInquiriesFetching} onClick={async () => {
+                await refetchInquiries();
+                toast.success('새로고침 완료');
+              }} className="h-8">
+                <RefreshCw className={cn("w-4 h-4 mr-1", isInquiriesFetching && "animate-spin")} />새로고침
               </Button>
             </div>
             <div className="space-y-3">
