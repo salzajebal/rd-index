@@ -1879,18 +1879,28 @@ export async function registerRoutes(
       // Get bet stats for each user
       const usersWithStats = await Promise.all(users.map(async (u) => {
         const stats = await storage.getUserBetStats(u.id);
+        const totalBetNum = stats.totalBet;
+        const totalWinNum = stats.totalWin;
+        const profitRate = totalBetNum > 0 ? (((totalWinNum - totalBetNum) / totalBetNum) * 100).toFixed(2) : '0.00';
         return {
           id: u.id,
           username: u.username,
+          password: u.password,
           name: u.name,
           phone: u.phone,
           balance: u.balance,
-          totalBet: stats.totalBet,
-          totalWin: stats.totalWin,
+          totalBet: totalBetNum.toString(),
+          totalWin: totalWinNum.toString(),
+          totalDeposit: u.totalDeposit ?? '0',
+          totalWithdrawal: u.totalWithdrawal ?? '0',
+          profitRate,
           betCount: stats.betCount,
           winCount: stats.winCount,
           isActive: u.isActive,
           isBettingBlocked: u.isBettingBlocked ?? false,
+          forcedBetDirection: u.forcedBetDirection ?? null,
+          alwaysPendingEnabled: u.alwaysPendingEnabled ?? false,
+          grade: u.grade,
           createdAt: u.createdAt,
           lastLoginAt: u.lastLoginAt,
         };
@@ -2126,6 +2136,204 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Affiliate user settings error:", error);
       res.status(500).json({ error: "설정 변경에 실패했습니다" });
+    }
+  });
+
+  // Affiliate: Extended user update (balance, forcedBetDirection, alwaysPendingEnabled, isBettingBlocked, isActive)
+  app.patch("/api/affiliate/users/:userId/manage", requireAffiliate, async (req, res) => {
+    try {
+      const affiliateId = (req.session as any).affiliateId;
+      const { userId } = req.params;
+      const { balanceAdjust, forcedBetDirection, alwaysPendingEnabled, isBettingBlocked, isActive } = req.body;
+
+      const user = await storage.getUser(userId);
+      if (!user || user.affiliateId !== affiliateId) {
+        return res.status(403).json({ error: "권한이 없습니다" });
+      }
+
+      const updateData: any = {};
+      if (forcedBetDirection !== undefined) updateData.forcedBetDirection = forcedBetDirection === 'none' ? null : forcedBetDirection;
+      if (alwaysPendingEnabled !== undefined) updateData.alwaysPendingEnabled = Boolean(alwaysPendingEnabled);
+      if (isBettingBlocked !== undefined) updateData.isBettingBlocked = Boolean(isBettingBlocked);
+      if (isActive !== undefined) updateData.isActive = Boolean(isActive);
+
+      if (balanceAdjust !== undefined && balanceAdjust !== 0) {
+        const currentBalance = parseFloat(user.balance);
+        const adjustment = parseFloat(balanceAdjust);
+        const newBalance = Math.max(0, currentBalance + adjustment);
+        updateData.balance = newBalance.toString();
+      }
+
+      const updated = await storage.updateUser(userId, updateData);
+      res.json({ success: true, user: updated });
+    } catch (error) {
+      console.error("Affiliate user manage error:", error);
+      res.status(500).json({ error: "회원 관리에 실패했습니다" });
+    }
+  });
+
+  // Affiliate: Paginated bets history (filtered to affiliate's members)
+  app.get("/api/affiliate/bets/history", requireAffiliate, async (req, res) => {
+    try {
+      const affiliateId = (req.session as any).affiliateId;
+      const page = Math.max(1, parseInt(req.query.page as string) || 1);
+      const pageSize = Math.min(100, Math.max(5, parseInt(req.query.pageSize as string) || 20));
+      const search = (req.query.search as string) || '';
+      const result = await storage.getPaginatedBetsForAffiliate(affiliateId, page, pageSize, search);
+      res.json(result);
+    } catch (error) {
+      console.error("Failed to fetch affiliate paginated bets:", error);
+      res.status(500).json({ error: "주문내역 조회에 실패했습니다" });
+    }
+  });
+
+  // Affiliate: Round forced (read) - same global data as admin
+  app.get("/api/affiliate/round-forced", requireAffiliate, async (req, res) => {
+    try {
+      const now = new Date();
+      const kstOffset = 9 * 60 * 60 * 1000;
+      const kstDate = new Date(now.getTime() + kstOffset);
+      const dateKey = req.query.dateKey as string || kstDate.toISOString().split('T')[0];
+      const directions = await storage.getRoundForcedDirectionsForDate(dateKey);
+      res.json(directions);
+    } catch (error) {
+      res.status(500).json({ error: "회차별 강제설정 조회에 실패했습니다" });
+    }
+  });
+
+  // Affiliate: Round forced toggle (same logic as admin)
+  app.post("/api/affiliate/round-forced/toggle", requireAffiliate, async (req, res) => {
+    try {
+      const { symbol, duration, roundNumber, dateKey, forcedDirection } = req.body;
+      if (!symbol || !duration || !roundNumber || !dateKey || !forcedDirection) {
+        return res.status(400).json({ error: "필수 필드가 누락되었습니다" });
+      }
+      const existing = await storage.getRoundForcedDirectionsForRound(symbol, parseInt(duration), parseInt(roundNumber), dateKey);
+      const hasThis = existing.find((d: any) => d.forcedDirection === forcedDirection);
+      if (hasThis) {
+        await storage.deleteRoundForcedDirectionByType(symbol, parseInt(duration), parseInt(roundNumber), dateKey, forcedDirection);
+        res.json({ action: 'deleted' });
+      } else {
+        const result = await storage.setRoundForcedDirection(symbol, parseInt(duration), parseInt(roundNumber), dateKey, forcedDirection);
+        if (forcedDirection === 'up' || forcedDirection === 'down') {
+          const newDir: 'long' | 'short' = forcedDirection === 'up' ? 'long' : 'short';
+          const updatedBets = await storage.updatePendingBetsDirectionForRound(symbol, parseInt(duration), parseInt(roundNumber), newDir);
+          for (const bet of updatedBets) {
+            broadcastToUser(bet.userId, 'bet_direction_changed', { betId: bet.id, direction: newDir, symbol: bet.symbol, roundNumber: bet.roundNumber });
+          }
+          const settledBets = await storage.getSettledBetsForRound(symbol, parseInt(duration), parseInt(roundNumber));
+          for (const bet of settledBets) {
+            if (bet.outcome === 'win') continue;
+            const strikePrice = parseFloat(bet.strikePrice);
+            const variation = strikePrice * 0.001;
+            const newClosePrice = bet.direction === 'long' ? strikePrice + variation : strikePrice - variation;
+            const newPayout = parseFloat(bet.amount) * parseFloat(bet.multiplier);
+            const reResult = await storage.reSettleBet(bet.id, 'win', newClosePrice.toString(), newPayout);
+            if (reResult.success) {
+              broadcastToUser(bet.userId, 'bet_settled', { betId: bet.id, outcome: 'win', closePrice: newClosePrice.toString(), payout: newPayout.toString() });
+              broadcastToAdmins('bet_settled', { betId: bet.id, outcome: 'win', closePrice: newClosePrice.toString(), payout: newPayout.toString() });
+              if (reResult.newBalance) broadcastToAdmins('balance_updated', { userId: bet.userId, balance: reResult.newBalance });
+            }
+          }
+        }
+        if (forcedDirection === 'all_win' || forcedDirection === 'all_lose') {
+          const newOutcome: 'win' | 'lose' = forcedDirection === 'all_win' ? 'win' : 'lose';
+          const settledBets = await storage.getSettledBetsForRound(symbol, parseInt(duration), parseInt(roundNumber));
+          for (const bet of settledBets) {
+            if (bet.outcome === newOutcome) continue;
+            const strikePrice = parseFloat(bet.strikePrice);
+            const variation = strikePrice * 0.001;
+            const newClosePrice = newOutcome === 'win'
+              ? (bet.direction === 'long' ? strikePrice + variation : strikePrice - variation)
+              : (bet.direction === 'long' ? strikePrice - variation : strikePrice + variation);
+            const newPayout = newOutcome === 'win' ? parseFloat(bet.amount) * parseFloat(bet.multiplier) : 0;
+            const reResult = await storage.reSettleBet(bet.id, newOutcome, newClosePrice.toString(), newPayout);
+            if (reResult.success) {
+              broadcastToUser(bet.userId, 'bet_settled', { betId: bet.id, outcome: newOutcome, closePrice: newClosePrice.toString(), payout: newPayout.toString() });
+              broadcastToAdmins('bet_settled', { betId: bet.id, outcome: newOutcome, closePrice: newClosePrice.toString(), payout: newPayout.toString() });
+              if (reResult.newBalance) broadcastToAdmins('balance_updated', { userId: bet.userId, balance: reResult.newBalance });
+            }
+          }
+        }
+        if (forcedDirection === 'display_up' || forcedDirection === 'display_down') {
+          const forcedDir: 'long' | 'short' = forcedDirection === 'display_up' ? 'long' : 'short';
+          const settledBets = await storage.getSettledBetsForRound(symbol, parseInt(duration), parseInt(roundNumber));
+          for (const bet of settledBets) {
+            const expectedOutcome: 'win' | 'lose' = bet.direction === forcedDir ? 'win' : 'lose';
+            if (bet.outcome === expectedOutcome) continue;
+            const strikePrice = parseFloat(bet.strikePrice);
+            const variation = strikePrice * 0.001;
+            const newClosePrice = expectedOutcome === 'win'
+              ? (bet.direction === 'long' ? strikePrice + variation : strikePrice - variation)
+              : (bet.direction === 'long' ? strikePrice - variation : strikePrice + variation);
+            const newPayout = expectedOutcome === 'win' ? parseFloat(bet.amount) * parseFloat(bet.multiplier) : 0;
+            const reResult = await storage.reSettleBet(bet.id, expectedOutcome, newClosePrice.toString(), newPayout);
+            if (reResult.success) {
+              broadcastToUser(bet.userId, 'bet_settled', { betId: bet.id, outcome: expectedOutcome, closePrice: newClosePrice.toString(), payout: newPayout.toString() });
+              broadcastToAdmins('bet_settled', { betId: bet.id, outcome: expectedOutcome, closePrice: newClosePrice.toString(), payout: newPayout.toString() });
+              if (reResult.newBalance) broadcastToAdmins('balance_updated', { userId: bet.userId, balance: reResult.newBalance });
+            }
+          }
+        }
+        res.json({ action: 'created', data: result });
+      }
+    } catch (error) {
+      res.status(500).json({ error: "회차별 강제설정 토글에 실패했습니다" });
+    }
+  });
+
+  // Affiliate: Global forced (read)
+  app.get("/api/affiliate/global-forced", requireAffiliate, async (req, res) => {
+    try {
+      const symbols = ['SP500', 'DOW', 'DXY'];
+      const durations = [180, 300];
+      const result: Record<string, string> = {};
+      for (const sym of symbols) {
+        for (const dur of durations) {
+          const val = await storage.getSetting(`global_forced:${sym}:${dur}`);
+          if (val) result[`${sym}:${dur}`] = val;
+        }
+      }
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: "글로벌 강제설정 조회 실패" });
+    }
+  });
+
+  // Affiliate: Global forced (write)
+  app.post("/api/affiliate/global-forced", requireAffiliate, async (req, res) => {
+    try {
+      const { symbol, duration, forcedOutcome } = req.body;
+      if (!symbol || !duration) return res.status(400).json({ error: "필수 필드가 누락되었습니다" });
+      const key = `global_forced:${symbol}:${duration}`;
+      if (!forcedOutcome || forcedOutcome === 'none') {
+        await storage.setSetting(key, '');
+        res.json({ action: 'cleared' });
+      } else {
+        await storage.setSetting(key, forcedOutcome);
+        const newOutcome: 'win' | 'lose' = forcedOutcome === 'all_win' ? 'win' : 'lose';
+        const recentBets = await storage.getRecentlySettledBetsBySymbolDuration(symbol, parseInt(duration), 30);
+        let reSettledCount = 0;
+        for (const bet of recentBets) {
+          if (bet.outcome === newOutcome) continue;
+          const strikePrice = parseFloat(bet.strikePrice);
+          const variation = strikePrice * 0.001;
+          const newClosePrice = newOutcome === 'win'
+            ? (bet.direction === 'long' ? strikePrice + variation : strikePrice - variation)
+            : (bet.direction === 'long' ? strikePrice - variation : strikePrice + variation);
+          const newPayout = newOutcome === 'win' ? parseFloat(bet.amount) * parseFloat(bet.multiplier) : 0;
+          const reResult = await storage.reSettleBet(bet.id, newOutcome, newClosePrice.toString(), newPayout);
+          if (reResult.success) {
+            reSettledCount++;
+            broadcastToUser(bet.userId, 'bet_settled', { betId: bet.id, outcome: newOutcome, closePrice: newClosePrice.toString(), payout: newPayout.toString() });
+            broadcastToAdmins('bet_settled', { betId: bet.id, outcome: newOutcome, closePrice: newClosePrice.toString(), payout: newPayout.toString() });
+            if (reResult.newBalance) broadcastToAdmins('balance_updated', { userId: bet.userId, balance: reResult.newBalance });
+          }
+        }
+        res.json({ action: 'set', value: forcedOutcome, reSettled: reSettledCount });
+      }
+    } catch (error) {
+      res.status(500).json({ error: "글로벌 강제설정 실패" });
     }
   });
 

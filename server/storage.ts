@@ -67,6 +67,7 @@ export interface IStorage {
   createBet(bet: InsertBet): Promise<Bet>;
   settleBet(id: number, closePrice: string, outcome: 'win' | 'lose', payout: string): Promise<Bet>;
   getPaginatedBets(page: number, pageSize: number, search?: string): Promise<{ bets: (Bet & { username: string; name: string })[]; total: number; totalPages: number }>;
+  getPaginatedBetsForAffiliate(affiliateId: string, page: number, pageSize: number, search?: string): Promise<{ bets: (Bet & { username: string; name: string })[]; total: number; totalPages: number }>;
   setForcedOutcome(betId: number, forcedOutcome: 'win' | 'lose' | null): Promise<Bet>;
   getExpiredPendingBets(): Promise<Bet[]>;
   getSettledBetsForRound(symbol: string, duration: number, roundNumber: number): Promise<Bet[]>;
@@ -829,6 +830,57 @@ export class DatabaseStorage implements IStorage {
 
     const allUsers = await this.getAllUsers();
     const userMap = new Map(allUsers.map(u => [u.id, { username: u.username, name: u.name }]));
+
+    const result = rows.map(bet => ({
+      ...bet,
+      username: userMap.get(bet.userId)?.username || 'Unknown',
+      name: userMap.get(bet.userId)?.name || '',
+    }));
+
+    return { bets: result, total, totalPages: Math.ceil(total / pageSize) };
+  }
+
+  async getPaginatedBetsForAffiliate(affiliateId: string, page: number, pageSize: number, search?: string): Promise<{ bets: (Bet & { username: string; name: string })[]; total: number; totalPages: number }> {
+    const offset = (page - 1) * pageSize;
+
+    // Get affiliate's user IDs
+    const affiliateUsers = await db.select({ id: users.id, username: users.username, name: users.name })
+      .from(users)
+      .where(eq(users.affiliateId, affiliateId));
+
+    if (affiliateUsers.length === 0) {
+      return { bets: [], total: 0, totalPages: 0 };
+    }
+
+    let eligibleUserIds = affiliateUsers.map(u => u.id);
+
+    // If search, further filter by username/name
+    if (search && search.trim()) {
+      const term = search.trim().toLowerCase();
+      eligibleUserIds = affiliateUsers
+        .filter(u => u.username.toLowerCase().includes(term) || (u.name || '').toLowerCase().includes(term))
+        .map(u => u.id);
+      if (eligibleUserIds.length === 0) {
+        return { bets: [], total: 0, totalPages: 0 };
+      }
+    }
+
+    const whereClause = inArray(bets.userId, eligibleUserIds);
+
+    const [{ total }] = await db
+      .select({ total: sql<number>`count(*)::int` })
+      .from(bets)
+      .where(whereClause);
+
+    const rows = await db
+      .select()
+      .from(bets)
+      .where(whereClause)
+      .orderBy(desc(bets.id))
+      .limit(pageSize)
+      .offset(offset);
+
+    const userMap = new Map(affiliateUsers.map(u => [u.id, { username: u.username, name: u.name }]));
 
     const result = rows.map(bet => ({
       ...bet,
