@@ -178,9 +178,9 @@ export default function AffiliateDashboard() {
 
   // Auth check
   const { data: auth, isLoading: authLoading } = useQuery<AffiliateAuth | null>({
-    queryKey: ['/api/affiliate/auth'],
+    queryKey: ['/api/affiliate/me'],
     queryFn: async () => {
-      const res = await fetch('/api/affiliate/auth', { credentials: 'include' });
+      const res = await fetch('/api/affiliate/me', { credentials: 'include' });
       if (!res.ok) return null;
       return res.json();
     },
