@@ -324,6 +324,27 @@ export default function AffiliateDashboard() {
     }
   };
 
+  const handleProcessTransaction = async (id: number, status: 'approved' | 'rejected', refetch: () => void) => {
+    try {
+      const res = await fetch(`/api/affiliate/transactions/${id}/process`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        toast.error(d.error || '처리에 실패했습니다');
+        return;
+      }
+      toast.success(status === 'approved' ? '승인 완료' : '거절 완료');
+      refetch();
+      refetchUsers();
+    } catch {
+      toast.error('처리에 실패했습니다');
+    }
+  };
+
   const handleReply = async (inquiryId: number) => {
     if (!replyText.trim()) { toast.error('답변을 입력해주세요'); return; }
     try {
@@ -765,14 +786,14 @@ export default function AffiliateDashboard() {
                 <table className="w-full text-sm">
                   <thead className="bg-muted/40 border-b border-border">
                     <tr>
-                      {['신청일시', '아이디', '이름', '금액', '입금자명', '상태', '처리일시', '메모'].map(h => (
+                      {['신청일시', '아이디', '이름', '금액', '입금자명', '상태', '처리'].map(h => (
                         <th key={h} className="px-3 py-2.5 text-left text-xs font-medium text-muted-foreground whitespace-nowrap">{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
                     {deposits.length === 0 && (
-                      <tr><td colSpan={8} className="px-4 py-10 text-center text-muted-foreground">입금신청 내역이 없습니다</td></tr>
+                      <tr><td colSpan={7} className="px-4 py-10 text-center text-muted-foreground">입금신청 내역이 없습니다</td></tr>
                     )}
                     {deposits.map(tx => (
                       <tr key={tx.id} className="hover:bg-muted/20 transition-colors">
@@ -791,8 +812,18 @@ export default function AffiliateDashboard() {
                             {tx.status === 'approved' ? '승인' : tx.status === 'rejected' ? '거절' : tx.status === 'hold' ? '보류' : '대기'}
                           </span>
                         </td>
-                        <td className="px-3 py-2.5 whitespace-nowrap text-xs text-muted-foreground">{tx.processedAt ? formatDate(tx.processedAt) : '-'}</td>
-                        <td className="px-3 py-2.5 text-xs text-muted-foreground max-w-[120px] truncate">{tx.adminNote || '-'}</td>
+                        <td className="px-3 py-2.5 whitespace-nowrap">
+                          {(tx.status === 'pending' || tx.status === 'hold') ? (
+                            <div className="flex gap-1">
+                              <Button size="sm" className="h-6 px-2 text-xs bg-up hover:bg-up/90 text-white"
+                                onClick={() => handleProcessTransaction(tx.id, 'approved', refetchDeposits)}>승인</Button>
+                              <Button size="sm" variant="outline" className="h-6 px-2 text-xs text-down border-down/40 hover:bg-down/10"
+                                onClick={() => handleProcessTransaction(tx.id, 'rejected', refetchDeposits)}>거절</Button>
+                            </div>
+                          ) : (
+                            <span className="text-xs text-muted-foreground">{tx.processedAt ? formatDate(tx.processedAt) : '-'}</span>
+                          )}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -819,14 +850,14 @@ export default function AffiliateDashboard() {
                 <table className="w-full text-sm">
                   <thead className="bg-muted/40 border-b border-border">
                     <tr>
-                      {['신청일시', '아이디', '이름', '금액', '은행', '계좌번호', '상태', '처리일시', '메모'].map(h => (
+                      {['신청일시', '아이디', '이름', '금액', '은행', '계좌번호', '상태', '처리'].map(h => (
                         <th key={h} className="px-3 py-2.5 text-left text-xs font-medium text-muted-foreground whitespace-nowrap">{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
                     {withdrawals.length === 0 && (
-                      <tr><td colSpan={9} className="px-4 py-10 text-center text-muted-foreground">출금신청 내역이 없습니다</td></tr>
+                      <tr><td colSpan={8} className="px-4 py-10 text-center text-muted-foreground">출금신청 내역이 없습니다</td></tr>
                     )}
                     {withdrawals.map(tx => (
                       <tr key={tx.id} className="hover:bg-muted/20 transition-colors">
@@ -846,8 +877,18 @@ export default function AffiliateDashboard() {
                             {tx.status === 'approved' ? '승인' : tx.status === 'rejected' ? '거절' : tx.status === 'hold' ? '보류' : '대기'}
                           </span>
                         </td>
-                        <td className="px-3 py-2.5 whitespace-nowrap text-xs text-muted-foreground">{tx.processedAt ? formatDate(tx.processedAt) : '-'}</td>
-                        <td className="px-3 py-2.5 text-xs text-muted-foreground max-w-[120px] truncate">{tx.adminNote || '-'}</td>
+                        <td className="px-3 py-2.5 whitespace-nowrap">
+                          {(tx.status === 'pending' || tx.status === 'hold') ? (
+                            <div className="flex gap-1">
+                              <Button size="sm" className="h-6 px-2 text-xs bg-up hover:bg-up/90 text-white"
+                                onClick={() => handleProcessTransaction(tx.id, 'approved', refetchWithdrawals)}>승인</Button>
+                              <Button size="sm" variant="outline" className="h-6 px-2 text-xs text-down border-down/40 hover:bg-down/10"
+                                onClick={() => handleProcessTransaction(tx.id, 'rejected', refetchWithdrawals)}>거절</Button>
+                            </div>
+                          ) : (
+                            <span className="text-xs text-muted-foreground">{tx.processedAt ? formatDate(tx.processedAt) : '-'}</span>
+                          )}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

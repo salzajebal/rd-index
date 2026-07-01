@@ -2215,6 +2215,93 @@ export async function registerRoutes(
     }
   });
 
+  // Affiliate: Process transaction request (approve/reject) — own members only
+  app.post("/api/affiliate/transactions/:id/process", requireAffiliate, async (req, res) => {
+    try {
+      const affiliateId = (req.session as any).affiliateId;
+      const id = parseInt(req.params.id);
+      const { status, adminNote } = req.body;
+
+      if (!status || !['approved', 'rejected', 'hold'].includes(status)) {
+        return res.status(400).json({ error: "유효하지 않은 상태입니다" });
+      }
+
+      const request = await storage.getTransactionRequest(id);
+      if (!request) return res.status(404).json({ error: "요청을 찾을 수 없습니다" });
+
+      // Verify the user belongs to this affiliate
+      const affiliateUsers = await storage.getUsersByAffiliateId(affiliateId);
+      if (!affiliateUsers.some(u => u.id === request.userId)) {
+        return res.status(403).json({ error: "권한이 없습니다" });
+      }
+
+      const prevStatus = request.status;
+      const isReprocess = prevStatus !== 'pending' && prevStatus !== 'hold';
+
+      if (status === 'hold') {
+        const user = await storage.getUser(request.userId);
+        if (user && isReprocess) {
+          const currentBalance = parseFloat(user.balance);
+          const amount = parseFloat(request.amount);
+          if (request.type === 'deposit' && prevStatus === 'approved') {
+            await storage.updateUserBalance(user.id, (currentBalance - amount).toString());
+            await storage.updateUser(user.id, { totalDeposit: (parseFloat(user.totalDeposit) - amount).toString() });
+          } else if (request.type === 'withdrawal' && prevStatus === 'approved') {
+            await storage.updateUser(user.id, { totalWithdrawal: (parseFloat(user.totalWithdrawal) - amount).toString() });
+          } else if (request.type === 'withdrawal' && prevStatus === 'rejected') {
+            await storage.updateUserBalance(user.id, (currentBalance - amount).toString());
+          }
+        }
+        const updated = await storage.processTransactionRequest(id, status, affiliateId, adminNote);
+        return res.json({ success: true, request: updated });
+      }
+
+      const updated = await storage.processTransactionRequest(id, status, affiliateId, adminNote);
+      const user = await storage.getUser(request.userId);
+      if (user) {
+        let currentBalance = parseFloat(user.balance);
+        const amount = parseFloat(request.amount);
+        if (isReprocess) {
+          if (request.type === 'deposit' && prevStatus === 'approved') {
+            currentBalance -= amount;
+            await storage.updateUserBalance(user.id, currentBalance.toString());
+            await storage.updateUser(user.id, { totalDeposit: (parseFloat(user.totalDeposit) - amount).toString() });
+          } else if (request.type === 'withdrawal' && prevStatus === 'approved') {
+            await storage.updateUser(user.id, { totalWithdrawal: (parseFloat(user.totalWithdrawal) - amount).toString() });
+          } else if (request.type === 'withdrawal' && prevStatus === 'rejected') {
+            currentBalance -= amount;
+            await storage.updateUserBalance(user.id, currentBalance.toString());
+          }
+        }
+        const freshUser = await storage.getUser(user.id);
+        const freshBalance = parseFloat(freshUser?.balance ?? user.balance);
+        if (request.type === 'deposit') {
+          if (status === 'approved') {
+            await storage.updateUserBalance(user.id, (freshBalance + amount).toString());
+            await storage.updateUser(user.id, {
+              totalDeposit: (parseFloat(freshUser?.totalDeposit ?? user.totalDeposit) + amount).toString(),
+            });
+          }
+        } else if (request.type === 'withdrawal') {
+          if (status === 'approved') {
+            await storage.updateUser(user.id, {
+              totalWithdrawal: (parseFloat(freshUser?.totalWithdrawal ?? user.totalWithdrawal) + amount).toString(),
+            });
+          } else if (status === 'rejected') {
+            await storage.updateUserBalance(user.id, (freshBalance + amount).toString());
+          }
+        }
+        const updatedUser = await storage.getUser(user.id);
+        broadcastToUser(user.id, 'transaction_processed', { ...updated, newBalance: updatedUser?.balance });
+        broadcastToAdmins('balance_updated', { userId: user.id, balance: updatedUser?.balance });
+      }
+      res.json({ success: true, request: updated });
+    } catch (error) {
+      console.error("Affiliate process transaction error:", error);
+      res.status(500).json({ error: "처리에 실패했습니다" });
+    }
+  });
+
   // Affiliate: Round forced (read) - same global data as admin
   app.get("/api/affiliate/round-forced", requireAffiliate, async (req, res) => {
     try {
