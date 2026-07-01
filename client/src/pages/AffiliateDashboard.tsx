@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { RoundForcedTab } from '@/components/RoundForcedTab';
 import {
   Users, LogOut, MessageSquare, RefreshCw, Eye, EyeOff,
-  Edit2, Snowflake, Play, ChevronLeft, ChevronRight,
+  Edit2, ChevronLeft, ChevronRight,
   List, Zap, ArrowUp, ArrowDown, ArrowUpDown, X,
 } from 'lucide-react';
 
@@ -126,7 +126,7 @@ function AffiliateLogin() {
       <div className="w-full max-w-sm bg-card border border-border rounded-xl p-8 space-y-6 shadow-lg">
         <div className="text-center">
           <h1 className="text-2xl font-bold">총판 로그인</h1>
-          <p className="text-sm text-muted-foreground mt-1">BTK 총판 관리 시스템</p>
+          <p className="text-sm text-muted-foreground mt-1">MIB 총판 관리 시스템</p>
         </div>
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-2">
@@ -248,22 +248,6 @@ export default function AffiliateDashboard() {
     window.location.reload();
   };
 
-  const handleToggleFreeze = async (user: AffiliateUser) => {
-    try {
-      const res = await fetch(`/api/affiliate/users/${user.id}/manage`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ isActive: !user.isActive }),
-      });
-      if (!res.ok) throw new Error();
-      toast.success(user.isActive ? `${user.username} 동결 처리` : `${user.username} 활성화`);
-      refetchUsers();
-    } catch {
-      toast.error('처리에 실패했습니다');
-    }
-  };
-
   const handleSaveUser = async () => {
     if (!editingUser) return;
     setIsSaving(true);
@@ -344,7 +328,7 @@ export default function AffiliateDashboard() {
       <header className="border-b border-border bg-card sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-lg font-bold">BTK 총판</span>
+            <span className="text-lg font-bold">MIB 총판</span>
             <span className="text-sm text-muted-foreground">{auth.displayName}</span>
           </div>
           <button
@@ -526,13 +510,6 @@ export default function AffiliateDashboard() {
                             >
                               <Edit2 className="w-3 h-3" />
                               <span className="hidden lg:inline">수정</span>
-                            </button>
-                            <button
-                              onClick={() => handleToggleFreeze(user)}
-                              className={cn('p-1.5 rounded hover:bg-muted/50', user.isActive ? 'text-blue-400 hover:text-blue-300' : 'text-up hover:text-up')}
-                              title={user.isActive ? '동결' : '활성화'}
-                            >
-                              {user.isActive ? <Snowflake className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                             </button>
                           </div>
                         </td>
