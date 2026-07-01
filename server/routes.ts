@@ -4720,6 +4720,16 @@ export async function registerRoutes(
   app.get("/api/inquiries", requireAuth, async (req, res) => {
     try {
       const inquiries = await storage.getInquiriesForUser(req.session.userId!);
+      // 조회 시 answered 상태의 문의를 자동으로 읽음 처리
+      const hasUnread = inquiries.some((i: any) => i.status === 'answered' && !i.isReplyRead);
+      if (hasUnread) {
+        await storage.markAllInquiryRepliesReadForUser(req.session.userId!);
+        // 읽음 처리 후 업데이트된 데이터 반환
+        const updated = inquiries.map((i: any) =>
+          i.status === 'answered' ? { ...i, isReplyRead: true } : i
+        );
+        return res.json(updated);
+      }
       res.json(inquiries);
     } catch (error) {
       console.error("Get inquiries error:", error);
