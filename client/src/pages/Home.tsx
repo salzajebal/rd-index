@@ -111,7 +111,7 @@ function HomeInner() {
   const { data: myInquiries = [], refetch: refetchInquiries } = useQuery<any[]>({
     queryKey: ['/api/inquiries'],
     queryFn: async () => {
-      const res = await fetch('/api/inquiries');
+      const res = await fetch('/api/inquiries', { credentials: 'include' });
       if (!res.ok) return [];
       return res.json();
     },
@@ -120,17 +120,13 @@ function HomeInner() {
     refetchInterval: 30000,
   });
 
-  // 답변된 문의가 있을 때 자동으로 읽음 처리 (어드민 화면에 "회원읽음" 반영)
+  // 모달이 열릴 때 읽음 처리 (어드민 화면에 "회원읽음" 반영)
   useEffect(() => {
     if (!showMyInquiriesModal) return;
-    const hasUnread = myInquiries.some(
-      (i: any) => i.status === 'answered' && !i.isReplyRead
-    );
-    if (!hasUnread) return;
     fetch('/api/inquiries/read-replies', { method: 'POST', credentials: 'include' })
       .then(() => refetchInquiries())
       .catch(() => {});
-  }, [showMyInquiriesModal, myInquiries]);
+  }, [showMyInquiriesModal]);
 
   // Fetch user transactions (입출금 내역)
   const { data: myTransactions = [], refetch: refetchTransactions } = useQuery<any[]>({
