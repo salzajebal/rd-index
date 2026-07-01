@@ -2359,6 +2359,24 @@ export async function registerRoutes(
     }
   });
 
+  // Admin: Assign user to affiliate by username (case-insensitive)
+  app.post("/api/admin/affiliates/:affiliateId/assign-user", requireAdmin, async (req, res) => {
+    try {
+      const { affiliateId } = req.params;
+      const { username } = req.body;
+      if (!username) return res.status(400).json({ error: "아이디를 입력해주세요" });
+
+      const allUsers = await storage.getAllUsers();
+      const target = allUsers.find(u => u.username.toLowerCase() === username.trim().toLowerCase() && u.role === 'user');
+      if (!target) return res.status(404).json({ error: "존재하지 않는 회원 아이디입니다" });
+
+      await storage.updateUser(target.id, { affiliateId });
+      res.json({ success: true, userId: target.id, username: target.username });
+    } catch (error) {
+      res.status(500).json({ error: "배정에 실패했습니다" });
+    }
+  });
+
   // Admin: Create affiliate
   app.post("/api/admin/affiliates", requireAdmin, async (req, res) => {
     try {

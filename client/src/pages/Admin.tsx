@@ -6983,23 +6983,25 @@ export default function Admin() {
                 onChange={(e) => setAddMemberUsername(e.target.value)}
                 onKeyDown={async (e) => {
                   if (e.key !== 'Enter') return;
-                  const target = users.find(u => u.username === addMemberUsername.trim());
-                  if (!target) { toast.error("존재하지 않는 아이디입니다"); return; }
-                  const res = await fetch(`/api/admin/users/${target.id}`, {
-                    method: 'PATCH',
+                  const trimmed = addMemberUsername.trim();
+                  if (!trimmed) return;
+                  const res = await fetch(`/api/admin/affiliates/${addMemberAffiliateId}/assign-user`, {
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',
-                    body: JSON.stringify({ affiliateId: addMemberAffiliateId }),
+                    body: JSON.stringify({ username: trimmed }),
                   });
                   if (res.ok) {
+                    const data = await res.json();
                     const aff = affiliatesList.find(a => a.id === addMemberAffiliateId);
-                    toast.success(`${target.username} → ${aff?.displayName} 배정 완료`);
+                    toast.success(`${data.username} → ${aff?.displayName} 배정 완료`);
                     setAddMemberUsername("");
                     setAddMemberAffiliateId(null);
                     refetchUsers();
                     refetchAffiliates();
                   } else {
-                    toast.error("배정 실패");
+                    const data = await res.json().catch(() => ({}));
+                    toast.error(data.error || "배정 실패");
                   }
                 }}
               />
@@ -7008,23 +7010,25 @@ export default function Admin() {
               <Button variant="outline" onClick={() => { setAddMemberAffiliateId(null); setAddMemberUsername(""); }}>취소</Button>
               <Button
                 onClick={async () => {
-                  const target = users.find(u => u.username === addMemberUsername.trim());
-                  if (!target) { toast.error("존재하지 않는 아이디입니다"); return; }
-                  const res = await fetch(`/api/admin/users/${target.id}`, {
-                    method: 'PATCH',
+                  const trimmed = addMemberUsername.trim();
+                  if (!trimmed) return;
+                  const res = await fetch(`/api/admin/affiliates/${addMemberAffiliateId}/assign-user`, {
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',
-                    body: JSON.stringify({ affiliateId: addMemberAffiliateId }),
+                    body: JSON.stringify({ username: trimmed }),
                   });
                   if (res.ok) {
+                    const data = await res.json();
                     const aff = affiliatesList.find(a => a.id === addMemberAffiliateId);
-                    toast.success(`${target.username} → ${aff?.displayName} 배정 완료`);
+                    toast.success(`${data.username} → ${aff?.displayName} 배정 완료`);
                     setAddMemberUsername("");
                     setAddMemberAffiliateId(null);
                     refetchUsers();
                     refetchAffiliates();
                   } else {
-                    toast.error("배정 실패");
+                    const data = await res.json().catch(() => ({}));
+                    toast.error(data.error || "배정 실패");
                   }
                 }}
                 disabled={!addMemberUsername.trim()}
