@@ -598,11 +598,12 @@ export default function AffiliateDashboard() {
                 <List className="w-5 h-5 text-primary" />
                 주문내역
               </h1>
-              <Button variant="ghost" size="sm" disabled={isOrderFetching} onClick={async () => {
+              <Button variant="outline" size="sm" onClick={async () => {
                 await refetchOrderHistory();
                 toast.success('새로고침 완료');
-              }} className="h-8">
-                <RefreshCw className={cn("w-4 h-4 mr-1", isOrderFetching && "animate-spin")} />새로고침
+              }} className="h-8 px-2 lg:px-3">
+                <RefreshCw className={cn("w-4 h-4 lg:mr-2", isOrderFetching && "animate-spin")} />
+                <span className="hidden lg:inline">새로고침</span>
               </Button>
             </div>
 
@@ -780,11 +781,12 @@ export default function AffiliateDashboard() {
                 <TrendingUp className="w-5 h-5 text-up" />
                 입금신청
               </h1>
-              <Button variant="ghost" size="sm" disabled={isDepositsFetching} onClick={async () => {
+              <Button variant="outline" size="sm" onClick={async () => {
                 await refetchDeposits();
                 toast.success('새로고침 완료');
-              }} className="h-8">
-                <RefreshCw className={cn("w-4 h-4 mr-1", isDepositsFetching && "animate-spin")} />새로고침
+              }} className="h-8 px-2 lg:px-3">
+                <RefreshCw className={cn("w-4 h-4 lg:mr-2", isDepositsFetching && "animate-spin")} />
+                <span className="hidden lg:inline">새로고침</span>
               </Button>
             </div>
             <div className="bg-card border border-border rounded-lg overflow-hidden">
@@ -847,11 +849,12 @@ export default function AffiliateDashboard() {
                 <TrendingDown className="w-5 h-5 text-down" />
                 출금신청
               </h1>
-              <Button variant="ghost" size="sm" disabled={isWithdrawalsFetching} onClick={async () => {
+              <Button variant="outline" size="sm" onClick={async () => {
                 await refetchWithdrawals();
                 toast.success('새로고침 완료');
-              }} className="h-8">
-                <RefreshCw className={cn("w-4 h-4 mr-1", isWithdrawalsFetching && "animate-spin")} />새로고침
+              }} className="h-8 px-2 lg:px-3">
+                <RefreshCw className={cn("w-4 h-4 lg:mr-2", isWithdrawalsFetching && "animate-spin")} />
+                <span className="hidden lg:inline">새로고침</span>
               </Button>
             </div>
             <div className="bg-card border border-border rounded-lg overflow-hidden">
@@ -915,11 +918,12 @@ export default function AffiliateDashboard() {
                 <MessageSquare className="w-5 h-5 text-primary" />
                 1:1 문의
               </h1>
-              <Button variant="ghost" size="sm" disabled={isInquiriesFetching} onClick={async () => {
+              <Button variant="outline" size="sm" onClick={async () => {
                 await refetchInquiries();
                 toast.success('새로고침 완료');
-              }} className="h-8">
-                <RefreshCw className={cn("w-4 h-4 mr-1", isInquiriesFetching && "animate-spin")} />새로고침
+              }} className="h-8 px-2 lg:px-3">
+                <RefreshCw className={cn("w-4 h-4 lg:mr-2", isInquiriesFetching && "animate-spin")} />
+                <span className="hidden lg:inline">새로고침</span>
               </Button>
             </div>
             <div className="space-y-3">
