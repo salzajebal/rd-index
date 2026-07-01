@@ -2187,6 +2187,34 @@ export async function registerRoutes(
     }
   });
 
+  // Affiliate: Transactions (deposit/withdrawal requests for affiliate's members)
+  app.get("/api/affiliate/transactions", requireAffiliate, async (req, res) => {
+    try {
+      const affiliateId = (req.session as any).affiliateId;
+      const type = req.query.type as string | undefined; // 'deposit' | 'withdrawal' | undefined
+      const affiliateUsers = await storage.getUsersByAffiliateId(affiliateId);
+      const userIds = new Set(affiliateUsers.map(u => u.id));
+      const all = await storage.getAllTransactionRequests();
+      const filtered = all.filter(t => userIds.has(t.userId) && (!type || t.type === type));
+      filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      const userMap = new Map(affiliateUsers.map(u => [u.id, u]));
+      const result = filtered.map(t => {
+        const u = userMap.get(t.userId);
+        return {
+          ...t,
+          username: u?.username,
+          name: u?.name,
+          userBankName: u?.bankName,
+          userAccountHolder: u?.accountHolder,
+          userAccountNumber: u?.accountNumber,
+        };
+      });
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: "입출금 내역 조회에 실패했습니다" });
+    }
+  });
+
   // Affiliate: Round forced (read) - same global data as admin
   app.get("/api/affiliate/round-forced", requireAffiliate, async (req, res) => {
     try {

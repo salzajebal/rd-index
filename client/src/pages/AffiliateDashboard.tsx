@@ -10,6 +10,7 @@ import {
   Users, LogOut, MessageSquare, RefreshCw, Eye, EyeOff,
   Edit2, ChevronLeft, ChevronRight,
   List, Zap, ArrowUp, ArrowDown, ArrowUpDown, X,
+  TrendingDown, TrendingUp,
 } from 'lucide-react';
 
 interface AffiliateAuth {
@@ -58,6 +59,26 @@ interface AffiliateBet {
   balanceBefore: string | null;
   balanceAfter: string | null;
   createdAt: string;
+}
+
+interface AffiliateTransaction {
+  id: number;
+  userId: string;
+  username: string | undefined;
+  name: string | null | undefined;
+  type: string;
+  amount: string;
+  status: string;
+  bankName: string | null;
+  accountHolder: string | null;
+  accountNumber: string | null;
+  senderName: string | null;
+  adminNote: string | null;
+  createdAt: string;
+  processedAt: string | null;
+  userBankName: string | null | undefined;
+  userAccountHolder: string | null | undefined;
+  userAccountNumber: string | null | undefined;
 }
 
 interface AffiliateInquiry {
@@ -148,7 +169,7 @@ function AffiliateLogin() {
 
 export default function AffiliateDashboard() {
   const queryClient = useQueryClient();
-  const [activeTab, setActiveTab] = useState<'users' | 'order-history' | 'round-forced' | 'inquiries'>('users');
+  const [activeTab, setActiveTab] = useState<'users' | 'order-history' | 'round-forced' | 'inquiries' | 'deposits' | 'withdrawals'>('users');
 
   // Users tab state
   const [userSearchQuery, setUserSearchQuery] = useState('');
@@ -229,6 +250,30 @@ export default function AffiliateDashboard() {
       return res.json();
     },
     enabled: !!auth && activeTab === 'inquiries',
+    refetchInterval: 15000,
+  });
+
+  // Deposits
+  const { data: deposits = [], refetch: refetchDeposits } = useQuery<AffiliateTransaction[]>({
+    queryKey: ['/api/affiliate/transactions', 'deposit'],
+    queryFn: async () => {
+      const res = await fetch('/api/affiliate/transactions?type=deposit', { credentials: 'include' });
+      if (!res.ok) return [];
+      return res.json();
+    },
+    enabled: !!auth && activeTab === 'deposits',
+    refetchInterval: 15000,
+  });
+
+  // Withdrawals
+  const { data: withdrawals = [], refetch: refetchWithdrawals } = useQuery<AffiliateTransaction[]>({
+    queryKey: ['/api/affiliate/transactions', 'withdrawal'],
+    queryFn: async () => {
+      const res = await fetch('/api/affiliate/transactions?type=withdrawal', { credentials: 'include' });
+      if (!res.ok) return [];
+      return res.json();
+    },
+    enabled: !!auth && activeTab === 'withdrawals',
     refetchInterval: 15000,
   });
 
@@ -318,6 +363,8 @@ export default function AffiliateDashboard() {
   const tabs = [
     { key: 'users', label: '회원관리', icon: Users },
     { key: 'order-history', label: '주문내역', icon: List },
+    { key: 'deposits', label: '입금신청', icon: TrendingUp },
+    { key: 'withdrawals', label: '출금신청', icon: TrendingDown },
     { key: 'round-forced', label: '회차별 설정', icon: Zap },
     { key: 'inquiries', label: '1:1 문의', icon: MessageSquare },
   ] as const;
@@ -699,6 +746,115 @@ export default function AffiliateDashboard() {
         {/* ── 회차별 설정 탭 ── */}
         {activeTab === 'round-forced' && (
           <RoundForcedTab apiBase="affiliate" />
+        )}
+
+        {/* ── 입금신청 탭 ── */}
+        {activeTab === 'deposits' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h1 className="text-lg lg:text-2xl font-bold flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-up" />
+                입금신청
+              </h1>
+              <Button variant="ghost" size="sm" onClick={() => refetchDeposits()} className="h-8">
+                <RefreshCw className="w-4 h-4 mr-1" />새로고침
+              </Button>
+            </div>
+            <div className="bg-card border border-border rounded-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-muted/40 border-b border-border">
+                    <tr>
+                      {['신청일시', '아이디', '이름', '금액', '입금자명', '상태', '처리일시', '메모'].map(h => (
+                        <th key={h} className="px-3 py-2.5 text-left text-xs font-medium text-muted-foreground whitespace-nowrap">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {deposits.length === 0 && (
+                      <tr><td colSpan={8} className="px-4 py-10 text-center text-muted-foreground">입금신청 내역이 없습니다</td></tr>
+                    )}
+                    {deposits.map(tx => (
+                      <tr key={tx.id} className="hover:bg-muted/20 transition-colors">
+                        <td className="px-3 py-2.5 whitespace-nowrap text-xs text-muted-foreground">{formatDate(tx.createdAt)}</td>
+                        <td className="px-3 py-2.5 font-medium whitespace-nowrap">{tx.username || '-'}</td>
+                        <td className="px-3 py-2.5 whitespace-nowrap">{tx.name || '-'}</td>
+                        <td className="px-3 py-2.5 whitespace-nowrap font-mono text-up font-semibold">+{formatMoney(tx.amount)}</td>
+                        <td className="px-3 py-2.5 whitespace-nowrap">{tx.senderName || '-'}</td>
+                        <td className="px-3 py-2.5 whitespace-nowrap">
+                          <span className={cn('text-xs px-2 py-0.5 rounded-full font-medium',
+                            tx.status === 'approved' ? 'bg-up/20 text-up' :
+                            tx.status === 'rejected' ? 'bg-down/20 text-down' :
+                            tx.status === 'hold' ? 'bg-yellow-500/20 text-yellow-500' :
+                            'bg-muted text-muted-foreground'
+                          )}>
+                            {tx.status === 'approved' ? '승인' : tx.status === 'rejected' ? '거절' : tx.status === 'hold' ? '보류' : '대기'}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2.5 whitespace-nowrap text-xs text-muted-foreground">{tx.processedAt ? formatDate(tx.processedAt) : '-'}</td>
+                        <td className="px-3 py-2.5 text-xs text-muted-foreground max-w-[120px] truncate">{tx.adminNote || '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── 출금신청 탭 ── */}
+        {activeTab === 'withdrawals' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h1 className="text-lg lg:text-2xl font-bold flex items-center gap-2">
+                <TrendingDown className="w-5 h-5 text-down" />
+                출금신청
+              </h1>
+              <Button variant="ghost" size="sm" onClick={() => refetchWithdrawals()} className="h-8">
+                <RefreshCw className="w-4 h-4 mr-1" />새로고침
+              </Button>
+            </div>
+            <div className="bg-card border border-border rounded-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-muted/40 border-b border-border">
+                    <tr>
+                      {['신청일시', '아이디', '이름', '금액', '은행', '계좌번호', '상태', '처리일시', '메모'].map(h => (
+                        <th key={h} className="px-3 py-2.5 text-left text-xs font-medium text-muted-foreground whitespace-nowrap">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {withdrawals.length === 0 && (
+                      <tr><td colSpan={9} className="px-4 py-10 text-center text-muted-foreground">출금신청 내역이 없습니다</td></tr>
+                    )}
+                    {withdrawals.map(tx => (
+                      <tr key={tx.id} className="hover:bg-muted/20 transition-colors">
+                        <td className="px-3 py-2.5 whitespace-nowrap text-xs text-muted-foreground">{formatDate(tx.createdAt)}</td>
+                        <td className="px-3 py-2.5 font-medium whitespace-nowrap">{tx.username || '-'}</td>
+                        <td className="px-3 py-2.5 whitespace-nowrap">{tx.name || '-'}</td>
+                        <td className="px-3 py-2.5 whitespace-nowrap font-mono text-down font-semibold">-{formatMoney(tx.amount)}</td>
+                        <td className="px-3 py-2.5 whitespace-nowrap">{tx.userBankName || tx.bankName || '-'}</td>
+                        <td className="px-3 py-2.5 whitespace-nowrap font-mono text-xs">{tx.userAccountNumber || tx.accountNumber || '-'}</td>
+                        <td className="px-3 py-2.5 whitespace-nowrap">
+                          <span className={cn('text-xs px-2 py-0.5 rounded-full font-medium',
+                            tx.status === 'approved' ? 'bg-up/20 text-up' :
+                            tx.status === 'rejected' ? 'bg-down/20 text-down' :
+                            tx.status === 'hold' ? 'bg-yellow-500/20 text-yellow-500' :
+                            'bg-muted text-muted-foreground'
+                          )}>
+                            {tx.status === 'approved' ? '승인' : tx.status === 'rejected' ? '거절' : tx.status === 'hold' ? '보류' : '대기'}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2.5 whitespace-nowrap text-xs text-muted-foreground">{tx.processedAt ? formatDate(tx.processedAt) : '-'}</td>
+                        <td className="px-3 py-2.5 text-xs text-muted-foreground max-w-[120px] truncate">{tx.adminNote || '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         )}
 
         {/* ── 1:1 문의 탭 ── */}
