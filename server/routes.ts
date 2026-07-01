@@ -2367,7 +2367,7 @@ export async function registerRoutes(
       if (!username) return res.status(400).json({ error: "아이디를 입력해주세요" });
 
       const allUsers = await storage.getAllUsers();
-      const target = allUsers.find(u => u.username.toLowerCase() === username.trim().toLowerCase() && u.role === 'user');
+      const target = allUsers.find(u => u.username.trim().toLowerCase() === username.trim().toLowerCase() && u.role === 'user');
       if (!target) return res.status(404).json({ error: "존재하지 않는 회원 아이디입니다" });
 
       await storage.updateUser(target.id, { affiliateId });
