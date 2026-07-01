@@ -117,7 +117,20 @@ function HomeInner() {
     },
     enabled: !!user,
     staleTime: 0,
+    refetchInterval: 30000,
   });
+
+  // 답변된 문의가 있을 때 자동으로 읽음 처리 (어드민 화면에 "회원읽음" 반영)
+  useEffect(() => {
+    if (!showMyInquiriesModal) return;
+    const hasUnread = myInquiries.some(
+      (i: any) => i.status === 'answered' && !i.isReplyRead
+    );
+    if (!hasUnread) return;
+    fetch('/api/inquiries/read-replies', { method: 'POST', credentials: 'include' })
+      .then(() => refetchInquiries())
+      .catch(() => {});
+  }, [showMyInquiriesModal, myInquiries]);
 
   // Fetch user transactions (입출금 내역)
   const { data: myTransactions = [], refetch: refetchTransactions } = useQuery<any[]>({
@@ -680,16 +693,9 @@ function HomeInner() {
       </Dialog>
 
       {/* My Inquiries Modal - 내 문의 내역 */}
-      <Dialog open={showMyInquiriesModal} onOpenChange={async (open) => {
+      <Dialog open={showMyInquiriesModal} onOpenChange={(open) => {
         setShowMyInquiriesModal(open);
-        if (open) {
-          refetchInquiries();
-          // 모달 열릴 때 답변된 문의를 일괄 읽음 처리
-          try {
-            await fetch('/api/inquiries/read-replies', { method: 'POST', credentials: 'include' });
-            refetchInquiries();
-          } catch (e) {}
-        }
+        if (open) refetchInquiries();
       }}>
         <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
           <DialogTitle className="sr-only">내 문의 내역</DialogTitle>

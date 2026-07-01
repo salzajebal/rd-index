@@ -1890,6 +1890,7 @@ export async function registerRoutes(
           betCount: stats.betCount,
           winCount: stats.winCount,
           isActive: u.isActive,
+          isBettingBlocked: u.isBettingBlocked ?? false,
           createdAt: u.createdAt,
           lastLoginAt: u.lastLoginAt,
         };
@@ -2101,6 +2102,30 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Affiliate reply inquiry error:", error);
       res.status(500).json({ error: "답변 등록에 실패했습니다" });
+    }
+  });
+
+  // Affiliate: Toggle isBettingBlocked for a member
+  app.patch("/api/affiliate/users/:userId/settings", requireAffiliate, async (req, res) => {
+    try {
+      const affiliateId = (req.session as any).affiliateId;
+      const { userId } = req.params;
+      const { isBettingBlocked } = req.body;
+
+      // Verify the user belongs to this affiliate
+      const user = await storage.getUser(userId);
+      if (!user || user.affiliateId !== affiliateId) {
+        return res.status(403).json({ error: "권한이 없습니다" });
+      }
+
+      const updateData: any = {};
+      if (isBettingBlocked !== undefined) updateData.isBettingBlocked = Boolean(isBettingBlocked);
+
+      const updated = await storage.updateUser(userId, updateData);
+      res.json({ success: true, user: updated });
+    } catch (error) {
+      console.error("Affiliate user settings error:", error);
+      res.status(500).json({ error: "설정 변경에 실패했습니다" });
     }
   });
 

@@ -16,6 +16,10 @@ import {
   ChevronUp,
   Clock,
   CheckCircle,
+  ShoppingCart,
+  Settings,
+  TrendingUp,
+  TrendingDown,
 } from 'lucide-react';
 
 interface AffiliateAuth {
@@ -37,7 +41,12 @@ interface AffiliateUser {
   name: string | null;
   phone: string | null;
   balance: string;
+  totalBet: string;
+  totalWin: string;
+  betCount: number;
+  winCount: number;
   isActive: boolean;
+  isBettingBlocked: boolean;
   createdAt: string;
   lastLoginAt: string | null;
 }
@@ -53,6 +62,23 @@ interface AffiliateInquiry {
   status: string;
   createdAt: string;
   repliedAt: string | null;
+}
+
+interface AffiliateBet {
+  id: number;
+  userId: string;
+  username: string;
+  userName: string;
+  symbol: string;
+  direction: string;
+  amount: string;
+  duration: number;
+  outcome: string | null;
+  profit: string | null;
+  strikePrice: string | null;
+  closePrice: string | null;
+  createdAt: string;
+  resolvedAt: string | null;
 }
 
 function AffiliateLogin({ onLogin }: { onLogin: () => void }) {
@@ -126,13 +152,14 @@ function AffiliateLogin({ onLogin }: { onLogin: () => void }) {
   );
 }
 
-type TabType = 'dashboard' | 'users' | 'inquiries';
+type TabType = 'dashboard' | 'users' | 'orders' | 'member-settings' | 'inquiries';
 
 export default function AffiliateDashboard() {
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [expandedInquiry, setExpandedInquiry] = useState<number | null>(null);
   const [replyText, setReplyText] = useState<Record<number, string>>({});
+  const [blockingUserId, setBlockingUserId] = useState<string | null>(null);
 
   const { data: auth, isLoading: authLoading, refetch: refetchAuth } = useQuery<AffiliateAuth | null>({
     queryKey: ['/api/affiliate/me'],
@@ -154,14 +181,26 @@ export default function AffiliateDashboard() {
     refetchInterval: 30000,
   });
 
-  const { data: users = [] } = useQuery<AffiliateUser[]>({
+  const { data: users = [], refetch: refetchUsers } = useQuery<AffiliateUser[]>({
     queryKey: ['/api/affiliate/users'],
     queryFn: async () => {
       const res = await fetch('/api/affiliate/users');
       if (!res.ok) throw new Error('Failed');
       return res.json();
     },
-    enabled: !!auth && activeTab === 'users',
+    enabled: !!auth && (activeTab === 'users' || activeTab === 'member-settings'),
+    refetchInterval: activeTab === 'users' || activeTab === 'member-settings' ? 15000 : false,
+  });
+
+  const { data: bets = [] } = useQuery<AffiliateBet[]>({
+    queryKey: ['/api/affiliate/bets'],
+    queryFn: async () => {
+      const res = await fetch('/api/affiliate/bets');
+      if (!res.ok) throw new Error('Failed');
+      return res.json();
+    },
+    enabled: !!auth && activeTab === 'orders',
+    refetchInterval: activeTab === 'orders' ? 15000 : false,
   });
 
   const { data: inquiries = [], refetch: refetchInquiries } = useQuery<AffiliateInquiry[]>({
@@ -202,6 +241,32 @@ export default function AffiliateDashboard() {
     onError: (e: any) => toast.error(e.message),
   });
 
+  const blockMutation = useMutation({
+    mutationFn: async ({ userId, isBettingBlocked }: { userId: string; isBettingBlocked: boolean }) => {
+      const res = await fetch(`/api/affiliate/users/${userId}/settings`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isBettingBlocked }),
+      });
+      if (!res.ok) { const e = await res.json(); throw new Error(e.error || '설정 실패'); }
+      return res.json();
+    },
+    onSuccess: (_, { isBettingBlocked }) => {
+      toast.success(isBettingBlocked ? '배팅이 차단되었습니다' : '배팅 차단이 해제되었습니다');
+      setBlockingUserId(null);
+      refetchUsers();
+    },
+    onError: (e: any) => {
+      toast.error(e.message);
+      setBlockingUserId(null);
+    },
+  });
+
+  const handleToggleBlock = (user: AffiliateUser) => {
+    setBlockingUserId(user.id);
+    blockMutation.mutate({ userId: user.id, isBettingBlocked: !user.isBettingBlocked });
+  };
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast.success('복사되었습니다');
@@ -215,6 +280,7 @@ export default function AffiliateDashboard() {
 
   const formatMoney = (amount: string | number) => {
     const num = typeof amount === 'string' ? parseFloat(amount) : amount;
+    if (isNaN(num)) return '0원';
     return Math.floor(num).toLocaleString() + '원';
   };
 
@@ -252,6 +318,14 @@ export default function AffiliateDashboard() {
 
   if (!auth) return <AffiliateLogin onLogin={() => refetchAuth()} />;
 
+  const navItems: { id: TabType; label: string; icon: any; badge?: number }[] = [
+    { id: 'dashboard', label: '대시보드', icon: BarChart3 },
+    { id: 'users', label: '소속 회원', icon: Users },
+    { id: 'orders', label: '주문내역', icon: ShoppingCart },
+    { id: 'member-settings', label: '회차별 설정', icon: Settings },
+    { id: 'inquiries', label: '1:1 문의', icon: MessageSquare, badge: pendingCount },
+  ];
+
   return (
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
@@ -271,11 +345,7 @@ export default function AffiliateDashboard() {
         </div>
 
         <nav className="flex-1 p-3 space-y-1">
-          {([
-            { id: 'dashboard', label: '대시보드', icon: BarChart3 },
-            { id: 'users', label: '소속 회원', icon: Users },
-            { id: 'inquiries', label: '1:1 문의', icon: MessageSquare, badge: pendingCount },
-          ] as const).map(({ id, label, icon: Icon, badge }) => (
+          {navItems.map(({ id, label, icon: Icon, badge }) => (
             <button
               key={id}
               onClick={() => setActiveTab(id)}
@@ -397,7 +467,7 @@ export default function AffiliateDashboard() {
             </>
           )}
 
-          {/* Users Tab */}
+          {/* Users Tab - 소속 회원 */}
           {activeTab === 'users' && (
             <>
               <div>
@@ -414,9 +484,144 @@ export default function AffiliateDashboard() {
                           <th className="px-4 py-3 text-left font-medium">아이디</th>
                           <th className="px-4 py-3 text-left font-medium">이름</th>
                           <th className="px-4 py-3 text-right font-medium">잔액</th>
+                          <th className="px-4 py-3 text-right font-medium">총 배팅</th>
+                          <th className="px-4 py-3 text-center font-medium">배팅수</th>
                           <th className="px-4 py-3 text-center font-medium">상태</th>
                           <th className="px-4 py-3 text-center font-medium">가입일</th>
                           <th className="px-4 py-3 text-center font-medium">최근 접속</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border">
+                        {users.length === 0 && (
+                          <tr>
+                            <td colSpan={8} className="px-4 py-8 text-center text-muted-foreground">소속 회원이 없습니다</td>
+                          </tr>
+                        )}
+                        {users.map(u => (
+                          <tr key={u.id} className="hover:bg-muted/20 transition-colors">
+                            <td className="px-4 py-3 font-medium">{u.username}</td>
+                            <td className="px-4 py-3 text-muted-foreground">{u.name || '-'}</td>
+                            <td className="px-4 py-3 text-right">{formatMoney(u.balance)}</td>
+                            <td className="px-4 py-3 text-right text-muted-foreground">{formatMoney(u.totalBet)}</td>
+                            <td className="px-4 py-3 text-center text-muted-foreground">{u.betCount}회</td>
+                            <td className="px-4 py-3 text-center">
+                              {u.isBettingBlocked
+                                ? <span className="text-xs bg-red-500/10 text-red-500 px-2 py-0.5 rounded">배팅차단</span>
+                                : u.isActive
+                                  ? <span className="text-xs bg-green-500/10 text-green-500 px-2 py-0.5 rounded">활성</span>
+                                  : <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded">비활성</span>}
+                            </td>
+                            <td className="px-4 py-3 text-center text-xs text-muted-foreground">{formatDate(u.createdAt)}</td>
+                            <td className="px-4 py-3 text-center text-xs text-muted-foreground">
+                              {u.lastLoginAt ? formatDate(u.lastLoginAt) : '-'}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
+
+          {/* Orders Tab - 주문내역 */}
+          {activeTab === 'orders' && (
+            <>
+              <div>
+                <h1 className="text-xl font-bold">주문내역</h1>
+                <p className="text-sm text-muted-foreground mt-0.5">소속 회원 최근 거래 {bets.length}건</p>
+              </div>
+
+              <Card className="bg-card border-border">
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead className="bg-muted/50">
+                        <tr>
+                          <th className="px-4 py-3 text-left font-medium">회원</th>
+                          <th className="px-4 py-3 text-center font-medium">종목</th>
+                          <th className="px-4 py-3 text-center font-medium">방향</th>
+                          <th className="px-4 py-3 text-right font-medium">배팅금</th>
+                          <th className="px-4 py-3 text-center font-medium">시간</th>
+                          <th className="px-4 py-3 text-center font-medium">결과</th>
+                          <th className="px-4 py-3 text-right font-medium">손익</th>
+                          <th className="px-4 py-3 text-center font-medium">거래일시</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border">
+                        {bets.length === 0 && (
+                          <tr>
+                            <td colSpan={8} className="px-4 py-8 text-center text-muted-foreground">거래 내역이 없습니다</td>
+                          </tr>
+                        )}
+                        {bets.map(bet => {
+                          const isWin = bet.outcome === 'win';
+                          const isLose = bet.outcome === 'lose';
+                          const isPending = !bet.outcome;
+                          const profit = bet.profit ? parseFloat(bet.profit) : null;
+                          return (
+                            <tr key={bet.id} className="hover:bg-muted/20 transition-colors">
+                              <td className="px-4 py-3">
+                                <span className="font-medium">{bet.username}</span>
+                                {bet.userName && bet.userName !== '-' && (
+                                  <span className="text-xs text-muted-foreground ml-1">({bet.userName})</span>
+                                )}
+                              </td>
+                              <td className="px-4 py-3 text-center font-mono text-xs">{bet.symbol}</td>
+                              <td className="px-4 py-3 text-center">
+                                {bet.direction === 'up'
+                                  ? <span className="inline-flex items-center gap-1 text-xs font-bold text-red-500"><TrendingUp className="w-3 h-3" />상승</span>
+                                  : <span className="inline-flex items-center gap-1 text-xs font-bold text-blue-500"><TrendingDown className="w-3 h-3" />하락</span>}
+                              </td>
+                              <td className="px-4 py-3 text-right font-medium">{formatMoney(bet.amount)}</td>
+                              <td className="px-4 py-3 text-center text-xs text-muted-foreground">{bet.duration / 60}분</td>
+                              <td className="px-4 py-3 text-center">
+                                {isPending
+                                  ? <span className="text-xs bg-yellow-500/10 text-yellow-500 px-2 py-0.5 rounded">진행중</span>
+                                  : isWin
+                                    ? <span className="text-xs bg-green-500/10 text-green-500 px-2 py-0.5 rounded">승리</span>
+                                    : <span className="text-xs bg-red-500/10 text-red-500 px-2 py-0.5 rounded">패배</span>}
+                              </td>
+                              <td className="px-4 py-3 text-right">
+                                {profit !== null
+                                  ? <span className={profit >= 0 ? 'text-green-500 font-medium' : 'text-red-500 font-medium'}>
+                                      {profit >= 0 ? '+' : ''}{formatMoney(profit)}
+                                    </span>
+                                  : <span className="text-muted-foreground">-</span>}
+                              </td>
+                              <td className="px-4 py-3 text-center text-xs text-muted-foreground">{formatDateTime(bet.createdAt)}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
+
+          {/* Member Settings Tab - 회차별 설정 */}
+          {activeTab === 'member-settings' && (
+            <>
+              <div>
+                <h1 className="text-xl font-bold">회차별 설정</h1>
+                <p className="text-sm text-muted-foreground mt-0.5">소속 회원 배팅 차단 설정</p>
+              </div>
+
+              <Card className="bg-card border-border">
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead className="bg-muted/50">
+                        <tr>
+                          <th className="px-4 py-3 text-left font-medium">아이디</th>
+                          <th className="px-4 py-3 text-left font-medium">이름</th>
+                          <th className="px-4 py-3 text-right font-medium">잔액</th>
+                          <th className="px-4 py-3 text-center font-medium">계정 상태</th>
+                          <th className="px-4 py-3 text-center font-medium">배팅 차단</th>
+                          <th className="px-4 py-3 text-center font-medium">설정</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border">
@@ -435,9 +640,28 @@ export default function AffiliateDashboard() {
                                 ? <span className="text-xs bg-green-500/10 text-green-500 px-2 py-0.5 rounded">활성</span>
                                 : <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded">비활성</span>}
                             </td>
-                            <td className="px-4 py-3 text-center text-xs text-muted-foreground">{formatDate(u.createdAt)}</td>
-                            <td className="px-4 py-3 text-center text-xs text-muted-foreground">
-                              {u.lastLoginAt ? formatDate(u.lastLoginAt) : '-'}
+                            <td className="px-4 py-3 text-center">
+                              {u.isBettingBlocked
+                                ? <span className="text-xs bg-red-500/10 text-red-500 px-2 py-0.5 rounded font-medium">차단됨</span>
+                                : <span className="text-xs bg-green-500/10 text-green-500 px-2 py-0.5 rounded">정상</span>}
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <Button
+                                size="sm"
+                                variant={u.isBettingBlocked ? 'outline' : 'destructive'}
+                                className={cn(
+                                  'text-xs h-7 px-3',
+                                  !u.isBettingBlocked && 'bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500/20'
+                                )}
+                                disabled={blockingUserId === u.id}
+                                onClick={() => handleToggleBlock(u)}
+                              >
+                                {blockingUserId === u.id
+                                  ? '처리중...'
+                                  : u.isBettingBlocked
+                                    ? '차단 해제'
+                                    : '배팅 차단'}
+                              </Button>
                             </td>
                           </tr>
                         ))}
@@ -446,6 +670,11 @@ export default function AffiliateDashboard() {
                   </div>
                 </CardContent>
               </Card>
+
+              <div className="text-xs text-muted-foreground bg-muted/30 rounded-lg p-3">
+                <p className="font-medium mb-1">안내</p>
+                <p>배팅 차단 설정 시 해당 회원은 배팅을 진행할 수 없습니다. 어드민 권한이 필요한 추가 설정은 관리자에게 문의해주세요.</p>
+              </div>
             </>
           )}
 
