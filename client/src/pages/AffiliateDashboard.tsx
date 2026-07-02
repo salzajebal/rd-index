@@ -952,11 +952,11 @@ export default function AffiliateDashboard() {
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground font-medium mb-1">제목</p>
-                    <p className="text-sm">{inquiry.subject}</p>
+                    <p className="text-sm">{inquiry.title}</p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground font-medium mb-1">문의 내용</p>
-                    <p className="text-sm whitespace-pre-wrap bg-muted/30 rounded p-2">{inquiry.message}</p>
+                    <p className="text-sm whitespace-pre-wrap bg-muted/30 rounded p-2">{inquiry.content}</p>
                   </div>
                   {inquiry.reply && (
                     <div>
