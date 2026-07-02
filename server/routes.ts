@@ -1846,6 +1846,21 @@ export async function registerRoutes(
       const monthVolume = await storage.getAffiliateTradingVolume(affiliateId, thisMonth);
       const totalVolume = await storage.getAffiliateTradingVolume(affiliateId);
 
+      // Total deposit / withdrawal sums (approved only)
+      const userIds = users.map(u => u.id);
+      let totalDepositAmount = 0;
+      let totalWithdrawalAmount = 0;
+      if (userIds.length > 0) {
+        const allTx = await storage.getAllTransactionRequests();
+        for (const tx of allTx) {
+          if (!userIds.includes(tx.userId)) continue;
+          if (tx.status !== 'approved') continue;
+          const amt = parseFloat(tx.amount || '0');
+          if (tx.type === 'deposit') totalDepositAmount += amt;
+          else if (tx.type === 'withdrawal') totalWithdrawalAmount += amt;
+        }
+      }
+
       // Recent signups (last 5)
       const recentUsers = users.slice(0, 5).map(u => ({
         id: u.id,
@@ -1855,7 +1870,10 @@ export async function registerRoutes(
       }));
 
       res.json({
+        referralCode: affiliate.referralCode,
         totalUsers: users.length,
+        totalDepositAmount,
+        totalWithdrawalAmount,
         todayVolume,
         monthVolume,
         totalVolume,

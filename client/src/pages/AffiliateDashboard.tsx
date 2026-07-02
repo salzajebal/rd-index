@@ -10,7 +10,7 @@ import {
   Users, LogOut, MessageSquare, RefreshCw, Eye, EyeOff,
   Edit2, ChevronLeft, ChevronRight,
   List, Zap, ArrowUp, ArrowDown, ArrowUpDown, X,
-  TrendingDown, TrendingUp,
+  TrendingDown, TrendingUp, Copy, Check,
 } from 'lucide-react';
 
 interface AffiliateAuth {
@@ -19,6 +19,16 @@ interface AffiliateAuth {
   displayName: string;
   referralCode: string;
   commissionRate: string;
+}
+
+interface AffiliateSummary {
+  referralCode: string;
+  totalUsers: number;
+  totalDepositAmount: number;
+  totalWithdrawalAmount: number;
+  todayVolume: number;
+  monthVolume: number;
+  totalVolume: number;
 }
 
 interface AffiliateUser {
@@ -197,6 +207,8 @@ export default function AffiliateDashboard() {
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const [replyText, setReplyText] = useState('');
 
+  const [codeCopied, setCodeCopied] = useState(false);
+
   // Auth check
   const { data: auth, isLoading: authLoading } = useQuery<AffiliateAuth | null>({
     queryKey: ['/api/affiliate/me'],
@@ -206,6 +218,18 @@ export default function AffiliateDashboard() {
       return res.json();
     },
     retry: false,
+  });
+
+  // Summary
+  const { data: summary, refetch: refetchSummary } = useQuery<AffiliateSummary>({
+    queryKey: ['/api/affiliate/summary'],
+    queryFn: async () => {
+      const res = await fetch('/api/affiliate/summary', { credentials: 'include' });
+      if (!res.ok) throw new Error('failed');
+      return res.json();
+    },
+    enabled: !!auth,
+    refetchInterval: 30000,
   });
 
   // Users
@@ -410,6 +434,59 @@ export default function AffiliateDashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+
+        {/* ── 요약 대시보드 ── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* 총판코드 */}
+          <div className="bg-card border border-border rounded-xl p-4 space-y-1">
+            <p className="text-xs text-muted-foreground font-medium">총판코드</p>
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold tracking-widest text-primary">
+                {summary?.referralCode ?? auth.referralCode ?? '-'}
+              </span>
+              <button
+                onClick={() => {
+                  const code = summary?.referralCode ?? auth.referralCode;
+                  if (!code) return;
+                  navigator.clipboard.writeText(code).then(() => {
+                    setCodeCopied(true);
+                    setTimeout(() => setCodeCopied(false), 1500);
+                  });
+                }}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {codeCopied ? <Check className="w-3.5 h-3.5 text-up" /> : <Copy className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+          </div>
+
+          {/* 총 회원 수 */}
+          <div className="bg-card border border-border rounded-xl p-4 space-y-1">
+            <p className="text-xs text-muted-foreground font-medium">총 회원 수</p>
+            <p className="text-lg font-bold">
+              {summary != null ? `${summary.totalUsers.toLocaleString('ko-KR')}명` : `${users.length.toLocaleString('ko-KR')}명`}
+            </p>
+          </div>
+
+          {/* 총 입금 합계 */}
+          <div className="bg-card border border-border rounded-xl p-4 space-y-1">
+            <p className="text-xs text-muted-foreground font-medium">총 입금 합계</p>
+            <p className="text-lg font-bold text-up">
+              {summary != null ? (summary.totalDepositAmount).toLocaleString('ko-KR') + '원' : '-'}
+            </p>
+            <p className="text-xs text-muted-foreground">승인 완료 기준</p>
+          </div>
+
+          {/* 총 출금 합계 */}
+          <div className="bg-card border border-border rounded-xl p-4 space-y-1">
+            <p className="text-xs text-muted-foreground font-medium">총 출금 합계</p>
+            <p className="text-lg font-bold text-down">
+              {summary != null ? (summary.totalWithdrawalAmount).toLocaleString('ko-KR') + '원' : '-'}
+            </p>
+            <p className="text-xs text-muted-foreground">승인 완료 기준</p>
+          </div>
+        </div>
+
         {/* Tabs */}
         <div className="flex gap-1 border-b border-border overflow-x-auto">
           {tabs.map(({ key, label, icon: Icon }) => (
