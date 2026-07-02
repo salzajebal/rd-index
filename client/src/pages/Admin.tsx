@@ -6673,6 +6673,7 @@ export default function Admin() {
                     isBettingBlocked: editingUser.isBettingBlocked,
                     alwaysPendingEnabled: editingUser.alwaysPendingEnabled ?? false,
                     telegramNotifyEnabled: editingUser.telegramNotifyEnabled ?? false,
+                    affiliateId: editingUser.affiliateId,
                   })} 
                   disabled={updateUser.isPending}
                 >
