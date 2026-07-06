@@ -68,7 +68,7 @@ export function LearnInvestLogo({
         fill="#14328C"
       >
         RD
-        <tspan fontWeight="300" fill="#3454D1" letterSpacing="1.2">
+        <tspan fontWeight="600" fill="#3454D1" letterSpacing="0.8">
           -INDEX
         </tspan>
       </text>
