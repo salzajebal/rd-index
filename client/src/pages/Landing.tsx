@@ -1170,7 +1170,7 @@ export default function Landing() {
               <LearnInvestLogo variant="icon" size={96} className="relative rounded-2xl" />
             </div>
             <h1 className="text-5xl md:text-7xl font-bold mb-2 tracking-wide">
-              <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">RD</span>
+              <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">RD-INDEX</span>
             </h1>
           </div>
 
