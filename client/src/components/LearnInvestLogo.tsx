@@ -65,7 +65,7 @@ export function LearnInvestLogo({
         fontSize="19"
         fontWeight="800"
         letterSpacing="-0.3"
-        fill="#1E1B33"
+        fill="#14328C"
       >
         RD-INDEX
       </text>
