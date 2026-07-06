@@ -577,15 +577,15 @@ export default function Landing() {
 
   if (isIpBlocked) {
     return (
-      <div className="min-h-screen bg-[#100805] flex flex-col items-center justify-center px-4">
+      <div className="min-h-screen bg-[#F7F6FD] flex flex-col items-center justify-center px-4">
         <div className="text-center space-y-6 max-w-md">
-          <div className="w-20 h-20 mx-auto rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center">
+          <div className="w-20 h-20 mx-auto rounded-full bg-red-50 border border-red-200 flex items-center justify-center">
             <svg className="w-10 h-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-white">접근이 차단되었습니다</h1>
-          <p className="text-gray-400 text-sm leading-relaxed">
+          <h1 className="text-2xl font-bold text-gray-900">접근이 차단되었습니다</h1>
+          <p className="text-gray-500 text-sm leading-relaxed">
             해당 IP 주소는 관리자에 의해 차단되었습니다.<br />
             문의사항이 있으시면 고객센터로 연락해 주세요.
           </p>
@@ -1429,11 +1429,11 @@ export default function Landing() {
         <DialogContent className="sm:max-w-md p-0 bg-transparent border-none shadow-none [&>button]:hidden">
           <DialogTitle className="sr-only">로그인</DialogTitle>
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 via-amber-500/20 to-amber-500/20 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-[#1C1008]/95 border border-white/10 rounded-2xl p-8 shadow-2xl">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
+            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-8 shadow-2xl">
               <button 
                 onClick={() => setShowLoginModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors z-10"
                 data-testid="button-close-login-modal"
               >
                 <X className="w-5 h-5" />
@@ -1443,32 +1443,32 @@ export default function Landing() {
                 <div className="flex items-center justify-center gap-2 mb-4">
                   <LearnInvestLogo variant="icon" size={48} className="rounded-lg" />
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-1">로그인</h2>
-                <p className="text-gray-400 text-sm">계정에 접속하여 거래를 시작하세요</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">로그인</h2>
+                <p className="text-gray-500 text-sm">계정에 접속하여 거래를 시작하세요</p>
               </div>
               
               <form onSubmit={handleLoginSubmit} className="space-y-5">
                 <div className="space-y-2">
-                  <label className="text-sm text-gray-300 font-medium">아이디</label>
+                  <label className="text-sm text-gray-600 font-medium">아이디</label>
                   <Input
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="아이디를 입력하세요"
-                    className="h-12 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-amber-500/50 focus:ring-amber-500/20 transition-all"
+                    className="h-12 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 focus:border-[#8B5CF6]/50 focus:ring-[#8B5CF6]/20 transition-all"
                     data-testid="input-modal-username"
                     required
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm text-gray-300 font-medium">비밀번호</label>
+                  <label className="text-sm text-gray-600 font-medium">비밀번호</label>
                   <Input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="비밀번호를 입력하세요"
-                    className="h-12 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-amber-500/50 focus:ring-amber-500/20 transition-all"
+                    className="h-12 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 focus:border-[#8B5CF6]/50 focus:ring-[#8B5CF6]/20 transition-all"
                     data-testid="input-modal-password"
                     required
                   />
@@ -1476,7 +1476,7 @@ export default function Landing() {
 
                 <Button
                   type="submit"
-                  className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 hover:from-amber-400 hover:via-amber-400 hover:to-amber-500 text-white shadow-lg shadow-amber-500/25 transition-all duration-300 hover:shadow-amber-500/40"
+                  className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-[#4F3CC9] via-[#6D4FD9] to-[#8B5CF6] hover:opacity-90 text-white shadow-lg shadow-[#4F3CC9]/25 transition-all duration-300 hover:shadow-[#4F3CC9]/40"
                   disabled={login.isPending}
                   data-testid="button-modal-login"
                 >
@@ -1484,10 +1484,10 @@ export default function Landing() {
                 </Button>
               </form>
 
-              <div className="mt-6 pt-6 border-t border-white/10 text-center text-sm text-gray-400">
+              <div className="mt-6 pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
                 계정이 없으신가요?{" "}
                 <button 
-                  className="text-amber-500 hover:text-amber-400 font-medium transition-colors"
+                  className="text-[#4F3CC9] hover:text-[#6D4FD9] font-medium transition-colors"
                   onClick={() => {
                     setShowLoginModal(false);
                     setShowRegisterModal(true);
@@ -1515,11 +1515,11 @@ export default function Landing() {
         <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-y-auto">
           <DialogTitle className="sr-only">회원가입</DialogTitle>
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 via-amber-500/20 to-amber-500/20 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-[#1C1008]/95 border border-white/10 rounded-2xl p-6 shadow-2xl">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
+            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl">
               <button 
                 onClick={() => setShowRegisterModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors z-10"
                 data-testid="button-close-register-modal"
               >
                 <X className="w-5 h-5" />
@@ -1529,20 +1529,20 @@ export default function Landing() {
                 <div className="flex items-center justify-center gap-2 mb-3">
                   <LearnInvestLogo variant="icon" size={40} className="rounded-lg" />
                 </div>
-                <h2 className="text-xl font-bold text-white mb-1">회원가입</h2>
-                <p className="text-gray-400 text-sm">지금 가입하고 거래를 시작하세요</p>
+                <h2 className="text-xl font-bold text-gray-900 mb-1">회원가입</h2>
+                <p className="text-gray-500 text-sm">지금 가입하고 거래를 시작하세요</p>
               </div>
               
               <form onSubmit={handleRegisterSubmit} className="space-y-3">
                 <div className="space-y-1">
-                  <label className="text-xs text-gray-300 font-medium">아이디</label>
+                  <label className="text-xs text-gray-600 font-medium">아이디</label>
                   <div className="flex gap-2">
                     <Input
                       type="text"
                       value={regUsername}
                       onChange={(e) => { setRegUsername(e.target.value); setUsernameChecked(false); setUsernameCheckMessage(""); setUsernameAvailable(false); }}
                       placeholder="아이디 (3자 이상)"
-                      className="h-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-amber-500/50 text-sm flex-1"
+                      className="h-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 focus:border-[#8B5CF6]/50 text-sm flex-1"
                       data-testid="input-reg-username"
                       required
                     />
@@ -1550,7 +1550,7 @@ export default function Landing() {
                       type="button"
                       onClick={handleCheckUsername}
                       disabled={checkingUsername || regUsername.length < 3}
-                      className="h-10 px-3 text-xs font-medium bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/30 whitespace-nowrap"
+                      className="h-10 px-3 text-xs font-medium bg-[#4F3CC9]/10 hover:bg-[#4F3CC9]/20 text-[#4F3CC9] border border-[#4F3CC9]/30 whitespace-nowrap"
                       data-testid="button-check-username"
                     >
                       {checkingUsername ? "확인중..." : "중복확인"}
@@ -1565,13 +1565,13 @@ export default function Landing() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="text-xs text-gray-300 font-medium">이름</label>
+                    <label className="text-xs text-gray-600 font-medium">이름</label>
                     <Input
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="실명"
-                      className="h-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-amber-500/50 text-sm"
+                      className="h-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 focus:border-[#8B5CF6]/50 text-sm"
                       data-testid="input-reg-name"
                       required
                     />
@@ -1581,25 +1581,25 @@ export default function Landing() {
                 <div className="space-y-1">
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <label className="text-xs text-gray-300 font-medium">비밀번호</label>
+                      <label className="text-xs text-gray-600 font-medium">비밀번호</label>
                       <Input
                         type="password"
                         value={regPassword}
                         onChange={(e) => setRegPassword(e.target.value)}
                         placeholder="비밀번호 입력"
-                        className="h-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-amber-500/50 text-sm"
+                        className="h-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 focus:border-[#8B5CF6]/50 text-sm"
                         data-testid="input-reg-password"
                         required
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs text-gray-300 font-medium">비밀번호 확인</label>
+                      <label className="text-xs text-gray-600 font-medium">비밀번호 확인</label>
                       <Input
                         type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="비밀번호 재입력"
-                        className="h-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-amber-500/50 text-sm"
+                        className="h-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 focus:border-[#8B5CF6]/50 text-sm"
                         data-testid="input-reg-confirm-password"
                         required
                       />
@@ -1610,19 +1610,19 @@ export default function Landing() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="text-xs text-gray-300 font-medium">휴대폰 번호</label>
+                    <label className="text-xs text-gray-600 font-medium">휴대폰 번호</label>
                     <Input
                       type="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="01012345678"
-                      className="h-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-amber-500/50 text-sm"
+                      className="h-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 focus:border-[#8B5CF6]/50 text-sm"
                       data-testid="input-reg-phone"
                       required
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs text-gray-300 font-medium">생년월일</label>
+                    <label className="text-xs text-gray-600 font-medium">생년월일</label>
                     <Input
                       type="text"
                       value={regBirthDate}
@@ -1632,26 +1632,26 @@ export default function Landing() {
                       }}
                       placeholder="예: 901231"
                       maxLength={6}
-                      className="h-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-amber-500/50 text-sm"
+                      className="h-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 focus:border-[#8B5CF6]/50 text-sm"
                       data-testid="input-reg-birthdate"
                       required
                     />
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-white/10">
-                  <p className="text-xs text-gray-400 mb-2">출금 계좌 정보</p>
+                <div className="pt-2 border-t border-gray-200">
+                  <p className="text-xs text-gray-500 mb-2">출금 계좌 정보</p>
                   
                   <div className="space-y-3">
                     <div className="space-y-1">
-                      <label className="text-xs text-gray-300 font-medium">은행 선택</label>
+                      <label className="text-xs text-gray-600 font-medium">은행 선택</label>
                       <Select value={bankName} onValueChange={setBankName}>
-                        <SelectTrigger className="h-10 bg-white/5 border-white/10 text-white text-sm">
+                        <SelectTrigger className="h-10 bg-gray-50 border-gray-200 text-gray-900 text-sm">
                           <SelectValue placeholder="은행을 선택하세요" />
                         </SelectTrigger>
-                        <SelectContent className="bg-[#1C1008] border-white/20 max-h-60 overflow-y-auto">
+                        <SelectContent className="bg-white border-gray-200 max-h-60 overflow-y-auto">
                           {KOREAN_BANKS.map((bank) => (
-                            <SelectItem key={bank} value={bank} className="text-white hover:bg-white/10">
+                            <SelectItem key={bank} value={bank} className="text-gray-900 hover:bg-gray-100">
                               {bank}
                             </SelectItem>
                           ))}
@@ -1661,25 +1661,25 @@ export default function Landing() {
 
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-xs text-gray-300 font-medium">예금주</label>
+                        <label className="text-xs text-gray-600 font-medium">예금주</label>
                         <Input
                           type="text"
                           value={accountHolder}
                           onChange={(e) => setAccountHolder(e.target.value)}
                           placeholder="예금주명"
-                          className="h-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-amber-500/50 text-sm"
+                          className="h-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 focus:border-[#8B5CF6]/50 text-sm"
                           data-testid="input-reg-account-holder"
                           required
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-xs text-gray-300 font-medium">계좌번호</label>
+                        <label className="text-xs text-gray-600 font-medium">계좌번호</label>
                         <Input
                           type="text"
                           value={accountNumber}
                           onChange={(e) => setAccountNumber(e.target.value)}
                           placeholder="- 없이 입력"
-                          className="h-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-amber-500/50 text-sm"
+                          className="h-10 bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 focus:border-[#8B5CF6]/50 text-sm"
                           data-testid="input-reg-account-number"
                           required
                         />
@@ -1696,7 +1696,7 @@ export default function Landing() {
 
                 <Button
                   type="submit"
-                  className="w-full h-11 text-base font-semibold bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 hover:from-amber-400 hover:via-amber-400 hover:to-amber-500 text-white shadow-lg shadow-amber-500/25 transition-all duration-300 hover:shadow-amber-500/40 mt-4"
+                  className="w-full h-11 text-base font-semibold bg-gradient-to-r from-[#4F3CC9] via-[#6D4FD9] to-[#8B5CF6] hover:opacity-90 text-white shadow-lg shadow-[#4F3CC9]/25 transition-all duration-300 hover:shadow-[#4F3CC9]/40 mt-4"
                   disabled={register.isPending}
                   data-testid="button-modal-register"
                 >
@@ -1704,10 +1704,10 @@ export default function Landing() {
                 </Button>
               </form>
 
-              <div className="mt-4 pt-4 border-t border-white/10 text-center text-sm text-gray-400">
+              <div className="mt-4 pt-4 border-t border-gray-200 text-center text-sm text-gray-500">
                 이미 계정이 있으신가요?{" "}
                 <button 
-                  className="text-amber-500 hover:text-amber-400 font-medium transition-colors"
+                  className="text-[#4F3CC9] hover:text-[#6D4FD9] font-medium transition-colors"
                   onClick={() => {
                     setShowRegisterModal(false);
                     setShowLoginModal(true);
@@ -1726,31 +1726,31 @@ export default function Landing() {
         <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-y-auto">
           <DialogTitle className="sr-only">거래내역</DialogTitle>
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 via-amber-500/20 to-amber-500/20 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-[#1C1008]/95 border border-white/10 rounded-2xl p-6 shadow-2xl">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
+            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl">
               <button 
                 onClick={() => setShowHistoryModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors z-10"
               >
                 <X className="w-5 h-5" />
               </button>
               
               <div className="text-center mb-6">
                 <div className="flex items-center justify-center gap-2 mb-3">
-                  <History className="w-8 h-8 text-amber-500" />
+                  <History className="w-8 h-8 text-[#4F3CC9]" />
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-1">거래내역</h2>
-                <p className="text-gray-400 text-sm">나의 거래 기록과 보유금액을 확인하세요</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">거래내역</h2>
+                <p className="text-gray-500 text-sm">나의 거래 기록과 보유금액을 확인하세요</p>
               </div>
 
               {/* Balance Card */}
-              <div className="bg-gradient-to-r from-amber-500/20 to-amber-500/20 border border-amber-500/30 rounded-xl p-4 mb-6">
+              <div className="bg-gradient-to-r from-[#4F3CC9]/10 to-[#8B5CF6]/10 border border-[#4F3CC9]/30 rounded-xl p-4 mb-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Wallet className="w-6 h-6 text-amber-500" />
-                    <span className="text-gray-300">보유금액</span>
+                    <Wallet className="w-6 h-6 text-[#4F3CC9]" />
+                    <span className="text-gray-600">보유금액</span>
                   </div>
-                  <span className="text-2xl font-bold text-white">
+                  <span className="text-2xl font-bold text-gray-900">
                     {balanceData?.balance ? Number(balanceData.balance).toLocaleString() : '0'}원
                   </span>
                 </div>
@@ -1758,32 +1758,32 @@ export default function Landing() {
 
               {/* Bet History */}
               <div className="space-y-3 max-h-[300px] overflow-y-auto">
-                <h3 className="text-sm font-medium text-gray-400 mb-2">최근 거래 내역</h3>
+                <h3 className="text-sm font-medium text-gray-500 mb-2">최근 거래 내역</h3>
                 {betHistory && betHistory.length > 0 ? (
                   betHistory.slice(0, 10).map((bet: any) => (
                     <div 
                       key={bet.id} 
-                      className="bg-white/5 border border-white/10 rounded-lg p-3 flex items-center justify-between"
+                      className="bg-gray-50 border border-gray-200 rounded-lg p-3 flex items-center justify-between"
                     >
                       <div>
                         <div className="flex items-center gap-2">
                           <span className={`text-xs px-2 py-0.5 rounded ${bet.direction === 'long' ? 'bg-red-500/20 text-red-400' : 'bg-red-500/20 text-red-400'}`}>
                             {bet.direction === 'long' ? '매수' : '매도'}
                           </span>
-                          <span className="text-white font-medium">{bet.symbol}</span>
+                          <span className="text-gray-900 font-medium">{bet.symbol}</span>
                           {bet.roundNumber && (
                             <span className="text-[10px] px-1.5 py-0.5 rounded bg-yellow-500/20 text-yellow-400">
                               {bet.roundNumber}회차
                             </span>
                           )}
                         </div>
-                        <div className="text-xs text-gray-400 mt-1">
+                        <div className="text-xs text-gray-500 mt-1">
                           {new Date(bet.createdAt).toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' })}{' '}
                           {new Date(bet.createdAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Seoul' })}
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-white font-medium">
+                        <div className="text-gray-900 font-medium">
                           {Number(bet.amount).toLocaleString()}원
                         </div>
                         <div className={`text-xs ${bet.outcome === 'win' ? 'text-green-400' : bet.outcome === 'lose' ? 'text-red-400' : 'text-yellow-400'}`}>
@@ -1793,14 +1793,14 @@ export default function Landing() {
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-8 text-gray-400">
+                  <div className="text-center py-8 text-gray-500">
                     거래 내역이 없습니다
                   </div>
                 )}
               </div>
 
               <Button
-                className="w-full mt-4 bg-amber-500 hover:bg-amber-600 text-white"
+                className="w-full mt-4 bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white"
                 onClick={() => {
                   setShowHistoryModal(false);
                   setLocation("/trade");
@@ -1819,32 +1819,32 @@ export default function Landing() {
           <DialogTitle className="sr-only">입금 신청</DialogTitle>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-green-500/10 via-green-500/10 to-green-500/10 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-[#1C1008]/95 border border-white/10 rounded-2xl p-6 shadow-2xl">
+            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl">
               {/* 헤더 */}
               <div className="flex items-center justify-between mb-5">
                 <button onClick={() => { setShowDepositPageModal(false); setDepositAmount(''); setDepositSenderName(''); }}
-                  className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+                  className="flex items-center gap-2 text-gray-400 hover:text-gray-900 transition-colors">
                   <ChevronRight className="w-5 h-5 rotate-180" />
                   <span className="text-sm">뒤로가기</span>
                 </button>
-                <h2 className="text-lg font-bold text-white">입금 신청</h2>
+                <h2 className="text-lg font-bold text-gray-900">입금 신청</h2>
                 <button onClick={() => { setShowDepositPageModal(false); setDepositAmount(''); setDepositSenderName(''); }}
-                  className="text-gray-400 hover:text-white transition-colors">
+                  className="text-gray-400 hover:text-gray-900 transition-colors">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* 현재 보유금액 */}
-              <div className="bg-gradient-to-r from-amber-500/20 to-amber-500/10 border border-amber-500/30 rounded-xl p-3 mb-5">
+              <div className="bg-gradient-to-r from-[#4F3CC9]/10 to-[#8B5CF6]/10 border border-[#4F3CC9]/30 rounded-xl p-3 mb-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-400 text-sm">현재 보유금액</span>
-                  <span className="text-xl font-bold text-white">{balanceData?.balance ? Number(balanceData.balance).toLocaleString() : '0'}원</span>
+                  <span className="text-gray-500 text-sm">현재 보유금액</span>
+                  <span className="text-xl font-bold text-gray-900">{balanceData?.balance ? Number(balanceData.balance).toLocaleString() : '0'}원</span>
                 </div>
               </div>
 
               {/* 입금 진행 절차 STEP 1~4 */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-5">
-                <h3 className="text-sm font-bold text-amber-400 mb-3">입금 진행 절차</h3>
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-5">
+                <h3 className="text-sm font-bold text-[#4F3CC9] mb-3">입금 진행 절차</h3>
                 <div className="space-y-3">
                   {[
                     { step: '01', text: '인터넷뱅킹, 모바일뱅킹, 무통장 입금, ATM 등으로 송금 가능합니다. 입금 계좌는 수시로 변경될 수 있으니 이체 전 반드시 최신 계좌를 확인해 주세요.' },
@@ -1854,17 +1854,17 @@ export default function Landing() {
                   ].map(({ step, text }) => (
                     <div key={step} className="flex gap-3">
                       <span className="shrink-0 w-8 h-8 rounded-full bg-green-500/20 border border-green-500/40 flex items-center justify-center text-green-400 text-xs font-bold">{step}</span>
-                      <p className="text-gray-400 text-xs leading-relaxed pt-1">{text}</p>
+                      <p className="text-gray-500 text-xs leading-relaxed pt-1">{text}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* 입금 계좌 정보 */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-5">
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-300 text-sm font-medium mb-1">입금 계좌 정보</p>
+                    <p className="text-gray-600 text-sm font-medium mb-1">입금 계좌 정보</p>
                     <p className="text-gray-500 text-xs">입금 계좌 정보는 고객센터를 통해 개별 안내드립니다.</p>
                   </div>
                   <button
@@ -1890,7 +1890,7 @@ export default function Landing() {
                         toast.error(err.message || '문의 생성에 실패했습니다');
                       }
                     }}
-                    className="text-xs bg-amber-500/20 border border-amber-500/40 text-amber-400 px-3 py-1 rounded-full hover:bg-amber-500/30 transition-colors whitespace-nowrap"
+                    className="text-xs bg-[#4F3CC9]/10 border border-[#4F3CC9]/30 text-[#4F3CC9] px-3 py-1 rounded-full hover:bg-[#4F3CC9]/20 transition-colors whitespace-nowrap"
                     data-testid="button-deposit-inquiry"
                   >
                     계좌번호 문의하기
@@ -1900,57 +1900,57 @@ export default function Landing() {
 
               {/* 보내시는 분 */}
               <div className="mb-4">
-                <label className="block text-gray-300 text-sm mb-2">보내시는 분 <span className="text-red-400">*</span></label>
+                <label className="block text-gray-600 text-sm mb-2">보내시는 분 <span className="text-red-400">*</span></label>
                 <Input
                   type="text"
                   value={depositSenderName}
                   onChange={(e) => setDepositSenderName(e.target.value)}
                   placeholder="실제 송금 통장의 예금주 성함 입력"
-                  className="bg-white/10 border-white/20 text-white placeholder:text-gray-500"
+                  className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500"
                   data-testid="input-deposit-sender"
                 />
               </div>
 
               {/* 입금 금액 */}
               <div className="mb-4">
-                <label className="block text-gray-300 text-sm mb-2">입금 금액 <span className="text-red-400">*</span></label>
+                <label className="block text-gray-600 text-sm mb-2">입금 금액 <span className="text-red-400">*</span></label>
                 <div className="relative">
                   <Input
                     type="text"
                     value={depositAmount}
                     onChange={(e) => setDepositAmount(e.target.value.replace(/[^0-9]/g, ''))}
                     placeholder="금액을 입력하세요"
-                    className="bg-white/10 border-white/20 text-white pr-12"
+                    className="bg-gray-50 border-gray-200 text-gray-900 pr-12"
                     data-testid="input-deposit-amount"
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span>
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">원</span>
                 </div>
-                {depositAmount && <p className="text-gray-400 text-xs mt-1">{Number(depositAmount).toLocaleString()}원</p>}
+                {depositAmount && <p className="text-gray-500 text-xs mt-1">{Number(depositAmount).toLocaleString()}원</p>}
               </div>
 
               {/* 빠른 금액 */}
               <div className="grid grid-cols-4 gap-2 mb-2">
                 {[10000, 50000, 100000, 500000].map((amt) => (
                   <button key={amt} onClick={() => setDepositAmount(String(Number(depositAmount || 0) + amt))}
-                    className="py-2 bg-white/10 hover:bg-white/20 text-gray-300 text-xs rounded transition-colors" data-testid={`button-deposit-quick-${amt}`}>
+                    className="py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs rounded transition-colors" data-testid={`button-deposit-quick-${amt}`}>
                     +{amt / 10000}만
                   </button>
                 ))}
               </div>
               <div className="grid grid-cols-2 gap-2 mb-5">
                 <button onClick={() => setDepositAmount(String(Number(depositAmount || 0) + 1000000))}
-                  className="py-2 bg-white/10 hover:bg-white/20 text-gray-300 text-xs rounded transition-colors" data-testid="button-deposit-quick-100">
+                  className="py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs rounded transition-colors" data-testid="button-deposit-quick-100">
                   +100만
                 </button>
                 <button onClick={() => setDepositAmount('')}
-                  className="py-2 bg-white/10 hover:bg-white/20 text-gray-300 text-xs rounded transition-colors" data-testid="button-deposit-reset">
+                  className="py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs rounded transition-colors" data-testid="button-deposit-reset">
                   초기화
                 </button>
               </div>
 
               {/* 입금신청 버튼 */}
               <Button
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-bold mb-6"
+                className="w-full bg-green-600 hover:bg-green-700 text-gray-900 font-bold mb-6"
                 disabled={depositSubmitting || !depositAmount || Number(depositAmount) <= 0 || !depositSenderName.trim()}
                 data-testid="button-deposit-submit"
                 onClick={async () => {
@@ -1984,26 +1984,26 @@ export default function Landing() {
 
               {/* 최근 입금 내역 */}
               <div>
-                <h3 className="text-sm font-bold text-gray-300 mb-3">최근 입금 내역</h3>
+                <h3 className="text-sm font-bold text-gray-600 mb-3">최근 입금 내역</h3>
                 {(() => {
                   const depositHistory = (myTransactions || []).filter((t: any) => t.type === 'deposit').slice(0, 5);
                   if (depositHistory.length === 0) {
                     return <p className="text-gray-500 text-xs text-center py-4">입금 내역이 없습니다</p>;
                   }
                   return (
-                    <div className="rounded-lg overflow-hidden border border-white/10">
+                    <div className="rounded-lg overflow-hidden border border-gray-200">
                       <table className="w-full text-xs">
                         <thead>
-                          <tr className="bg-white/5">
-                            <th className="text-left text-gray-400 px-3 py-2">신청금액</th>
-                            <th className="text-center text-gray-400 px-3 py-2">상태</th>
-                            <th className="text-right text-gray-400 px-3 py-2">신청일</th>
+                          <tr className="bg-gray-50">
+                            <th className="text-left text-gray-500 px-3 py-2">신청금액</th>
+                            <th className="text-center text-gray-500 px-3 py-2">상태</th>
+                            <th className="text-right text-gray-500 px-3 py-2">신청일</th>
                           </tr>
                         </thead>
                         <tbody>
                           {depositHistory.map((t: any) => (
-                            <tr key={t.id} className="border-t border-white/5">
-                              <td className="px-3 py-2 text-white font-medium">{Number(t.amount).toLocaleString()}원</td>
+                            <tr key={t.id} className="border-t border-gray-100">
+                              <td className="px-3 py-2 text-gray-900 font-medium">{Number(t.amount).toLocaleString()}원</td>
                               <td className="px-3 py-2 text-center">
                                 <span className={`px-2 py-0.5 rounded-full text-xs ${
                                   t.status === 'approved' ? 'bg-green-500/20 text-green-400' :
@@ -2013,7 +2013,7 @@ export default function Landing() {
                                   {t.status === 'approved' ? '승인' : t.status === 'rejected' ? '거절' : '대기'}
                                 </span>
                               </td>
-                              <td className="px-3 py-2 text-right text-gray-400">
+                              <td className="px-3 py-2 text-right text-gray-500">
                                 {new Date(t.createdAt).toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Seoul' })}
                               </td>
                             </tr>
@@ -2035,31 +2035,31 @@ export default function Landing() {
           <DialogTitle className="sr-only">출금 신청</DialogTitle>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/10 via-blue-500/10 to-blue-500/10 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-[#1C1008]/95 border border-white/10 rounded-2xl p-6 shadow-2xl">
+            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl">
               {/* 헤더 */}
               <div className="flex items-center justify-between mb-5">
                 <button onClick={() => { setShowWithdrawalPageModal(false); setWithdrawalAmount(''); }}
-                  className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+                  className="flex items-center gap-2 text-gray-400 hover:text-gray-900 transition-colors">
                   <ChevronRight className="w-5 h-5 rotate-180" />
                   <span className="text-sm">뒤로가기</span>
                 </button>
-                <h2 className="text-lg font-bold text-white">출금 신청</h2>
+                <h2 className="text-lg font-bold text-gray-900">출금 신청</h2>
                 <button onClick={() => { setShowWithdrawalPageModal(false); setWithdrawalAmount(''); }}
-                  className="text-gray-400 hover:text-white transition-colors">
+                  className="text-gray-400 hover:text-gray-900 transition-colors">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* 현재 보유금액 */}
-              <div className="bg-gradient-to-r from-amber-500/20 to-amber-500/10 border border-amber-500/30 rounded-xl p-3 mb-5">
+              <div className="bg-gradient-to-r from-[#4F3CC9]/10 to-[#8B5CF6]/10 border border-[#4F3CC9]/30 rounded-xl p-3 mb-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-400 text-sm">현재 보유금액</span>
-                  <span className="text-xl font-bold text-white">{balanceData?.balance ? Number(balanceData.balance).toLocaleString() : '0'}원</span>
+                  <span className="text-gray-500 text-sm">현재 보유금액</span>
+                  <span className="text-xl font-bold text-gray-900">{balanceData?.balance ? Number(balanceData.balance).toLocaleString() : '0'}원</span>
                 </div>
               </div>
 
               {/* 출금 진행 절차 STEP 1~4 */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-5">
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-5">
                 <h3 className="text-sm font-bold text-blue-400 mb-3">출금 진행 절차</h3>
                 <div className="space-y-3">
                   {[
@@ -2070,20 +2070,20 @@ export default function Landing() {
                   ].map(({ step, text }) => (
                     <div key={step} className="flex gap-3">
                       <span className="shrink-0 w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-blue-400 text-xs font-bold">{step}</span>
-                      <p className="text-gray-400 text-xs leading-relaxed pt-1">{text}</p>
+                      <p className="text-gray-500 text-xs leading-relaxed pt-1">{text}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* 출금 계좌 정보 (읽기전용) */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-5 space-y-3">
-                <h3 className="text-sm font-bold text-gray-300 mb-1">출금 계좌 정보</h3>
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-5 space-y-3">
+                <h3 className="text-sm font-bold text-gray-600 mb-1">출금 계좌 정보</h3>
                 {!user?.bankName && !user?.accountNumber ? (
                   <div className="text-center py-2">
                     <p className="text-yellow-400 text-xs mb-2">등록된 출금 계좌가 없습니다.</p>
                     <button onClick={() => { setShowWithdrawalPageModal(false); openMyPage(); }}
-                      className="text-amber-400 text-xs underline hover:text-amber-300 transition-colors">
+                      className="text-[#4F3CC9] text-xs underline hover:text-[#6D4FD9] transition-colors">
                       마이페이지에서 계좌 등록하기
                     </button>
                   </div>
@@ -2091,41 +2091,41 @@ export default function Landing() {
                   <>
                     <div className="flex justify-between">
                       <span className="text-gray-500 text-xs">거래은행</span>
-                      <span className="text-white text-xs font-medium">{user?.bankName || '-'}</span>
+                      <span className="text-gray-900 text-xs font-medium">{user?.bankName || '-'}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500 text-xs">계좌번호</span>
-                      <span className="text-white text-xs font-medium">{user?.accountNumber || '-'}</span>
+                      <span className="text-gray-900 text-xs font-medium">{user?.accountNumber || '-'}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500 text-xs">예금주</span>
-                      <span className="text-white text-xs font-medium">{user?.accountHolder || '-'}</span>
+                      <span className="text-gray-900 text-xs font-medium">{user?.accountHolder || '-'}</span>
                     </div>
                   </>
                 )}
               </div>
 
               {/* 출금 가능액 */}
-              <div className="flex justify-between items-center bg-white/5 border border-white/10 rounded-xl px-4 py-3 mb-4">
-                <span className="text-gray-400 text-sm">출금가능액</span>
-                <span className="text-white font-bold">{balanceData?.balance ? Number(balanceData.balance).toLocaleString() : '0'}원</span>
+              <div className="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 mb-4">
+                <span className="text-gray-500 text-sm">출금가능액</span>
+                <span className="text-gray-900 font-bold">{balanceData?.balance ? Number(balanceData.balance).toLocaleString() : '0'}원</span>
               </div>
 
               {/* 출금 금액 */}
               <div className="mb-4">
-                <label className="block text-gray-300 text-sm mb-2">출금 금액 <span className="text-red-400">*</span></label>
+                <label className="block text-gray-600 text-sm mb-2">출금 금액 <span className="text-red-400">*</span></label>
                 <div className="relative">
                   <Input
                     type="text"
                     value={withdrawalAmount}
                     onChange={(e) => setWithdrawalAmount(e.target.value.replace(/[^0-9]/g, ''))}
                     placeholder="금액을 입력하세요"
-                    className="bg-white/10 border-white/20 text-white pr-12"
+                    className="bg-gray-50 border-gray-200 text-gray-900 pr-12"
                     data-testid="input-withdrawal-amount"
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">원</span>
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">원</span>
                 </div>
-                {withdrawalAmount && <p className="text-gray-400 text-xs mt-1">{Number(withdrawalAmount).toLocaleString()}원</p>}
+                {withdrawalAmount && <p className="text-gray-500 text-xs mt-1">{Number(withdrawalAmount).toLocaleString()}원</p>}
                 {withdrawalAmount && Number(withdrawalAmount) > Number(balanceData?.balance || 0) && (
                   <p className="text-red-400 text-xs mt-1">보유금액을 초과할 수 없습니다</p>
                 )}
@@ -2135,25 +2135,25 @@ export default function Landing() {
               <div className="grid grid-cols-4 gap-2 mb-2">
                 {[10000, 50000, 100000, 500000].map((amt) => (
                   <button key={amt} onClick={() => setWithdrawalAmount(String(Math.min(Number(withdrawalAmount || 0) + amt, Number(balanceData?.balance || 0))))}
-                    className="py-2 bg-white/10 hover:bg-white/20 text-gray-300 text-xs rounded transition-colors" data-testid={`button-withdrawal-quick-${amt}`}>
+                    className="py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs rounded transition-colors" data-testid={`button-withdrawal-quick-${amt}`}>
                     +{amt / 10000}만
                   </button>
                 ))}
               </div>
               <div className="grid grid-cols-2 gap-2 mb-5">
                 <button onClick={() => setWithdrawalAmount(String(balanceData?.balance ? Math.floor(Number(balanceData.balance)) : 0))}
-                  className="py-2 bg-white/10 hover:bg-white/20 text-gray-300 text-xs rounded transition-colors" data-testid="button-withdrawal-all">
+                  className="py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs rounded transition-colors" data-testid="button-withdrawal-all">
                   전액
                 </button>
                 <button onClick={() => setWithdrawalAmount('')}
-                  className="py-2 bg-white/10 hover:bg-white/20 text-gray-300 text-xs rounded transition-colors" data-testid="button-withdrawal-reset">
+                  className="py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs rounded transition-colors" data-testid="button-withdrawal-reset">
                   초기화
                 </button>
               </div>
 
               {/* 출금신청 버튼 */}
               <Button
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-gray-900 font-bold"
                 disabled={
                   withdrawalSubmitting ||
                   !withdrawalAmount ||
@@ -2193,26 +2193,26 @@ export default function Landing() {
 
               {/* 최근 출금 내역 */}
               <div className="mt-4">
-                <h3 className="text-sm font-bold text-gray-300 mb-3">최근 출금 내역</h3>
+                <h3 className="text-sm font-bold text-gray-600 mb-3">최근 출금 내역</h3>
                 {(() => {
                   const withdrawalHistory = (myTransactions || []).filter((t: any) => t.type === 'withdrawal').slice(0, 5);
                   if (withdrawalHistory.length === 0) {
                     return <p className="text-gray-500 text-xs text-center py-4">출금 내역이 없습니다</p>;
                   }
                   return (
-                    <div className="rounded-lg overflow-hidden border border-white/10">
+                    <div className="rounded-lg overflow-hidden border border-gray-200">
                       <table className="w-full text-xs">
                         <thead>
-                          <tr className="bg-white/5">
-                            <th className="text-left text-gray-400 px-3 py-2">신청금액</th>
-                            <th className="text-center text-gray-400 px-3 py-2">상태</th>
-                            <th className="text-right text-gray-400 px-3 py-2">신청일</th>
+                          <tr className="bg-gray-50">
+                            <th className="text-left text-gray-500 px-3 py-2">신청금액</th>
+                            <th className="text-center text-gray-500 px-3 py-2">상태</th>
+                            <th className="text-right text-gray-500 px-3 py-2">신청일</th>
                           </tr>
                         </thead>
                         <tbody>
                           {withdrawalHistory.map((t: any) => (
-                            <tr key={t.id} className="border-t border-white/5">
-                              <td className="px-3 py-2 text-white font-medium">{Number(t.amount).toLocaleString()}원</td>
+                            <tr key={t.id} className="border-t border-gray-100">
+                              <td className="px-3 py-2 text-gray-900 font-medium">{Number(t.amount).toLocaleString()}원</td>
                               <td className="px-3 py-2 text-center">
                                 <span className={`px-2 py-0.5 rounded-full text-xs ${
                                   t.status === 'approved' ? 'bg-green-500/20 text-green-400' :
@@ -2223,7 +2223,7 @@ export default function Landing() {
                                   {t.status === 'approved' ? '승인' : t.status === 'rejected' ? '거절' : t.status === 'hold' ? '보류' : '대기'}
                                 </span>
                               </td>
-                              <td className="px-3 py-2 text-right text-gray-400">
+                              <td className="px-3 py-2 text-right text-gray-500">
                                 {new Date(t.createdAt).toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Seoul' })}
                               </td>
                             </tr>
@@ -2244,27 +2244,27 @@ export default function Landing() {
         <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
           <DialogTitle className="sr-only">고객센터</DialogTitle>
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 via-amber-500/20 to-amber-500/20 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-[#1C1008]/95 border border-white/10 rounded-2xl p-6 shadow-2xl">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
+            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl">
               <button 
                 onClick={() => setShowCustomerServiceModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors z-10"
               >
                 <X className="w-5 h-5" />
               </button>
               
               <div className="text-center mb-6">
                 <div className="flex items-center justify-center gap-2 mb-3">
-                  <Headphones className="w-8 h-8 text-amber-500" />
+                  <Headphones className="w-8 h-8 text-[#4F3CC9]" />
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-1">고객센터</h2>
-                <p className="text-gray-400 text-sm">문의를 남기시면 빠르게 답변드립니다</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">고객센터</h2>
+                <p className="text-gray-500 text-sm">문의를 남기시면 빠르게 답변드립니다</p>
               </div>
 
               <div className="space-y-3">
                 {/* 문의 작성하기 */}
                 <button 
-                  className="w-full block bg-gradient-to-r from-amber-500/10 to-amber-500/10 border border-amber-500/30 rounded-xl p-4 hover:border-amber-500/50 transition-colors cursor-pointer text-left"
+                  className="w-full block bg-gradient-to-r from-[#4F3CC9]/10 to-[#8B5CF6]/10 border border-[#4F3CC9]/30 rounded-xl p-4 hover:border-[#8B5CF6]/50 transition-colors cursor-pointer text-left"
                   onClick={() => {
                     if (!user) {
                       toast.error("로그인이 필요합니다");
@@ -2282,15 +2282,15 @@ export default function Landing() {
                   }}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center">
-                      <FileText className="w-6 h-6 text-amber-500" />
+                    <div className="w-12 h-12 bg-[#4F3CC9]/10 rounded-full flex items-center justify-center">
+                      <FileText className="w-6 h-6 text-[#4F3CC9]" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-white font-medium">문의 작성하기</h3>
-                      <p className="text-amber-400 text-sm">새로운 문의를 작성합니다</p>
-                      <p className="text-gray-400 text-xs">빠른 답변 보장</p>
+                      <h3 className="text-gray-900 font-medium">문의 작성하기</h3>
+                      <p className="text-[#4F3CC9] text-sm">새로운 문의를 작성합니다</p>
+                      <p className="text-gray-500 text-xs">빠른 답변 보장</p>
                     </div>
-                    <div className="text-amber-500">
+                    <div className="text-[#4F3CC9]">
                       <ChevronRight className="w-5 h-5" />
                     </div>
                   </div>
@@ -2298,7 +2298,7 @@ export default function Landing() {
 
                 {/* 내 문의 내역 */}
                 <button 
-                  className="w-full block bg-white/5 border border-white/10 rounded-xl p-4 hover:border-amber-500/50 transition-colors cursor-pointer text-left"
+                  className="w-full block bg-gray-50 border border-gray-200 rounded-xl p-4 hover:border-[#8B5CF6]/50 transition-colors cursor-pointer text-left"
                   onClick={() => {
                     if (!user) {
                       toast.error("로그인이 필요합니다");
@@ -2311,15 +2311,15 @@ export default function Landing() {
                   }}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center">
-                      <MessageCircle className="w-6 h-6 text-amber-500" />
+                    <div className="w-12 h-12 bg-[#4F3CC9]/10 rounded-full flex items-center justify-center">
+                      <MessageCircle className="w-6 h-6 text-[#4F3CC9]" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-white font-medium">내 문의 내역</h3>
-                      <p className="text-amber-400 text-sm">작성한 문의와 답변 확인</p>
-                      <p className="text-gray-400 text-xs">{myInquiries.length}건의 문의</p>
+                      <h3 className="text-gray-900 font-medium">내 문의 내역</h3>
+                      <p className="text-[#4F3CC9] text-sm">작성한 문의와 답변 확인</p>
+                      <p className="text-gray-500 text-xs">{myInquiries.length}건의 문의</p>
                     </div>
-                    <div className="text-amber-500">
+                    <div className="text-[#4F3CC9]">
                       <ChevronRight className="w-5 h-5" />
                     </div>
                   </div>
@@ -2327,7 +2327,7 @@ export default function Landing() {
 
                 {/* 입출금 내역 */}
                 <button
-                  className="w-full block bg-white/5 border border-white/10 rounded-xl p-4 hover:border-amber-500/50 transition-colors cursor-pointer text-left"
+                  className="w-full block bg-gray-50 border border-gray-200 rounded-xl p-4 hover:border-[#8B5CF6]/50 transition-colors cursor-pointer text-left"
                   onClick={() => {
                     if (!user) {
                       toast.error("로그인이 필요합니다");
@@ -2341,15 +2341,15 @@ export default function Landing() {
                   data-testid="button-my-transactions"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center">
-                      <History className="w-6 h-6 text-amber-400" />
+                    <div className="w-12 h-12 bg-[#4F3CC9]/10 rounded-full flex items-center justify-center">
+                      <History className="w-6 h-6 text-[#6D4FD9]" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-white font-medium">입출금 내역</h3>
-                      <p className="text-amber-400 text-sm">입금·출금 신청 및 처리 현황</p>
-                      <p className="text-gray-400 text-xs">{myTransactions.length}건의 거래 내역</p>
+                      <h3 className="text-gray-900 font-medium">입출금 내역</h3>
+                      <p className="text-[#4F3CC9] text-sm">입금·출금 신청 및 처리 현황</p>
+                      <p className="text-gray-500 text-xs">{myTransactions.length}건의 거래 내역</p>
                     </div>
-                    <div className="text-amber-400">
+                    <div className="text-[#4F3CC9]">
                       <ChevronRight className="w-5 h-5" />
                     </div>
                   </div>
@@ -2369,9 +2369,9 @@ export default function Landing() {
                         <Phone className="w-6 h-6 text-sky-500" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-white font-medium">텔레그램 고객센터</h3>
+                        <h3 className="text-gray-900 font-medium">텔레그램 고객센터</h3>
                         <p className="text-sky-400 text-sm">텔레그램으로 바로 문의</p>
-                        <p className="text-gray-400 text-xs">실시간 상담 가능</p>
+                        <p className="text-gray-500 text-xs">실시간 상담 가능</p>
                       </div>
                       <div className="text-sky-500">
                         <ChevronRight className="w-5 h-5" />
@@ -2395,9 +2395,9 @@ export default function Landing() {
                         <MessageCircle className="w-6 h-6 text-yellow-500" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-white font-medium">카카오톡 고객센터</h3>
+                        <h3 className="text-gray-900 font-medium">카카오톡 고객센터</h3>
                         <p className="text-yellow-400 text-sm">카카오톡으로 바로 문의</p>
-                        <p className="text-gray-400 text-xs">실시간 상담 가능</p>
+                        <p className="text-gray-500 text-xs">실시간 상담 가능</p>
                       </div>
                       <div className="text-yellow-500">
                         <ChevronRight className="w-5 h-5" />
@@ -2413,15 +2413,15 @@ export default function Landing() {
 
       {/* Withdrawal Success Modal */}
       <AlertDialog open={showWithdrawalSuccessModal} onOpenChange={setShowWithdrawalSuccessModal}>
-        <AlertDialogContent className="bg-[#1C1008] border border-white/10">
+        <AlertDialogContent className="bg-white border border-gray-200">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-white flex items-center gap-2">
+            <AlertDialogTitle className="text-gray-900 flex items-center gap-2">
               <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
                 <Check className="w-5 h-5 text-green-500" />
               </div>
               출금 신청 완료
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-400 space-y-3">
+            <AlertDialogDescription className="text-gray-500 space-y-3">
               <p className="text-lg">
                 <span className="text-green-400 font-bold">{Number(withdrawalSuccessAmount).toLocaleString()}원</span> 출금 신청이 완료되었습니다.
               </p>
@@ -2432,7 +2432,7 @@ export default function Landing() {
           <AlertDialogFooter>
             <AlertDialogAction 
               onClick={() => setShowWithdrawalSuccessModal(false)}
-              className="bg-gradient-to-r from-amber-500 to-amber-500 hover:from-amber-600 hover:to-amber-600 text-white"
+              className="bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white"
             >
               확인
             </AlertDialogAction>
@@ -2445,48 +2445,48 @@ export default function Landing() {
         <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
           <DialogTitle className="sr-only">문의 작성</DialogTitle>
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 via-amber-500/20 to-amber-500/20 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-[#1C1008]/95 border border-white/10 rounded-2xl p-6 shadow-2xl">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
+            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl">
               <button 
                 onClick={() => setShowInquiryFormModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors z-10"
               >
                 <X className="w-5 h-5" />
               </button>
               
               <div className="text-center mb-6">
                 <div className="flex items-center justify-center gap-2 mb-3">
-                  <FileText className="w-8 h-8 text-amber-500" />
+                  <FileText className="w-8 h-8 text-[#4F3CC9]" />
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-1">문의 작성</h2>
-                <p className="text-gray-400 text-sm">문의를 남기시면 빠르게 답변드립니다</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">문의 작성</h2>
+                <p className="text-gray-500 text-sm">문의를 남기시면 빠르게 답변드립니다</p>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">제목</label>
+                  <label className="block text-sm text-gray-500 mb-2">제목</label>
                   <input
                     type="text"
                     placeholder="문의 제목을 입력해주세요"
                     value={inquiryTitle}
                     onChange={(e) => setInquiryTitle(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#8B5CF6]"
                     data-testid="input-inquiry-title"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">내용</label>
+                  <label className="block text-sm text-gray-500 mb-2">내용</label>
                   <textarea
                     placeholder="문의 내용을 자세히 작성해주세요"
                     value={inquiryContent}
                     onChange={(e) => setInquiryContent(e.target.value)}
                     rows={5}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 resize-none"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#8B5CF6] resize-none"
                     data-testid="input-inquiry-content"
                   />
                 </div>
                 <Button
-                  className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3"
+                  className="w-full bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white font-semibold py-3"
                   disabled={inquirySubmitting || !inquiryTitle.trim() || !inquiryContent.trim()}
                   onClick={async () => {
                     try {
@@ -2527,31 +2527,31 @@ export default function Landing() {
         <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
           <DialogTitle className="sr-only">내 문의 내역</DialogTitle>
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 via-amber-500/20 to-amber-500/20 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-[#1C1008]/95 border border-white/10 rounded-2xl p-6 shadow-2xl max-h-[80vh] overflow-y-auto">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
+            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl max-h-[80vh] overflow-y-auto">
               <button 
                 onClick={() => setShowMyInquiriesModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors z-10"
               >
                 <X className="w-5 h-5" />
               </button>
               
               <div className="text-center mb-6">
                 <div className="flex items-center justify-center gap-2 mb-3">
-                  <MessageCircle className="w-8 h-8 text-amber-500" />
+                  <MessageCircle className="w-8 h-8 text-[#4F3CC9]" />
                 </div>
                 <div className="flex items-center justify-center gap-2 mb-1">
-                  <h2 className="text-2xl font-bold text-white">내 문의 내역</h2>
+                  <h2 className="text-2xl font-bold text-gray-900">내 문의 내역</h2>
                   <button
                     onClick={() => refetchInquiries()}
-                    className="p-1.5 text-gray-400 hover:text-amber-500 hover:bg-amber-500/10 rounded-lg transition-colors"
+                    className="p-1.5 text-gray-500 hover:text-[#4F3CC9] hover:bg-[#4F3CC9]/10 rounded-lg transition-colors"
                     title="새로고침"
                     data-testid="button-refresh-inquiries"
                   >
                     <RefreshCw className="w-5 h-5" />
                   </button>
                 </div>
-                <p className="text-gray-400 text-sm">총 {myInquiries.length}건의 문의</p>
+                <p className="text-gray-500 text-sm">총 {myInquiries.length}건의 문의</p>
               </div>
 
               <div className="space-y-3">
@@ -2559,18 +2559,18 @@ export default function Landing() {
                   <p className="text-gray-500 text-sm py-8 text-center">등록된 문의가 없습니다</p>
                 ) : (
                   myInquiries.map((inquiry) => (
-                    <div key={inquiry.id} className="bg-white/5 border border-white/10 rounded-xl p-4">
+                    <div key={inquiry.id} className="bg-gray-50 border border-gray-200 rounded-xl p-4">
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-white font-medium">{inquiry.title}</h3>
+                        <h3 className="text-gray-900 font-medium">{inquiry.title}</h3>
                         <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                           inquiry.status === 'answered' 
                             ? 'bg-red-500/20 text-red-400' 
-                            : 'bg-amber-500/20 text-yellow-400'
+                            : 'bg-[#4F3CC9]/10 text-[#4F3CC9]'
                         }`}>
                           {inquiry.status === 'answered' ? '답변완료' : '대기중'}
                         </span>
                       </div>
-                      <p className="text-gray-400 text-sm mb-2 whitespace-pre-wrap">{inquiry.content}</p>
+                      <p className="text-gray-500 text-sm mb-2 whitespace-pre-wrap">{inquiry.content}</p>
                       <p className="text-gray-500 text-xs mb-3">
                         {new Date(inquiry.createdAt).toLocaleDateString('ko-KR', {
                           year: 'numeric',
@@ -2582,9 +2582,9 @@ export default function Landing() {
                       </p>
                       
                       {inquiry.reply && (
-                        <div className="mt-3 pt-3 border-t border-white/10">
+                        <div className="mt-3 pt-3 border-t border-gray-200">
                           <div className="flex items-center gap-2 mb-2">
-                            <span className="text-amber-500 text-sm font-medium">고객센터</span>
+                            <span className="text-[#4F3CC9] text-sm font-medium">고객센터</span>
                             {inquiry.repliedAt && (
                               <span className="text-gray-500 text-xs">
                                 {new Date(inquiry.repliedAt).toLocaleDateString('ko-KR', {
@@ -2597,7 +2597,7 @@ export default function Landing() {
                               </span>
                             )}
                           </div>
-                          <p className="text-gray-300 text-sm whitespace-pre-wrap bg-amber-500/10 p-3 rounded-lg">{inquiry.reply}</p>
+                          <p className="text-gray-600 text-sm whitespace-pre-wrap bg-[#4F3CC9]/10 p-3 rounded-lg">{inquiry.reply}</p>
                         </div>
                       )}
                     </div>
@@ -2606,7 +2606,7 @@ export default function Landing() {
               </div>
               
               <Button
-                className="w-full mt-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold"
+                className="w-full mt-4 bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white font-semibold"
                 onClick={() => {
                   setShowMyInquiriesModal(false);
                   setShowInquiryFormModal(true);
@@ -2624,11 +2624,11 @@ export default function Landing() {
         <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
           <DialogTitle className="sr-only">입출금 내역</DialogTitle>
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-[#1C1008]/95 border border-white/10 rounded-2xl p-6 shadow-2xl max-h-[85vh] flex flex-col">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
+            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl max-h-[85vh] flex flex-col">
               <button
                 onClick={() => setShowTransactionsModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors z-10"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -2636,19 +2636,19 @@ export default function Landing() {
               {/* Header */}
               <div className="text-center mb-5">
                 <div className="flex items-center justify-center gap-2 mb-3">
-                  <History className="w-8 h-8 text-amber-500" />
+                  <History className="w-8 h-8 text-[#4F3CC9]" />
                 </div>
                 <div className="flex items-center justify-center gap-2 mb-1">
-                  <h2 className="text-2xl font-bold text-white">입출금 내역</h2>
+                  <h2 className="text-2xl font-bold text-gray-900">입출금 내역</h2>
                   <button
                     onClick={() => refetchTransactions()}
-                    className="p-1.5 text-gray-400 hover:text-amber-500 hover:bg-amber-500/10 rounded-lg transition-colors"
+                    className="p-1.5 text-gray-500 hover:text-[#4F3CC9] hover:bg-[#4F3CC9]/10 rounded-lg transition-colors"
                     title="새로고침"
                   >
                     <RefreshCw className="w-5 h-5" />
                   </button>
                 </div>
-                <p className="text-gray-400 text-sm">총 {myTransactions.length}건의 거래 내역</p>
+                <p className="text-gray-500 text-sm">총 {myTransactions.length}건의 거래 내역</p>
               </div>
 
               {/* Filter Tabs */}
@@ -2659,8 +2659,8 @@ export default function Landing() {
                     onClick={() => setTransactionFilter(f)}
                     className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${
                       transactionFilter === f
-                        ? 'bg-amber-500 text-white'
-                        : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                        ? 'bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] text-white'
+                        : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                     }`}
                     data-testid={`tab-transaction-${f}`}
                   >
@@ -2693,7 +2693,7 @@ export default function Landing() {
                     const isDeposit = tx.type === 'deposit';
                     const status = statusMap[tx.status] || statusMap.pending;
                     return (
-                      <div key={tx.id} className="bg-white/5 border border-white/10 rounded-xl p-4" data-testid={`tx-item-${tx.id}`}>
+                      <div key={tx.id} className="bg-gray-50 border border-gray-200 rounded-xl p-4" data-testid={`tx-item-${tx.id}`}>
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             {isDeposit
@@ -2709,7 +2709,7 @@ export default function Landing() {
                           </span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-white font-bold text-lg">
+                          <span className="text-gray-900 font-bold text-lg">
                             {Number(tx.amount).toLocaleString('ko-KR')}원
                           </span>
                           <span className="text-gray-500 text-xs">
@@ -2720,14 +2720,14 @@ export default function Landing() {
                           </span>
                         </div>
                         {tx.bankName && (
-                          <p className="text-gray-400 text-xs mt-1">
+                          <p className="text-gray-500 text-xs mt-1">
                             {tx.bankName} · {tx.accountHolder} · {tx.accountNumber}
                           </p>
                         )}
                         {tx.adminNote && (
-                          <div className="mt-2 pt-2 border-t border-white/10">
-                            <p className="text-amber-400 text-xs font-medium mb-0.5">관리자 메모</p>
-                            <p className="text-gray-300 text-xs">{tx.adminNote}</p>
+                          <div className="mt-2 pt-2 border-t border-gray-200">
+                            <p className="text-[#4F3CC9] text-xs font-medium mb-0.5">관리자 메모</p>
+                            <p className="text-gray-600 text-xs">{tx.adminNote}</p>
                           </div>
                         )}
                       </div>
@@ -2745,21 +2745,21 @@ export default function Landing() {
         <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-y-auto">
           <DialogTitle className="sr-only">쪽지함</DialogTitle>
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 via-cyan-500/20 to-amber-500/20 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-[#1C1008]/95 border border-white/10 rounded-2xl p-6 shadow-2xl">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
+            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl">
               <button 
                 onClick={() => { setShowMessagesModal(false); setSelectedMessage(null); }}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors z-10"
               >
                 <X className="w-5 h-5" />
               </button>
               
               <div className="text-center mb-6">
                 <div className="flex items-center justify-center gap-2 mb-3">
-                  <Mail className="w-8 h-8 text-amber-500" />
+                  <Mail className="w-8 h-8 text-[#4F3CC9]" />
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-1">쪽지함</h2>
-                <p className="text-gray-400 text-sm">
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">쪽지함</h2>
+                <p className="text-gray-500 text-sm">
                   {selectedMessage ? '쪽지 내용' : `총 ${messages.length}건의 쪽지`}
                 </p>
               </div>
@@ -2768,16 +2768,16 @@ export default function Landing() {
                 <div className="space-y-4">
                   <button
                     onClick={() => setSelectedMessage(null)}
-                    className="flex items-center gap-2 text-amber-400 hover:text-amber-300 text-sm"
+                    className="flex items-center gap-2 text-[#4F3CC9] hover:text-[#6D4FD9] text-sm"
                   >
                     <ChevronRight className="w-4 h-4 rotate-180" />
                     목록으로 돌아가기
                   </button>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
                     <div className="flex items-start justify-between mb-3">
-                      <h3 className="text-white font-medium text-lg">{selectedMessage.title}</h3>
+                      <h3 className="text-gray-900 font-medium text-lg">{selectedMessage.title}</h3>
                     </div>
-                    <p className="text-gray-300 text-sm whitespace-pre-wrap break-words mb-3">{selectedMessage.content}</p>
+                    <p className="text-gray-600 text-sm whitespace-pre-wrap break-words mb-3">{selectedMessage.content}</p>
                     <p className="text-gray-500 text-xs">
                       {new Date(selectedMessage.createdAt).toLocaleDateString('ko-KR', {
                         year: 'numeric',
@@ -2798,15 +2798,15 @@ export default function Landing() {
                       <button
                         key={msg.id}
                         onClick={() => handleOpenMessage(msg)}
-                        className={`w-full text-left bg-white/5 border rounded-xl p-4 hover:border-amber-500/50 transition-colors ${msg.isRead ? 'border-white/10' : 'border-amber-500/30 bg-amber-500/10'}`}
+                        className={`w-full text-left bg-gray-50 border rounded-xl p-4 hover:border-[#8B5CF6]/50 transition-colors ${msg.isRead ? 'border-gray-200' : 'border-[#4F3CC9]/30 bg-[#4F3CC9]/10'}`}
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex items-center gap-2">
-                            {!msg.isRead && <span className="w-2 h-2 bg-amber-500 rounded-full" />}
-                            <h3 className={`font-medium ${msg.isRead ? 'text-gray-400' : 'text-white'}`}>{msg.title}</h3>
+                            {!msg.isRead && <span className="w-2 h-2 bg-[#4F3CC9] rounded-full" />}
+                            <h3 className={`font-medium ${msg.isRead ? 'text-gray-500' : 'text-gray-900'}`}>{msg.title}</h3>
                           </div>
                         </div>
-                        <p className="text-gray-400 text-sm line-clamp-2">{msg.content}</p>
+                        <p className="text-gray-500 text-sm line-clamp-2">{msg.content}</p>
                         <p className="text-gray-500 text-xs mt-2">
                           {new Date(msg.createdAt).toLocaleDateString('ko-KR', {
                             year: 'numeric',
@@ -2831,21 +2831,21 @@ export default function Landing() {
         <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
           <DialogTitle className="sr-only">공지사항</DialogTitle>
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 via-amber-500/20 to-amber-500/20 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-[#1C1008]/95 border border-white/10 rounded-2xl p-6 shadow-2xl max-h-[80vh] overflow-y-auto">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
+            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl max-h-[80vh] overflow-y-auto">
               <button 
                 onClick={() => { setShowAnnouncementsModal(false); setSelectedAnnouncement(null); }}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors z-10"
               >
                 <X className="w-5 h-5" />
               </button>
               
               <div className="text-center mb-6">
                 <div className="flex items-center justify-center gap-2 mb-3">
-                  <Bell className="w-8 h-8 text-amber-500" />
+                  <Bell className="w-8 h-8 text-[#4F3CC9]" />
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-1">공지사항</h2>
-                <p className="text-gray-400 text-sm">
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">공지사항</h2>
+                <p className="text-gray-500 text-sm">
                   {selectedAnnouncement ? '공지사항 상세' : '중요한 안내사항을 확인하세요'}
                 </p>
               </div>
@@ -2854,22 +2854,22 @@ export default function Landing() {
                 <div className="space-y-4">
                   <button
                     onClick={() => setSelectedAnnouncement(null)}
-                    className="flex items-center gap-2 text-amber-400 hover:text-amber-300 text-sm"
+                    className="flex items-center gap-2 text-[#4F3CC9] hover:text-[#6D4FD9] text-sm"
                   >
                     <ChevronRight className="w-4 h-4 rotate-180" />
                     목록으로 돌아가기
                   </button>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
                     <div className="flex items-start gap-3 mb-2">
                       {selectedAnnouncement.isPinned && (
-                        <span className="px-2 py-0.5 bg-amber-500/20 text-amber-500 rounded text-xs font-medium">고정</span>
+                        <span className="px-2 py-0.5 bg-[#4F3CC9]/10 text-[#4F3CC9] rounded text-xs font-medium">고정</span>
                       )}
-                      <h3 className="text-white font-medium text-lg">{selectedAnnouncement.title}</h3>
+                      <h3 className="text-gray-900 font-medium text-lg">{selectedAnnouncement.title}</h3>
                     </div>
                     <p className="text-gray-500 text-xs mb-3">
                       등록일: {new Date(selectedAnnouncement.displayDate || selectedAnnouncement.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}
                     </p>
-                    <p className="text-gray-300 text-sm whitespace-pre-wrap">{selectedAnnouncement.content}</p>
+                    <p className="text-gray-600 text-sm whitespace-pre-wrap">{selectedAnnouncement.content}</p>
                   </div>
                 </div>
               ) : (
@@ -2881,16 +2881,16 @@ export default function Landing() {
                       <button
                         key={ann.id}
                         onClick={() => setSelectedAnnouncement(ann)}
-                        className="w-full text-left bg-white/5 border border-white/10 rounded-xl p-4 hover:border-amber-500/50 transition-colors"
+                        className="w-full text-left bg-gray-50 border border-gray-200 rounded-xl p-4 hover:border-[#8B5CF6]/50 transition-colors"
                         data-testid={`announcement-item-${ann.id}`}
                       >
                         <div className="flex items-start gap-3">
                           {ann.isPinned && (
-                            <span className="px-2 py-0.5 bg-amber-500/20 text-amber-500 rounded text-xs font-medium">고정</span>
+                            <span className="px-2 py-0.5 bg-[#4F3CC9]/10 text-[#4F3CC9] rounded text-xs font-medium">고정</span>
                           )}
                           <div className="flex-1">
-                            <h3 className="text-white font-medium mb-1">{ann.title}</h3>
-                            <p className="text-gray-400 text-sm line-clamp-2">{ann.content}</p>
+                            <h3 className="text-gray-900 font-medium mb-1">{ann.title}</h3>
+                            <p className="text-gray-500 text-sm line-clamp-2">{ann.content}</p>
                             <p className="text-gray-500 text-xs mt-1">
                               {new Date(ann.displayDate || ann.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}
                             </p>
@@ -2908,45 +2908,45 @@ export default function Landing() {
 
       {/* My Page Modal */}
       <Dialog open={showMyPageModal} onOpenChange={setShowMyPageModal}>
-        <DialogContent className="bg-[#0f1117] border border-white/10 text-white max-w-lg w-full max-h-[90vh] overflow-y-auto p-0">
+        <DialogContent className="bg-white border border-gray-200 text-gray-900 max-w-lg w-full max-h-[90vh] overflow-y-auto p-0">
           <div className="p-6">
-            <DialogTitle className="text-xl font-bold text-white mb-6">마이페이지</DialogTitle>
+            <DialogTitle className="text-xl font-bold text-gray-900 mb-6">마이페이지</DialogTitle>
 
             {/* 계정 정보 */}
             <div className="mb-6">
-              <h3 className="text-base font-semibold text-white mb-4 pb-2 border-b border-white/10">계정 정보</h3>
+              <h3 className="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">계정 정보</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs text-gray-400 mb-1">아이디</label>
+                  <label className="block text-xs text-gray-500 mb-1">아이디</label>
                   <input
                     type="text"
                     value={user?.username || ""}
                     readOnly
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-gray-300 text-sm cursor-not-allowed"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-600 text-sm cursor-not-allowed"
                     data-testid="input-mypage-username"
                   />
                   <p className="text-xs text-gray-500 mt-1">로그인에 사용되는 고유 아이디입니다.</p>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs text-gray-400 mb-1">새 비밀번호</label>
+                    <label className="block text-xs text-gray-500 mb-1">새 비밀번호</label>
                     <Input
                       type="password"
                       placeholder="새 비밀번호"
                       value={myPageNewPassword}
                       onChange={e => setMyPageNewPassword(e.target.value)}
-                      className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 text-sm"
+                      className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 text-sm"
                       data-testid="input-mypage-new-password"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-400 mb-1">비밀번호 확인</label>
+                    <label className="block text-xs text-gray-500 mb-1">비밀번호 확인</label>
                     <Input
                       type="password"
                       placeholder="새 비밀번호 확인"
                       value={myPageConfirmPassword}
                       onChange={e => setMyPageConfirmPassword(e.target.value)}
-                      className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 text-sm"
+                      className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 text-sm"
                       data-testid="input-mypage-confirm-password"
                     />
                   </div>
@@ -2957,25 +2957,25 @@ export default function Landing() {
 
             {/* 본인 정보 */}
             <div className="mb-6">
-              <h3 className="text-base font-semibold text-white mb-4 pb-2 border-b border-white/10">본인 정보</h3>
+              <h3 className="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">본인 정보</h3>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs text-gray-400 mb-1">이름</label>
+                  <label className="block text-xs text-gray-500 mb-1">이름</label>
                   <input
                     type="text"
                     value={(user as any)?.name || ""}
                     readOnly
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-gray-300 text-sm cursor-not-allowed"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-600 text-sm cursor-not-allowed"
                     data-testid="input-mypage-name"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-400 mb-1">생년월일 (YYMMDD)</label>
+                  <label className="block text-xs text-gray-500 mb-1">생년월일 (YYMMDD)</label>
                   <input
                     type="text"
                     value={(user as any)?.birthDate || ""}
                     readOnly
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-gray-300 text-sm cursor-not-allowed"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-600 text-sm cursor-not-allowed"
                     data-testid="input-mypage-birthdate"
                   />
                   <p className="text-xs text-gray-500 mt-1">회원 가입 시 등록한 정보 기준으로 표시됩니다.</p>
@@ -2985,41 +2985,41 @@ export default function Landing() {
 
             {/* 출금 계좌 */}
             <div className="mb-6">
-              <h3 className="text-base font-semibold text-white mb-4 pb-2 border-b border-white/10">출금 계좌</h3>
+              <h3 className="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">출금 계좌</h3>
               <div className="space-y-3">
                 <div>
-                  <label className="block text-xs text-gray-400 mb-1">은행명</label>
+                  <label className="block text-xs text-gray-500 mb-1">은행명</label>
                   <Select value={myPageBankName} onValueChange={setMyPageBankName}>
-                    <SelectTrigger className="bg-white/5 border-white/10 text-white text-sm" data-testid="select-mypage-bank">
+                    <SelectTrigger className="bg-gray-50 border-gray-200 text-gray-900 text-sm" data-testid="select-mypage-bank">
                       <SelectValue placeholder="은행 선택" />
                     </SelectTrigger>
-                    <SelectContent className="bg-[#1C1008] border-white/10 max-h-60">
+                    <SelectContent className="bg-white border-gray-200 max-h-60">
                       {KOREAN_BANKS.map(bank => (
-                        <SelectItem key={bank} value={bank} className="text-gray-300 focus:bg-white/10 focus:text-white">{bank}</SelectItem>
+                        <SelectItem key={bank} value={bank} className="text-gray-600 focus:bg-gray-100 focus:text-gray-900">{bank}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-gray-500 mt-1">정산 및 출금 시 사용될 계좌 정보를 정확히 입력해 주세요.</p>
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-400 mb-1">계좌번호</label>
+                  <label className="block text-xs text-gray-500 mb-1">계좌번호</label>
                   <Input
                     type="text"
                     placeholder="계좌번호 (숫자만)"
                     value={myPageAccountNumber}
                     onChange={e => setMyPageAccountNumber(e.target.value)}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 text-sm"
+                    className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 text-sm"
                     data-testid="input-mypage-account-number"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-400 mb-1">예금주</label>
+                  <label className="block text-xs text-gray-500 mb-1">예금주</label>
                   <Input
                     type="text"
                     placeholder="예금주명"
                     value={myPageAccountHolder}
                     onChange={e => setMyPageAccountHolder(e.target.value)}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 text-sm"
+                    className="bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 text-sm"
                     data-testid="input-mypage-account-holder"
                   />
                   <p className="text-xs text-gray-500 mt-1">회원 실명과 동일해야 정상 출금이 가능합니다.</p>
@@ -3029,14 +3029,14 @@ export default function Landing() {
 
             {/* 보유금 */}
             <div className="mb-6">
-              <h3 className="text-base font-semibold text-white mb-4 pb-2 border-b border-white/10">보유금</h3>
+              <h3 className="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">보유금</h3>
               <div>
-                <label className="block text-xs text-gray-400 mb-1">보유금액</label>
+                <label className="block text-xs text-gray-500 mb-1">보유금액</label>
                 <input
                   type="text"
                   value={`₩ ${balanceData?.balance ? Math.floor(parseFloat(balanceData.balance)).toLocaleString() : '0'}`}
                   readOnly
-                  className="w-full bg-amber-500/5 border border-amber-500/20 rounded-lg px-3 py-2 text-amber-400 font-bold text-sm cursor-not-allowed"
+                  className="w-full bg-[#4F3CC9]/5 border border-[#4F3CC9]/20 rounded-lg px-3 py-2 text-[#4F3CC9] font-bold text-sm cursor-not-allowed"
                   data-testid="input-mypage-balance"
                 />
               </div>
@@ -3046,7 +3046,7 @@ export default function Landing() {
             <Button
               onClick={handleMyPageSave}
               disabled={myPageSaving}
-              className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold h-11"
+              className="w-full bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white font-semibold h-11"
               data-testid="button-mypage-save"
             >
               {myPageSaving ? "저장 중..." : "저장하기"}
@@ -3057,20 +3057,20 @@ export default function Landing() {
 
       {/* Login Error Alert Dialog */}
       <AlertDialog open={!!loginErrorMessage} onOpenChange={() => setLoginErrorMessage("")}>
-        <AlertDialogContent className="bg-[#1C1008] border border-red-500/30">
+        <AlertDialogContent className="bg-white border border-red-500/30">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-red-500 flex items-center gap-2">
               <X className="w-5 h-5" />
               로그인 실패
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-300">
+            <AlertDialogDescription className="text-gray-600">
               {loginErrorMessage}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogAction 
               onClick={() => setLoginErrorMessage("")}
-              className="bg-amber-500 hover:bg-amber-600 text-white"
+              className="bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white"
             >
               확인
             </AlertDialogAction>
