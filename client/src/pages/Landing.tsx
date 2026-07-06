@@ -595,9 +595,9 @@ export default function Landing() {
   }
 
   return (
-    <div className="min-h-screen bg-[#100805] text-white">
+    <div className="min-h-screen bg-white text-[#181A2A]">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#100805]/95 backdrop-blur-sm border-b border-white/5">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-black/5 shadow-sm">
         <div className="max-w-7xl mx-auto px-3 md:px-4 h-14 md:h-16 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-3 md:gap-5 min-w-0">
@@ -608,14 +608,14 @@ export default function Landing() {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-3">
               <DropdownMenu>
-                <DropdownMenuTrigger className="text-gray-300 hover:text-amber-500 transition-colors text-xs font-medium flex items-center gap-1 whitespace-nowrap" data-testid="nav-options-trading">
+                <DropdownMenuTrigger className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium flex items-center gap-1 whitespace-nowrap" data-testid="nav-options-trading">
                   옵션거래 <ChevronDown className="w-3 h-3" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-[#1C1008] border-white/10">
+                <DropdownMenuContent className="bg-white border-black/10">
                   {CRYPTO_ASSETS.map((stock) => (
                     <DropdownMenuItem 
                       key={stock.symbol}
-                      className="text-gray-300 hover:text-amber-500 hover:bg-white/5 cursor-pointer"
+                      className="text-gray-700 hover:text-[#6D4FD9] hover:bg-[#F5F3FF] cursor-pointer"
                       onClick={() => {
                         if (user) {
                           setLocation("/trade");
@@ -624,7 +624,7 @@ export default function Landing() {
                         }
                       }}
                     >
-                      <span className="font-medium text-amber-500 mr-2">{stock.symbol}</span>
+                      <span className="font-medium text-[#6D4FD9] mr-2">{stock.symbol}</span>
                       {stock.name}
                     </DropdownMenuItem>
                   ))}
@@ -638,7 +638,7 @@ export default function Landing() {
                     setShowLoginModal(true);
                   }
                 }}
-                className="text-gray-300 hover:text-amber-500 transition-colors text-xs font-medium whitespace-nowrap" 
+                className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap" 
                 data-testid="nav-trade-history"
               >
                 거래내역
@@ -649,7 +649,7 @@ export default function Landing() {
                   if (!isWithinOperatingHours()) { toast.error("입출금 신청은 오전 09:00 ~ 18:00 사이에만 가능합니다"); return; }
                   setDepositAmount(''); setDepositSenderName(user?.name || user?.accountHolder || ''); setShowDepositPageModal(true);
                 }}
-                className="text-gray-300 hover:text-amber-500 transition-colors text-xs font-medium whitespace-nowrap" 
+                className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap" 
                 data-testid="nav-deposit"
               >
                 입금신청
@@ -661,14 +661,14 @@ export default function Landing() {
                   if (!isWithinOperatingHours()) { toast.error("입출금 신청은 오전 09:00 ~ 18:00 사이에만 가능합니다"); return; }
                   setWithdrawalAmount(''); setShowWithdrawalPageModal(true);
                 }}
-                className="text-gray-300 hover:text-amber-500 transition-colors text-xs font-medium whitespace-nowrap" 
+                className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap" 
                 data-testid="nav-withdrawal"
               >
                 출금신청
               </button>
               <button 
                 onClick={() => setShowAnnouncementsModal(true)}
-                className="text-gray-300 hover:text-amber-500 transition-colors text-xs font-medium whitespace-nowrap" 
+                className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap" 
                 data-testid="nav-announcements"
               >
                 공지사항
@@ -676,7 +676,7 @@ export default function Landing() {
               {user && (
                 <button 
                   onClick={openMyPage}
-                  className="text-gray-300 hover:text-amber-500 transition-colors text-xs font-medium whitespace-nowrap" 
+                  className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap" 
                   data-testid="nav-mypage"
                 >
                   마이페이지
@@ -684,7 +684,7 @@ export default function Landing() {
               )}
               <button 
                 onClick={() => setShowCustomerServiceModal(true)}
-                className="text-gray-300 hover:text-amber-500 transition-colors text-xs font-medium whitespace-nowrap" 
+                className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap" 
                 data-testid="nav-customer-service"
               >
                 고객센터
@@ -697,7 +697,7 @@ export default function Landing() {
                     setShowLoginModal(true);
                   }
                 }}
-                className="text-gray-300 hover:text-amber-500 transition-colors text-xs font-medium whitespace-nowrap relative" 
+                className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap relative" 
                 data-testid="nav-messages"
               >
                 쪽지함
@@ -715,10 +715,10 @@ export default function Landing() {
             {user ? (
               <>
                 {/* Balance Display */}
-                <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5">
-                  <Wallet className="w-4 h-4 text-amber-500" />
-                  <span className="text-gray-400 text-xs">보유금액</span>
-                  <span className="text-white font-bold text-sm" data-testid="text-header-balance">
+                <div className="flex items-center gap-2 bg-[#F5F3FF] border border-[#6D4FD9]/15 rounded-lg px-3 py-1.5">
+                  <Wallet className="w-4 h-4 text-[#6D4FD9]" />
+                  <span className="text-gray-500 text-xs">보유금액</span>
+                  <span className="text-[#181A2A] font-bold text-sm" data-testid="text-header-balance">
                     {balanceData?.balance ? Math.floor(parseFloat(balanceData.balance)).toLocaleString() : '0'}원
                   </span>
                 </div>
@@ -728,7 +728,7 @@ export default function Landing() {
                   <Button 
                     variant="ghost"
                     size="sm"
-                    className="text-green-400 hover:text-green-300 hover:bg-green-500/10 text-xs px-2"
+                    className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 text-xs px-2"
                     data-testid="button-header-deposit"
                     onClick={() => { 
                       if (!isWithinOperatingHours()) { toast.error("입출금 신청은 오전 09:00 ~ 18:00 사이에만 가능합니다"); return; }
@@ -740,7 +740,7 @@ export default function Landing() {
                   <Button 
                     variant="ghost"
                     size="sm"
-                    className="text-red-400 hover:text-red-300 hover:bg-red-500/10 text-xs px-2"
+                    className="text-red-500 hover:text-red-600 hover:bg-red-50 text-xs px-2"
                     data-testid="button-header-withdraw"
                     onClick={() => { 
                       if ((user as any)?.isBettingBlocked) { toast.error("거래정지 해제 이후 다시 시도해 주세요."); return; }
@@ -752,12 +752,12 @@ export default function Landing() {
                   </Button>
                 </div>
 
-                <span className="text-gray-300 text-sm hidden lg:block">
+                <span className="text-gray-500 text-sm hidden lg:block">
                   {user.username}님
                 </span>
                 {user.role === 'admin' ? (
                   <Button 
-                    className="bg-amber-500 hover:bg-amber-600 text-white font-semibold" 
+                    className="bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white font-semibold" 
                     data-testid="button-header-admin"
                     onClick={() => setLocation("/admin")}
                   >
@@ -765,7 +765,7 @@ export default function Landing() {
                   </Button>
                 ) : (
                   <Button 
-                    className="bg-amber-500 hover:bg-amber-600 text-white font-semibold" 
+                    className="bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white font-semibold" 
                     data-testid="button-header-trade"
                     onClick={() => setLocation("/trade")}
                   >
@@ -774,7 +774,7 @@ export default function Landing() {
                 )}
                 <Button 
                   variant="ghost" 
-                  className="text-gray-300 hover:text-white hover:bg-white/10" 
+                  className="text-gray-500 hover:text-[#181A2A] hover:bg-black/5" 
                   data-testid="button-header-logout"
                   onClick={() => logout.mutate()}
                 >
@@ -785,14 +785,14 @@ export default function Landing() {
               <>
                 <Button 
                   variant="ghost" 
-                  className="text-gray-300 hover:text-white hover:bg-white/10" 
+                  className="text-gray-500 hover:text-[#181A2A] hover:bg-black/5" 
                   data-testid="button-header-login"
                   onClick={() => setShowLoginModal(true)}
                 >
                   로그인
                 </Button>
                 <Button 
-                  className="bg-amber-500 hover:bg-amber-600 text-white font-semibold" 
+                  className="bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white font-semibold" 
                   data-testid="button-header-register"
                   onClick={() => setShowRegisterModal(true)}
                 >
@@ -805,20 +805,20 @@ export default function Landing() {
           {/* Mobile Menu Button */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
-              <button className="md:hidden p-2 text-gray-300 hover:text-white">
+              <button className="md:hidden p-2 text-gray-500 hover:text-[#181A2A]">
                 <Menu className="w-6 h-6" />
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-[#100805] border-white/10 w-[280px]">
+            <SheetContent side="right" className="bg-white border-black/10 w-[280px]">
               <SheetHeader>
-                <SheetTitle className="text-white text-left">메뉴</SheetTitle>
+                <SheetTitle className="text-[#181A2A] text-left">메뉴</SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col gap-2 mt-6">
                 {user && (
-                  <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-3 py-2 mb-4">
-                    <Wallet className="w-4 h-4 text-amber-500" />
-                    <span className="text-gray-400 text-xs">보유금액</span>
-                    <span className="text-white font-bold text-sm">
+                  <div className="flex items-center gap-2 bg-[#F5F3FF] border border-[#6D4FD9]/15 rounded-lg px-3 py-2 mb-4">
+                    <Wallet className="w-4 h-4 text-[#6D4FD9]" />
+                    <span className="text-gray-500 text-xs">보유금액</span>
+                    <span className="text-[#181A2A] font-bold text-sm">
                       {balanceData?.balance ? Math.floor(parseFloat(balanceData.balance)).toLocaleString() : '0'}원
                     </span>
                   </div>
@@ -833,7 +833,7 @@ export default function Landing() {
                     }
                     setMobileMenuOpen(false);
                   }}
-                  className="text-left text-gray-300 hover:text-amber-500 py-3 border-b border-white/10 w-full touch-manipulation"
+                  className="text-left text-gray-600 hover:text-[#6D4FD9] py-3 border-b border-black/5 w-full touch-manipulation"
                   style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   옵션거래
@@ -847,7 +847,7 @@ export default function Landing() {
                     }
                     setMobileMenuOpen(false);
                   }}
-                  className="text-left text-gray-300 hover:text-amber-500 py-3 border-b border-white/10 w-full touch-manipulation"
+                  className="text-left text-gray-600 hover:text-[#6D4FD9] py-3 border-b border-black/5 w-full touch-manipulation"
                   style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   거래내역
@@ -859,7 +859,7 @@ export default function Landing() {
                     setDepositAmount(''); setDepositSenderName(user?.name || user?.accountHolder || ''); setShowDepositPageModal(true);
                     setMobileMenuOpen(false);
                   }}
-                  className="text-left text-gray-300 hover:text-amber-500 py-3 border-b border-white/10 w-full touch-manipulation"
+                  className="text-left text-gray-600 hover:text-[#6D4FD9] py-3 border-b border-black/5 w-full touch-manipulation"
                   style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   입금신청
@@ -872,7 +872,7 @@ export default function Landing() {
                     setWithdrawalAmount(''); setShowWithdrawalPageModal(true);
                     setMobileMenuOpen(false);
                   }}
-                  className="text-left text-gray-300 hover:text-amber-500 py-3 border-b border-white/10 w-full touch-manipulation"
+                  className="text-left text-gray-600 hover:text-[#6D4FD9] py-3 border-b border-black/5 w-full touch-manipulation"
                   style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   출금신청
@@ -882,7 +882,7 @@ export default function Landing() {
                     setShowAnnouncementsModal(true);
                     setMobileMenuOpen(false);
                   }}
-                  className="text-left text-gray-300 hover:text-amber-500 py-3 border-b border-white/10 w-full touch-manipulation"
+                  className="text-left text-gray-600 hover:text-[#6D4FD9] py-3 border-b border-black/5 w-full touch-manipulation"
                   style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   공지사항
@@ -893,7 +893,7 @@ export default function Landing() {
                       openMyPage();
                       setMobileMenuOpen(false);
                     }}
-                    className="text-left text-gray-300 hover:text-amber-500 py-3 border-b border-white/10 w-full touch-manipulation"
+                    className="text-left text-gray-600 hover:text-[#6D4FD9] py-3 border-b border-black/5 w-full touch-manipulation"
                     style={{ WebkitTapHighlightColor: 'transparent' }}
                     data-testid="mobile-nav-mypage"
                   >
@@ -905,7 +905,7 @@ export default function Landing() {
                     setShowCustomerServiceModal(true);
                     setMobileMenuOpen(false);
                   }}
-                  className="text-left text-gray-300 hover:text-amber-500 py-3 border-b border-white/10 w-full touch-manipulation"
+                  className="text-left text-gray-600 hover:text-[#6D4FD9] py-3 border-b border-black/5 w-full touch-manipulation"
                   style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   고객센터
@@ -919,7 +919,7 @@ export default function Landing() {
                     }
                     setMobileMenuOpen(false);
                   }}
-                  className="text-left text-gray-300 hover:text-amber-500 py-3 border-b border-white/10 w-full touch-manipulation"
+                  className="text-left text-gray-600 hover:text-[#6D4FD9] py-3 border-b border-black/5 w-full touch-manipulation"
                   style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
                   쪽지함
@@ -928,24 +928,24 @@ export default function Landing() {
                 <div className="mt-4 flex flex-col gap-2">
                   {user ? (
                     <>
-                      <p className="text-gray-400 text-sm mb-2">{user.username}님</p>
+                      <p className="text-gray-500 text-sm mb-2">{user.username}님</p>
                       {user.role === 'admin' && (
                         <Button 
-                          className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold" 
+                          className="w-full bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white font-semibold" 
                           onClick={() => { setLocation("/admin"); setMobileMenuOpen(false); }}
                         >
                           관리자
                         </Button>
                       )}
                       <Button 
-                        className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold" 
+                        className="w-full bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white font-semibold" 
                         onClick={() => { setLocation("/trade"); setMobileMenuOpen(false); }}
                       >
                         거래하기
                       </Button>
                       <Button 
                         variant="outline" 
-                        className="w-full border-white/20 text-gray-300 hover:text-white" 
+                        className="w-full border-black/10 text-gray-600 hover:text-[#181A2A]" 
                         onClick={() => { logout.mutate(); setMobileMenuOpen(false); }}
                       >
                         로그아웃
@@ -955,13 +955,13 @@ export default function Landing() {
                     <>
                       <Button 
                         variant="outline" 
-                        className="w-full border-white/20 text-gray-300 hover:text-white" 
+                        className="w-full border-black/10 text-gray-600 hover:text-[#181A2A]" 
                         onClick={() => { setShowLoginModal(true); setMobileMenuOpen(false); }}
                       >
                         로그인
                       </Button>
                       <Button 
-                        className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold" 
+                        className="w-full bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white font-semibold" 
                         onClick={() => { setShowRegisterModal(true); setMobileMenuOpen(false); }}
                       >
                         회원가입
@@ -976,338 +976,142 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-        {/* === BASE: Deep navy-charcoal, premium securities-firm tone === */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0E17] via-[#080B12] to-[#05070B]" />
-
-        {/* === CENTER RADIAL GLOW (muted platinum/gold) === */}
-        <div
-          className="absolute inset-0 hero-center-glow"
-          style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 32%, rgba(203,163,90,0.10) 0%, rgba(60,90,140,0.08) 45%, transparent 75%)' }}
-        />
-
-        {/* === ALL CHART LAYERS + REFINED CONSTELLATION IN ONE SVG === */}
-        <svg
-          className="absolute inset-0 w-full h-full"
-          viewBox="0 0 1440 900"
-          preserveAspectRatio="xMidYMid slice"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <filter id="blur-deep"><feGaussianBlur stdDeviation="14"/></filter>
-            <filter id="blur-mid"><feGaussianBlur stdDeviation="5"/></filter>
-            <filter id="glow-line">
-              <feGaussianBlur stdDeviation="2.5" result="b"/>
-              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-            <filter id="glow-dot">
-              <feGaussianBlur stdDeviation="2" result="b"/>
-              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-
-            {/* Index line gradient — refined gold */}
-            <linearGradient id="sp500F" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#8E7133" stopOpacity="0"/>
-              <stop offset="12%" stopColor="#CBA35A" stopOpacity="0.9"/>
-              <stop offset="88%" stopColor="#E8D19C" stopOpacity="0.9"/>
-              <stop offset="100%" stopColor="#F3E3B8" stopOpacity="0"/>
-            </linearGradient>
-            <linearGradient id="sp500Fill" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#CBA35A" stopOpacity="0.10"/>
-              <stop offset="100%" stopColor="#CBA35A" stopOpacity="0"/>
-            </linearGradient>
-            <linearGradient id="dowF" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#3A4A63" stopOpacity="0"/>
-              <stop offset="18%" stopColor="#5E7291" stopOpacity="0.5"/>
-              <stop offset="82%" stopColor="#7C93B4" stopOpacity="0.5"/>
-              <stop offset="100%" stopColor="#9AACC8" stopOpacity="0"/>
-            </linearGradient>
-            <linearGradient id="dxyF" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#3A4A63" stopOpacity="0"/>
-              <stop offset="22%" stopColor="#526279" stopOpacity="0.35"/>
-              <stop offset="78%" stopColor="#6C7F9C" stopOpacity="0.35"/>
-              <stop offset="100%" stopColor="#8496B4" stopOpacity="0"/>
-            </linearGradient>
-          </defs>
-
-          {/* ── LAYER 1: Deep background silhouettes (skyline feel) ── */}
-          <g filter="url(#blur-deep)" opacity="0.16" className="chart-float">
-            <path d="M-100,580 L120,520 L280,545 L440,490 L600,460 L760,430 L920,400 L1080,370 L1240,340 L1440,305"
-              stroke="#3E4A5E" strokeWidth="4" fill="none"/>
-            <path d="M-100,680 L150,640 L320,660 L500,620 L680,590 L860,560 L1040,530 L1220,500 L1440,465"
-              stroke="#2E3A4C" strokeWidth="3" fill="none"/>
-            <path d="M-100,750 L200,720 L400,735 L620,700 L840,670 L1060,640 L1280,610 L1440,585"
-              stroke="#212A38" strokeWidth="3" fill="none"/>
-          </g>
-
-          {/* ── LAYER 2: Mid distance ── */}
-          <g filter="url(#blur-mid)" opacity="0.22">
-            <path d="M-50,650 L100,620 L200,635 L320,600 L460,575 L600,555 L740,530 L880,505 L1020,478 L1160,452 L1300,425 L1440,400"
-              stroke="#48576E" strokeWidth="2.5" fill="none"/>
-            <path d="M-50,730 L150,700 L280,715 L420,682 L570,655 L720,635 L870,608 L1030,580 L1190,555 L1350,528 L1440,510"
-              stroke="#3A4658" strokeWidth="2" fill="none"/>
-          </g>
-
-          {/* ── FINE GRID ── */}
-          {[120,240,360,480,600,720].map(y => (
-            <line key={`h${y}`} x1="0" y1={y} x2="1440" y2={y} stroke="#3A4658" strokeOpacity="0.14" strokeWidth="0.5" strokeDasharray="1 10"/>
-          ))}
-          {[0,160,320,480,640,800,960,1120,1280,1440].map(x => (
-            <line key={`v${x}`} x1={x} y1="0" x2={x} y2="900" stroke="#3A4658" strokeOpacity="0.08" strokeWidth="0.5" strokeDasharray="1 10"/>
-          ))}
-
-          {/* ── LAYER 3: Sharp foreground index line ── */}
-          <path
-            d="M-20,720 L60,700 L110,712 L170,692 L230,668 L290,682 L360,648 L430,625 L490,640 L550,614 L620,592 L680,608 L750,578 L820,552 L880,568 L950,538 L1020,510 L1090,526 L1160,494 L1240,465 L1310,480 L1390,448 L1440,430 L1440,900 L-20,900 Z"
-            fill="url(#sp500Fill)"
-          />
-          <path
-            d="M-20,720 L60,700 L110,712 L170,692 L230,668 L290,682 L360,648 L430,625 L490,640 L550,614 L620,592 L680,608 L750,578 L820,552 L880,568 L950,538 L1020,510 L1090,526 L1160,494 L1240,465 L1310,480 L1390,448 L1440,430"
-            stroke="url(#sp500F)" strokeWidth="1.8" fill="none" filter="url(#glow-line)"
-          />
-          <path
-            d="M-20,790 L90,762 L160,778 L240,748 L320,725 L400,742 L480,710 L560,688 L640,705 L720,672 L800,648 L880,665 L960,633 L1040,608 L1120,625 L1200,595 L1280,568 L1360,584 L1440,555"
-            stroke="url(#dowF)" strokeWidth="1.3" fill="none"
-          />
-          <path
-            d="M-20,848 L110,832 L200,842 L310,825 L410,835 L520,818 L620,808 L720,820 L830,802 L930,790 L1040,803 L1150,785 L1260,773 L1370,785 L1440,770"
-            stroke="url(#dxyF)" strokeWidth="1" fill="none"
-          />
-
-          {/* ── MINIMAL CONSTELLATION (sparse, refined) ── */}
-          {([
-            [[120,120],[300,90]],[[300,90],[520,130]],[[520,130],[760,80]],[[760,80],[980,120]],
-            [[980,120],[1220,75]],[[1220,75],[1400,110]],[[300,90],[340,260]],[[760,80],[800,240]],
-            [[1220,75],[1260,230]],
-          ] as [number,number][][]).map(([[x1,y1],[x2,y2]], i) => (
-            <line
-              key={`nl${i}`} x1={x1} y1={y1} x2={x2} y2={y2}
-              stroke="#CBA35A" strokeOpacity="0.18" strokeWidth="0.6"
-              strokeDasharray="6 8"
-              className="network-line"
-              style={{ animationDelay: `${(i * 0.3) % 5}s` }}
-            />
-          ))}
-
-          {([
-            [120,120],[300,90],[520,130],[760,80],[980,120],[1220,75],[1400,110],[340,260],[800,240],[1260,230],
-          ] as [number,number][]).map(([x,y], i) => (
-            <g key={`nn${i}`}>
-              <circle cx={x} cy={y} r="6" fill="#CBA35A" opacity="0.08"
-                className="node-ring"
-                style={{ animationDelay: `${(i * 0.3) % 3.5}s`, transformOrigin: `${x}px ${y}px` }}
-              />
-              <circle cx={x} cy={y} r="2" fill="#E8D19C" opacity="0.5"
-                className="node-dot" filter="url(#glow-dot)"
-                style={{ animationDelay: `${(i * 0.3) % 3}s` }}
-              />
-            </g>
-          ))}
-
-          {/* ── GLOWING DATA POINTS on index line ── */}
-          {([[230,668],[550,614],[820,552],[1090,526],[1390,448]] as [number,number][]).map(([x,y],i) => (
-            <g key={`dp${i}`}>
-              <circle cx={x} cy={y} r="7" fill="#CBA35A" opacity="0.1" className="node-ring" style={{ animationDelay: `${i*0.4}s`, transformOrigin: `${x}px ${y}px` }}/>
-              <circle cx={x} cy={y} r="2.6" fill="#E8D19C" opacity="0.8" filter="url(#glow-dot)" className="node-dot" style={{ animationDelay: `${i*0.4}s` }}/>
-            </g>
-          ))}
-
-          {/* ── TICKER LABELS ── */}
-          <g filter="url(#glow-line)">
-            <rect x="1345" y="418" width="82" height="22" rx="4" fill="#0F1522" opacity="0.9"/>
-            <rect x="1345" y="418" width="82" height="22" rx="4" fill="none" stroke="#CBA35A" strokeWidth="0.5" strokeOpacity="0.5"/>
-            <text x="1386" y="433" textAnchor="middle" fill="#E8D19C" fontSize="10.5" fontWeight="700" fontFamily="monospace">SP500 ▲</text>
-          </g>
-          <g opacity="0.5">
-            <rect x="1345" y="542" width="82" height="22" rx="4" fill="#0F1522" opacity="0.9"/>
-            <rect x="1345" y="542" width="82" height="22" rx="4" fill="none" stroke="#7C93B4" strokeWidth="0.5" strokeOpacity="0.5"/>
-            <text x="1386" y="557" textAnchor="middle" fill="#9AACC8" fontSize="10.5" fontWeight="700" fontFamily="monospace">DOW ▲</text>
-          </g>
-          <g opacity="0.35">
-            <rect x="1345" y="758" width="66" height="22" rx="4" fill="#0F1522" opacity="0.9"/>
-            <text x="1378" y="773" textAnchor="middle" fill="#6C7F9C" fontSize="10" fontWeight="600" fontFamily="monospace">DXY →</text>
-          </g>
-        </svg>
-
-        {/* === GRADIENT OVERLAYS for text readability === */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#05070B]/20 via-[#05070B]/55 to-[#05070B]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#05070B]/50 via-transparent to-[#05070B]/50" />
-        {/* Top fade */}
-        <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#05070B] to-transparent" />
-
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <div className="mb-8 flex flex-col items-center">
-            <div className="relative mb-6">
-              <div className="absolute -inset-4 bg-[#CBA35A]/15 rounded-full blur-xl animate-pulse" />
-              <LearnInvestLogo variant="icon" size={96} className="relative rounded-2xl" />
-            </div>
-            <h1 className="text-5xl md:text-7xl font-bold mb-2 tracking-wide">
-              <span className="bg-gradient-to-r from-[#E8D19C] via-[#F3E3B8] to-[#CBA35A] bg-clip-text text-transparent">RD-INDEX</span>
-            </h1>
-          </div>
-
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <span className="h-px w-12 bg-gradient-to-r from-transparent to-[#CBA35A]/50" />
-            <div className="flex items-center gap-2">
-              <span className="text-[#CBA35A] text-sm font-semibold tracking-widest uppercase">Global Options Exchange</span>
-            </div>
-            <span className="h-px w-12 bg-gradient-to-l from-transparent to-[#CBA35A]/50" />
-          </div>
-          
-          <h2 className="text-2xl md:text-4xl font-bold mb-6" data-testid="text-hero-title">
-            가장 신뢰받는 글로벌 옵션거래
-          </h2>
-          
-          <p className="text-gray-300 text-lg md:text-xl mb-8 max-w-2xl mx-auto" data-testid="text-hero-description">
-            안전하고 투명한 시스템으로<br />
-            빠르고 편리한 외환 옵션 거래를 제공합니다.
-          </p>
-
-          <div className="flex items-center justify-center gap-6 mb-10 text-sm">
-            <div className="flex items-center gap-2 text-gray-400">
-              <SymbolIcon symbol="SP500" size={22} />
-              <span>S&amp;P500</span>
-            </div>
-            <div className="w-1 h-1 rounded-full bg-gray-600" />
-            <div className="flex items-center gap-2 text-gray-400">
-              <SymbolIcon symbol="DOW" size={22} />
-              <span>다우존스</span>
-            </div>
-            <div className="w-1 h-1 rounded-full bg-gray-600" />
-            <div className="flex items-center gap-2 text-gray-400">
-              <SymbolIcon symbol="DXY" size={22} />
-              <span>달러 인덱스</span>
-            </div>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-[#8E7133] to-[#CBA35A] hover:from-[#7A5F29] hover:to-[#B8924E] text-[#0A0E17] font-bold px-10 py-6 text-lg rounded-lg shadow-lg shadow-black/40"
-              data-testid="button-trade"
-              onClick={handleTradeClick}
-            >
-              거래 시작하기
-            </Button>
-            {!user && (
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-[#CBA35A]/30 text-[#E8D19C] hover:bg-[#CBA35A]/10 px-10 py-6 text-lg rounded-lg"
-                data-testid="button-register"
-                onClick={() => setShowRegisterModal(true)}
-              >
-                회원가입
-              </Button>
-            )}
-          </div>
-        </div>
-
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-[#CBA35A]/30 rounded-full flex justify-center pt-2">
-            <div className="w-1.5 h-3 bg-[#CBA35A]/50 rounded-full" />
-          </div>
-        </div>
-      </section>
-
-      {/* Index Ticker Strip */}
-      <div className="relative overflow-hidden bg-[#120906] border-y border-amber-500/10 py-3">
-        <div className="flex animate-[ticker_30s_linear_infinite] whitespace-nowrap">
-          {[0, 1].map((repeatIdx) => (
-            <div key={repeatIdx} className="flex shrink-0 items-center">
-              {[
-                { pair: 'S&P500', name: 'SP500' },
-                { pair: '다우존스', name: 'DOW' },
-                { pair: '달러', name: 'DXY' },
-                { pair: 'S&P500', name: 'SP500-300' },
-                { pair: '다우존스', name: 'DOW-300' },
-                { pair: '달러', name: 'DXY-300' },
-              ].map((item, i) => (
-                <div key={`${repeatIdx}-${i}`} className="flex items-center gap-2 text-sm px-6 border-r border-white/5 last:border-0">
-                  <SymbolIcon symbol={item.name} size={20} />
-                  <span className="text-gray-400">{item.pair}</span>
+      <section className="relative pt-28 pb-16 px-4 overflow-hidden bg-gradient-to-b from-[#F5F3FF] via-white to-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-[1.7fr_1fr] gap-5">
+            {/* Main hero card */}
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#4F3CC9] via-[#6D4FD9] to-[#8B5CF6] p-8 md:p-12 min-h-[420px] flex flex-col justify-between shadow-xl shadow-[#4F3CC9]/20">
+              <div className="absolute -right-16 -bottom-16 w-72 h-72 rounded-full bg-white/10 blur-2xl" />
+              <div className="absolute right-10 top-10 w-40 h-40 rounded-full bg-white/5 blur-xl" />
+              <div className="relative z-10">
+                <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full mb-6">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
+                  실시간 거래
                 </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
+                <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-4" data-testid="text-hero-title">
+                  글로벌 시장의 중심,<br />
+                  <span className="bg-gradient-to-r from-white to-[#E4DBFF] bg-clip-text text-transparent">RD-INDEX</span>에서 투자하세요
+                </h1>
+                <p className="text-white/80 text-sm md:text-base mb-8" data-testid="text-hero-description">
+                  S&amp;P500 · 다우존스 · 달러지수 5분 거래
+                </p>
+              </div>
 
-      {/* Market Overview */}
-      <section className="py-20 px-4 bg-[#130A06]">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-green-400 text-sm font-medium">LIVE</span>
-            </div>
-            <h2 className="text-2xl md:text-3xl font-bold mb-2">실시간 마켓</h2>
-            <p className="text-gray-400">글로벌 주요 지수를 실시간으로 확인하세요</p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-4">
-            {marketData.map((item, index) => {
-              const isPositive = item.changePercent >= 0;
-              const chartPath = generateSparklinePath(item.priceHistory);
-              const priceDecimals = item.symbol === 'DXY' ? 4 : 2;
-              const formattedPrice = item.price.toFixed(priceDecimals);
-              const formattedChange = `${isPositive ? '+' : ''}${item.changePercent.toFixed(2)}%`;
-              
-              return (
-                <div 
-                  key={item.symbol}
-                  className="w-full sm:w-[280px] bg-gradient-to-br from-[#201208] to-[#180D06] border border-white/10 rounded-xl p-5 hover:border-amber-500/50 transition-all cursor-pointer group"
-                  data-testid={`card-market-${index}`}
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-amber-500/25 to-amber-600/10 rounded-full flex items-center justify-center group-hover:from-amber-500/35 group-hover:to-amber-600/20 transition-colors border border-amber-500/20">
-                        <span className="text-lg font-bold text-amber-400">{item.symbol === 'SP500' ? '📈' : item.symbol === 'DOW' ? '🏛️' : '$'}</span>
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-white">{item.name}</h3>
-                        <p className="text-xs text-gray-500">{item.symbol}</p>
-                      </div>
-                    </div>
-                    <div className={`text-xs font-medium px-2 py-1 rounded ${isPositive ? 'bg-red-500/20 text-red-400' : 'bg-red-500/20 text-red-400'}`}>
-                      {formattedChange}
-                    </div>
+              <div className="relative z-10 flex items-end justify-between gap-6">
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Button
+                      size="lg"
+                      className="bg-white hover:bg-white/90 text-[#4F3CC9] font-bold px-8 rounded-xl"
+                      data-testid="button-trade"
+                      onClick={handleTradeClick}
+                    >
+                      지금 거래하기
+                    </Button>
+                    <Button
+                      size="lg"
+                      variant="ghost"
+                      className="text-white hover:bg-white/10 font-medium px-4"
+                      data-testid="button-hero-more"
+                      onClick={() => setShowCustomerServiceModal(true)}
+                    >
+                      자세히 보기 →
+                    </Button>
                   </div>
-                  
-                  {/* Mini Chart - Real-time */}
-                  <div className="h-12 mb-3 overflow-hidden">
-                    <svg width="100%" height="48" viewBox="0 0 120 50" preserveAspectRatio="none">
-                      <defs>
-                        <linearGradient id={`gradient-${index}`} x1="0%" y1="0%" x2="0%" y2="100%">
-                          <stop offset="0%" stopColor={isPositive ? "#ef4444" : "#ef4444"} stopOpacity="0.3" />
-                          <stop offset="100%" stopColor={isPositive ? "#ef4444" : "#ef4444"} stopOpacity="0" />
-                        </linearGradient>
-                      </defs>
-                      <path
-                        d={`${chartPath} L120,50 L0,50 Z`}
-                        fill={`url(#gradient-${index})`}
-                      />
-                      <path
-                        d={chartPath}
-                        fill="none"
-                        stroke={isPositive ? "#ef4444" : "#ef4444"}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="transition-all duration-300"
-                      />
+                  <p className="text-white/50 text-xs">SP500 · 실시간</p>
+                </div>
+
+                {/* Candlestick illustration */}
+                <svg viewBox="0 0 220 70" className="hidden sm:block w-[200px] h-[64px] opacity-90">
+                  {[
+                    [10, 40, 55, 30, 45], [28, 30, 50, 22, 40], [46, 45, 60, 35, 50],
+                    [64, 20, 40, 12, 32], [82, 32, 48, 24, 42], [100, 15, 35, 8, 28],
+                    [118, 25, 42, 15, 35], [136, 8, 28, 2, 20], [154, 18, 32, 10, 26],
+                    [172, 5, 24, -2, 15], [190, 10, 22, 2, 16],
+                  ].map(([x, high, low, top, bottom], i) => (
+                    <g key={i}>
+                      <line x1={x} y1={high} x2={x} y2={low} stroke="#ffffff" strokeOpacity="0.9" strokeWidth="1.5" />
+                      <rect x={x - 4} y={Math.min(top, bottom)} width="8" height={Math.max(2, Math.abs(bottom - top))} fill={i % 3 === 0 ? "#F97373" : "#ffffff"} rx="1" />
+                    </g>
+                  ))}
+                  <path d="M10,42 L28,36 L46,48 L64,26 L82,38 L100,22 L118,30 L136,15 L154,22 L172,10 L190,14" stroke="#C4F5D6" strokeWidth="1.5" fill="none" opacity="0.7" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Side stat cards */}
+            <div className="flex flex-col gap-5">
+              {marketData.slice(0, 2).map((item, idx) => {
+                const isPositive = item.changePercent >= 0;
+                const chartPath = generateSparklinePath(item.priceHistory);
+                const priceDecimals = item.symbol === 'DXY' ? 4 : 2;
+                const gradients = [
+                  "from-[#9333EA] to-[#C084FC]",
+                  "from-[#22D3EE] to-[#3B82F6]",
+                ];
+                return (
+                  <div
+                    key={item.symbol}
+                    className={`relative overflow-hidden rounded-3xl bg-gradient-to-br ${gradients[idx]} p-6 flex-1 flex flex-col justify-between shadow-lg`}
+                    data-testid={`card-hero-stat-${item.symbol}`}
+                  >
+                    <div className="absolute -right-8 -bottom-8 w-32 h-32 rounded-full bg-white/10 blur-xl" />
+                    <div className="relative z-10">
+                      <p className="text-white/80 text-xs font-medium mb-2">· {item.name}</p>
+                      <p className="text-white text-2xl md:text-3xl font-bold mb-1">
+                        {item.price.toLocaleString('ko-KR', { minimumFractionDigits: priceDecimals, maximumFractionDigits: priceDecimals })}
+                      </p>
+                      <p className="text-white/80 text-xs">{isPositive ? '+' : ''}{item.changePercent.toFixed(2)}% 실시간 변동</p>
+                    </div>
+                    <svg viewBox="0 0 120 30" className="relative z-10 w-full h-8 mt-3" preserveAspectRatio="none">
+                      <path d={chartPath} fill="none" stroke="#ffffff" strokeOpacity="0.85" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
-                  
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <p className="text-xs text-gray-500 mb-1">현재가</p>
-                      <p className="text-lg font-bold text-white transition-all">{formattedPrice}</p>
-                    </div>
-                    <Link href="/trade">
-                      <Button size="sm" className="bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-white text-xs transition-all" data-testid={`button-trade-${item.symbol}`}>
-                        거래하기
-                      </Button>
-                    </Link>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Carousel dots (decorative) */}
+          <div className="flex items-center justify-center gap-2 mt-8">
+            <button className="w-1.5 h-1.5 rounded-full bg-black/20" aria-label="prev" />
+            <span className="w-6 h-1.5 rounded-full bg-[#6D4FD9]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-black/20" />
+            <span className="w-1.5 h-1.5 rounded-full bg-black/20" />
+            <button className="w-1.5 h-1.5 rounded-full bg-black/20" aria-label="next" />
+          </div>
+
+          {/* Quick asset row */}
+          <div className="grid sm:grid-cols-3 gap-4 mt-10">
+            {marketData.map((item, index) => {
+              const isPositive = item.changePercent >= 0;
+              const priceDecimals = item.symbol === 'DXY' ? 4 : 2;
+              const nameMap: Record<string, string> = { SP500: 'S&P 500', DOW: '다우존스', DXY: '달러(DXY)' };
+              return (
+                <div
+                  key={item.symbol}
+                  className="flex items-center justify-between bg-white border border-black/5 rounded-2xl px-5 py-4 shadow-sm hover:shadow-md transition-shadow"
+                  data-testid={`card-market-${index}`}
+                >
+                  <div>
+                    <p className="text-gray-400 text-xs font-medium mb-1">{item.symbol}</p>
+                    <p className="text-lg font-bold text-[#181A2A]">
+                      {item.price.toLocaleString('ko-KR', { minimumFractionDigits: priceDecimals, maximumFractionDigits: priceDecimals })}
+                    </p>
+                    <p className="text-gray-400 text-xs">{nameMap[item.symbol]}</p>
+                  </div>
+                  <div className="flex flex-col items-end gap-2">
+                    <span className={`text-xs font-semibold px-2 py-0.5 rounded ${isPositive ? 'bg-emerald-50 text-emerald-500' : 'bg-red-50 text-red-500'}`}>
+                      {isPositive ? '+' : ''}{item.changePercent.toFixed(2)}%
+                    </span>
+                    <Button
+                      size="sm"
+                      className="bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white text-xs px-4 h-7 rounded-lg"
+                      data-testid={`button-trade-${item.symbol}`}
+                      onClick={handleTradeClick}
+                    >
+                      거래
+                    </Button>
                   </div>
                 </div>
               );
@@ -1316,85 +1120,89 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Announcements & Messages Section */}
-      <section className="py-16 px-4 bg-[#100805]">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Announcements */}
-            <div className="bg-gradient-to-br from-[#201208] to-[#180D06] border border-white/10 rounded-xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-amber-500/20 rounded-full flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-white">공지사항</h3>
-              </div>
-              <div className="space-y-3 max-h-[300px] overflow-y-auto">
-                {announcements.length === 0 ? (
-                  <p className="text-gray-500 text-sm py-4 text-center">등록된 공지사항이 없습니다</p>
-                ) : (
-                  announcements.slice(0, 5).map((ann) => (
-                    <button
-                      key={ann.id}
-                      onClick={() => { setSelectedAnnouncement(ann); setShowAnnouncementsModal(true); }}
-                      className="w-full text-left p-3 bg-black/30 rounded-lg border border-white/5 hover:border-amber-500/30 transition-colors cursor-pointer"
-                      data-testid={`landing-announcement-${ann.id}`}
-                    >
-                      <div className="flex items-center gap-2 mb-1">
-                        {ann.isPinned && <span className="text-[10px] px-1.5 py-0.5 bg-amber-500/20 text-amber-400 rounded">고정</span>}
-                        <span className="text-white font-medium text-sm line-clamp-1">{ann.title}</span>
-                      </div>
-                      <p className="text-gray-400 text-xs line-clamp-2">{ann.content}</p>
-                    </button>
-                  ))
-                )}
-              </div>
-            </div>
 
-            {/* Messages (for logged-in users) or Login Prompt */}
-            <div className="bg-gradient-to-br from-[#201208] to-[#180D06] border border-white/10 rounded-xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-amber-500/20 rounded-full flex items-center justify-center">
-                  <Mail className="w-5 h-5 text-amber-500" />
+      {/* Notice & Insight Section */}
+      <section className="py-20 px-4 bg-[#F7F6FD]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[#6D4FD9] font-semibold text-sm mb-2 tracking-wide">01. NOTICE &amp; INSIGHT</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#181A2A]">공지사항 &amp; 투자정보</h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Insight / Messages gradient card */}
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#4F3CC9] to-[#8B5CF6] p-8 min-h-[380px] flex flex-col justify-between shadow-lg shadow-[#4F3CC9]/15">
+              <div className="absolute -right-10 -bottom-10 w-48 h-48 rounded-full bg-white/10 blur-2xl" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 bg-white/15 rounded-2xl flex items-center justify-center mb-4">
+                  <Mail className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-white">쪽지함</h3>
+                <h3 className="text-xl font-bold text-white mb-2">쪽지함</h3>
                 {user && messages.filter(m => !m.isRead).length > 0 && (
-                  <span className="px-2 py-0.5 bg-red-500 text-white text-xs rounded-full">
-                    {messages.filter(m => !m.isRead).length}
+                  <span className="inline-block px-2 py-0.5 bg-white/20 text-white text-xs rounded-full mb-3">
+                    안읽은 쪽지 {messages.filter(m => !m.isRead).length}개
                   </span>
                 )}
               </div>
-              <div className="space-y-3 max-h-[300px] overflow-y-auto">
+              <div className="relative z-10 space-y-2 max-h-[220px] overflow-y-auto">
                 {!user ? (
-                  <div className="text-center py-8">
-                    <Mail className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-                    <p className="text-gray-400 text-sm mb-3">로그인 후 쪽지를 확인하세요</p>
+                  <div className="text-center py-6">
+                    <p className="text-white/70 text-sm mb-3">로그인 후 쪽지를 확인하세요</p>
                     <Button 
                       size="sm" 
-                      className="bg-amber-500 hover:bg-amber-600 text-white"
+                      className="bg-white hover:bg-white/90 text-[#4F3CC9] font-semibold"
                       onClick={() => setShowLoginModal(true)}
                     >
                       로그인
                     </Button>
                   </div>
                 ) : messages.length === 0 ? (
-                  <p className="text-gray-500 text-sm py-4 text-center">받은 쪽지가 없습니다</p>
+                  <p className="text-white/70 text-sm py-4 text-center">받은 쪽지가 없습니다</p>
                 ) : (
-                  messages.slice(0, 5).map((msg) => (
+                  messages.slice(0, 4).map((msg) => (
                     <button
                       key={msg.id}
                       onClick={() => handleOpenMessage(msg)}
-                      className={`w-full text-left p-3 rounded-lg border transition-colors cursor-pointer hover:border-amber-500/50 ${msg.isRead ? 'bg-black/20 border-white/5' : 'bg-amber-500/10 border-amber-500/30'}`}
+                      className="w-full text-left p-3 rounded-xl bg-white/10 hover:bg-white/15 transition-colors cursor-pointer"
                       data-testid={`message-item-${msg.id}`}
                     >
                       <div className="flex items-center gap-2 mb-1">
-                        {!msg.isRead && <span className="w-2 h-2 bg-amber-500 rounded-full" />}
-                        <span className={`font-medium text-sm line-clamp-1 ${msg.isRead ? 'text-gray-400' : 'text-white'}`}>{msg.title}</span>
+                        {!msg.isRead && <span className="w-1.5 h-1.5 bg-white rounded-full" />}
+                        <span className="font-medium text-sm line-clamp-1 text-white">{msg.title}</span>
                       </div>
-                      <p className="text-gray-400 text-xs line-clamp-2">{msg.content}</p>
-                      <p className="text-gray-600 text-[10px] mt-1">{new Date(msg.createdAt).toLocaleDateString('ko-KR')}</p>
+                      <p className="text-white/70 text-xs line-clamp-2">{msg.content}</p>
+                    </button>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* Announcements */}
+            <div className="bg-white border border-black/5 rounded-3xl p-6 shadow-sm">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-[#F5F3FF] rounded-xl flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-[#6D4FD9]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-[#181A2A]">공지사항</h3>
+              </div>
+              <div className="space-y-3 max-h-[300px] overflow-y-auto">
+                {announcements.length === 0 ? (
+                  <p className="text-gray-400 text-sm py-4 text-center">등록된 공지사항이 없습니다</p>
+                ) : (
+                  announcements.slice(0, 5).map((ann) => (
+                    <button
+                      key={ann.id}
+                      onClick={() => { setSelectedAnnouncement(ann); setShowAnnouncementsModal(true); }}
+                      className="w-full text-left p-3 bg-[#F7F6FD] rounded-xl border border-black/5 hover:border-[#6D4FD9]/30 transition-colors cursor-pointer"
+                      data-testid={`landing-announcement-${ann.id}`}
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        {ann.isPinned && <span className="text-[10px] px-1.5 py-0.5 bg-[#EDE9FE] text-[#6D4FD9] rounded">고정</span>}
+                        <span className="text-[#181A2A] font-medium text-sm line-clamp-1">{ann.title}</span>
+                      </div>
+                      <p className="text-gray-500 text-xs line-clamp-2">{ann.content}</p>
                     </button>
                   ))
                 )}
@@ -1404,57 +1212,47 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 px-4">
+      {/* Investment Philosophy Section */}
+      <section className="py-20 px-4 bg-gradient-to-b from-[#171238] to-[#0F0C28]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-amber-400 font-medium mb-2">월드 클래스</p>
-            <h2 className="text-3xl md:text-4xl font-bold" data-testid="text-features-title">트레이딩 플랫폼</h2>
+            <p className="text-[#A78BFA] font-medium mb-2">02. INVESTMENT PHILOSOPHY</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-white" data-testid="text-features-title">왜 RD-INDEX인가?</h2>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                icon: Award,
-                title: "수상 경력이 있는 플랫폼",
-                description: "업계에서 가장 우수한 플랫폼, 최첨단 코어로 편리한 트레이딩 환경을 선사합니다."
+                icon: TrendingUp,
+                title: "실시간 시세",
+                description: "글로벌 지수의 가격 변동을 지연 없이 실시간으로 확인하세요."
               },
               {
-                icon: Zap,
-                title: "사용자 지정 인터페이스",
-                description: "필요에 따라 인터페이스를 구성합니다. 레이아웃, 테마를 구성하고 알림을 설정하십시오."
+                icon: Award,
+                title: "투명한 정산",
+                description: "명확한 기준의 스트라이크 가격으로 공정하게 정산됩니다."
               },
               {
                 icon: Shield,
-                title: "편리한 출금",
-                description: "다양한 결제 시스템을 이용하여 자금을 즉시 인출합니다."
+                title: "자산 보안",
+                description: "은행급 보안 시스템으로 회원님의 자산을 안전하게 보호합니다."
               },
               {
                 icon: Headphones,
-                title: "연중무휴 지원",
-                description: "당사의 전문 지원팀은 항상 귀하의 언어로 지원합니다."
-              },
-              {
-                icon: TrendingUp,
-                title: "직관적인 경험",
-                description: "첫날부터 새로운 사람들과 전문가들 모두를 위해 능률적인 거래 솔루션을 설계하고 구축했습니다."
-              },
-              {
-                icon: Lock,
-                title: "업계 최상위 보안 시스템",
-                description: "사용자 정보와 자금의 보안이 우리의 최우선 과제입니다."
+                title: "24시간 운영",
+                description: "연중무휴 24시간, 언제든 원하는 시간에 거래할 수 있습니다."
               }
             ].map((feature, index) => (
               <div 
                 key={index}
-                className="bg-[#130A06] border border-white/5 rounded-2xl p-8 hover:border-amber-500/30 transition-all hover:transform hover:-translate-y-1"
+                className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:border-[#8B5CF6]/40 transition-all hover:-translate-y-1"
                 data-testid={`card-feature-${index}`}
               >
-                <div className="w-14 h-14 bg-amber-500/10 rounded-xl flex items-center justify-center mb-6">
-                  <feature.icon className="w-7 h-7 text-amber-400" />
+                <div className="w-14 h-14 bg-gradient-to-br from-[#4F3CC9] to-[#8B5CF6] rounded-xl flex items-center justify-center mb-6">
+                  <feature.icon className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+                <h3 className="text-lg font-bold mb-3 text-white">{feature.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -1462,11 +1260,11 @@ export default function Landing() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 px-4 bg-[#130A06]">
+      <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-amber-400 font-medium mb-2">플랫폼 이용 후기</p>
-            <h2 className="text-3xl md:text-4xl font-bold" data-testid="text-reviews-title">고객리뷰</h2>
+            <p className="text-[#6D4FD9] font-medium mb-2">플랫폼 이용 후기</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#181A2A]" data-testid="text-reviews-title">고객리뷰</h2>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
@@ -1477,31 +1275,48 @@ export default function Landing() {
             ].map((review, index) => (
               <div 
                 key={index}
-                className="bg-[#1C1008] border border-white/10 rounded-2xl p-8"
+                className="bg-[#F7F6FD] border border-black/5 rounded-2xl p-8"
                 data-testid={`card-review-${index}`}
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-500 rounded-full" />
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#4F3CC9] to-[#8B5CF6] rounded-full" />
                   <div>
-                    <p className="font-semibold">투자자 {index + 1}</p>
+                    <p className="font-semibold text-[#181A2A]">투자자 {index + 1}</p>
                     <p className="text-sm text-gray-500">Premium 회원</p>
                   </div>
                 </div>
-                <p className="text-gray-300 leading-relaxed">"{review}"</p>
+                <p className="text-gray-600 leading-relaxed">"{review}"</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* Stats Bar */}
+      <section className="py-16 px-4 bg-white border-t border-black/5">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          {[
+            { value: "12,400+명", label: "누적회원수" },
+            { value: "3.2억원", label: "일평균거래량" },
+            { value: "24/7", label: "서비스운영" },
+            { value: "99.9%", label: "시스템가동률" },
+          ].map((stat, i) => (
+            <div key={i} data-testid={`stat-${i}`}>
+              <p className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] bg-clip-text text-transparent mb-1">{stat.value}</p>
+              <p className="text-gray-500 text-sm">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* CTA Section - Only show for non-logged-in users */}
       {!user && (
-        <section className="py-20 px-4">
+        <section className="py-20 px-4 bg-[#F7F6FD]">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4" data-testid="text-cta-title">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#181A2A]" data-testid="text-cta-title">
               RD INDEX에 가입하고<br />지금 바로 시작해보세요
             </h2>
-            <p className="text-gray-400 text-lg mb-10">
+            <p className="text-gray-500 text-lg mb-10">
               당신의 첫 투자,<br />
               믿을 수 있는 RD INDEX에서 시작하세요!
             </p>
@@ -1509,7 +1324,7 @@ export default function Landing() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-white/30 text-white hover:bg-white/10 px-10 py-6 text-lg rounded-lg"
+                className="border-black/15 text-[#181A2A] hover:bg-black/5 px-10 py-6 text-lg rounded-lg"
                 data-testid="button-login-cta"
                 onClick={() => setShowLoginModal(true)}
               >
@@ -1517,7 +1332,7 @@ export default function Landing() {
               </Button>
               <Button 
                 size="lg" 
-                className="bg-amber-500 hover:bg-amber-600 text-white font-bold px-10 py-6 text-lg rounded-lg"
+                className="bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white font-bold px-10 py-6 text-lg rounded-lg"
                 data-testid="button-register-cta"
                 onClick={() => setShowRegisterModal(true)}
               >
@@ -1529,60 +1344,60 @@ export default function Landing() {
       )}
 
       {/* Footer */}
-      <footer className="bg-[#0C0705] py-16 px-4 border-t border-white/5">
+      <footer className="bg-[#14103A] py-16 px-4 border-t border-white/5">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-10 mb-12">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <h3 className="text-xl font-bold text-amber-400">
+                <h3 className="text-xl font-bold bg-gradient-to-r from-[#A78BFA] to-[#8B5CF6] bg-clip-text text-transparent">
                   RD INDEX
                 </h3>
               </div>
-              <p className="text-gray-500 text-sm">
+              <p className="text-gray-400 text-sm">
                 안전하고 투명한 시스템으로<br />
                 빠르고 편리한 옵션 거래를 제공합니다.
               </p>
             </div>
             <div>
               <h4 className="font-semibold mb-4 text-gray-300">지수 거래</h4>
-              <ul className="space-y-2 text-gray-500 text-sm">
-                <li><Link href="/trade" className="hover:text-amber-400 transition-colors" data-testid="link-trade-sp500">SP500 (S&amp;P500)</Link></li>
-                <li><Link href="/trade" className="hover:text-amber-400 transition-colors" data-testid="link-trade-dow">DOW (다우존스)</Link></li>
-                <li><Link href="/trade" className="hover:text-amber-400 transition-colors" data-testid="link-trade-dxy">DXY (달러)</Link></li>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li><Link href="/trade" className="hover:text-[#A78BFA] transition-colors" data-testid="link-trade-sp500">SP500 (S&amp;P500)</Link></li>
+                <li><Link href="/trade" className="hover:text-[#A78BFA] transition-colors" data-testid="link-trade-dow">DOW (다우존스)</Link></li>
+                <li><Link href="/trade" className="hover:text-[#A78BFA] transition-colors" data-testid="link-trade-dxy">DXY (달러)</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4 text-gray-300">입출금</h4>
-              <ul className="space-y-2 text-gray-500 text-sm">
+              <ul className="space-y-2 text-gray-400 text-sm">
                 <li><button onClick={() => { 
                   if (!user) { setShowLoginModal(true); return; }
                   if (!isWithinOperatingHours()) { toast.error("입출금 신청은 오전 09:00 ~ 18:00 사이에만 가능합니다"); return; }
                   setDepositAmount(''); setDepositSenderName(user?.name || user?.accountHolder || ''); setShowDepositPageModal(true);
-                }} className="hover:text-amber-500 transition-colors" data-testid="link-deposit">입금신청</button></li>
+                }} className="hover:text-[#A78BFA] transition-colors" data-testid="link-deposit">입금신청</button></li>
                 <li><button onClick={() => { 
                   if (!user) { setShowLoginModal(true); return; }
                   if ((user as any)?.isBettingBlocked) { toast.error("거래정지 해제 이후 다시 시도해 주세요."); return; }
                   if (!isWithinOperatingHours()) { toast.error("입출금 신청은 오전 09:00 ~ 18:00 사이에만 가능합니다"); return; }
                   setWithdrawalAmount(''); setShowWithdrawalPageModal(true);
-                }} className="hover:text-amber-500 transition-colors" data-testid="link-withdraw">출금신청</button></li>
-                <li><button onClick={() => { if (user) { setShowHistoryModal(true); } else { setShowLoginModal(true); } }} className="hover:text-amber-500 transition-colors" data-testid="link-transaction-history">입출금내역</button></li>
+                }} className="hover:text-[#A78BFA] transition-colors" data-testid="link-withdraw">출금신청</button></li>
+                <li><button onClick={() => { if (user) { setShowHistoryModal(true); } else { setShowLoginModal(true); } }} className="hover:text-[#A78BFA] transition-colors" data-testid="link-transaction-history">입출금내역</button></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4 text-gray-300">고객센터</h4>
-              <ul className="space-y-2 text-gray-500 text-sm">
-                <li><button onClick={() => setShowAnnouncementsModal(true)} className="hover:text-amber-500 transition-colors" data-testid="link-notice">공지사항</button></li>
-                <li><button onClick={() => setShowCustomerServiceModal(true)} className="hover:text-amber-500 transition-colors" data-testid="link-inquiry">고객센터</button></li>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li><button onClick={() => setShowAnnouncementsModal(true)} className="hover:text-[#A78BFA] transition-colors" data-testid="link-notice">공지사항</button></li>
+                <li><button onClick={() => setShowCustomerServiceModal(true)} className="hover:text-[#A78BFA] transition-colors" data-testid="link-inquiry">고객센터</button></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-white/5 pt-8 mb-6">
+          <div className="border-t border-white/10 pt-8 mb-6">
             <div className="grid md:grid-cols-3 gap-6">
               <div>
                 <h4 className="font-semibold mb-3 text-gray-300 text-sm">입·출금 및 상담 가능시간</h4>
-                <p className="text-gray-600 text-xs mb-2">(주말/공휴일 제외)</p>
-                <ul className="space-y-1 text-gray-500 text-xs">
+                <p className="text-gray-500 text-xs mb-2">(주말/공휴일 제외)</p>
+                <ul className="space-y-1 text-gray-400 text-xs">
                   <li className="flex justify-between"><span>고객상담</span><span>평일 09:00 ~ 18:00</span></li>
                   <li className="flex justify-between"><span>입금시간</span><span>평일 09:00 ~ 18:00</span></li>
                   <li className="flex justify-between"><span>출금시간</span><span>평일 09:00 ~ 18:00</span></li>
@@ -1590,7 +1405,7 @@ export default function Landing() {
               </div>
               <div>
                 <h4 className="font-semibold mb-3 text-gray-300 text-sm">거래 상품</h4>
-                <ul className="space-y-1 text-gray-500 text-xs">
+                <ul className="space-y-1 text-gray-400 text-xs">
                   <li className="flex justify-between"><span>S&amp;P500</span><span></span></li>
                   <li className="flex justify-between"><span>다우존스</span><span></span></li>
                   <li className="flex justify-between"><span>US Dollar</span><span></span></li>
@@ -1598,12 +1413,12 @@ export default function Landing() {
               </div>
               <div>
                 <h4 className="font-semibold mb-3 text-gray-300 text-sm">지수 CFD 거래</h4>
-                <p className="text-gray-500 text-xs">00:00 ~ 24:00</p>
+                <p className="text-gray-400 text-xs">00:00 ~ 24:00</p>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-white/5 pt-6 text-center text-gray-600 text-sm space-y-2">
+          <div className="border-t border-white/10 pt-6 text-center text-gray-500 text-sm space-y-2">
             <p>© 2024 RD INDEX. All rights reserved.</p>
           </div>
         </div>
