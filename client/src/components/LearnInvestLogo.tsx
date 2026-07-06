@@ -58,27 +58,17 @@ export function LearnInvestLogo({
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      <defs>
-        <linearGradient id="rd-italic-accent" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#3454D1" />
-          <stop offset="100%" stopColor="#7C5CFC" />
-        </linearGradient>
-      </defs>
       <text
         x="0"
         y="23"
         fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif"
-        fontSize="19"
+        fontSize="20"
         fontWeight="800"
-        letterSpacing="-0.3"
+        letterSpacing="0.5"
         fill="#14328C"
       >
         RD
-        <tspan
-          fontStyle="italic"
-          fontWeight="900"
-          fill="url(#rd-italic-accent)"
-        >
+        <tspan fontWeight="300" fill="#3454D1" letterSpacing="1.2">
           -INDEX
         </tspan>
       </text>
