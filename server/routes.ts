@@ -3560,7 +3560,7 @@ export async function registerRoutes(
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: chatId,
-          text: `✅ <b>[Learn-invest 테스트 알림]</b>\n텔레그램 봇이 정상적으로 연결되었습니다.\n🕐 ${new Date(Date.now() + 9 * 3600000).toISOString().replace("T", " ").substring(0, 16)} (KST)`,
+          text: `✅ <b>[RD-INDEX 테스트 알림]</b>\n텔레그램 봇이 정상적으로 연결되었습니다.\n🕐 ${new Date(Date.now() + 9 * 3600000).toISOString().replace("T", " ").substring(0, 16)} (KST)`,
           parse_mode: "HTML",
         }),
       });
