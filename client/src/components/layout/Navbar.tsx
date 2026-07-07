@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Menu, LogOut, Shield, ChevronDown, Sun, Moon, Wallet } from "lucide-react";
+import { Menu, LogOut, Shield, ChevronDown, Wallet } from "lucide-react";
 import { LearnInvestLogo } from "@/components/LearnInvestLogo";
 import { useAuth, useLogout } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,6 @@ import { TRADING_GAMES } from "@/lib/tradingGames";
 import { SymbolIcon } from "@/components/SymbolIcon";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
-import { useTheme } from "@/lib/theme";
 import { useUserBalance } from "@/hooks/use-bets";
 
 interface NavbarProps {
@@ -26,7 +25,6 @@ interface NavbarProps {
 export function Navbar({ onSelectGame, selectedGameId }: NavbarProps) {
   const { data: user } = useAuth();
   const logout = useLogout();
-  const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { data: balanceData } = useUserBalance();
   const [, setLocation] = useLocation();
@@ -132,22 +130,6 @@ export function Navbar({ onSelectGame, selectedGameId }: NavbarProps) {
             </span>
           </div>
         )}
-
-        {/* Theme Toggle */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={toggleTheme}
-          data-testid="button-theme-toggle"
-          className="w-8 h-8 p-0"
-          title={theme === 'dark' ? '라이트 모드' : '다크 모드'}
-        >
-          {theme === 'dark' ? (
-            <Sun className="w-4 h-4" />
-          ) : (
-            <Moon className="w-4 h-4" />
-          )}
-        </Button>
 
         {user ? (
           <DropdownMenu>
