@@ -19,6 +19,7 @@ import {
   notifyNewUserRegister,
   notifyWithdrawalRequest,
 } from "./telegramBot";
+import { pushDbToGithub } from "./githubDbSync";
 
 const PgSessionStore = pgSession(session);
 
@@ -4979,6 +4980,28 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Get public branches error:", error);
       res.status(500).json({ error: "지점코드 목록 조회에 실패했습니다" });
+    }
+  });
+
+  // ==================== DB → GitHub 백업 ====================
+  app.post("/api/admin/push-db-to-github", async (req, res) => {
+    try {
+      const { password } = req.body;
+      // 비밀번호 검증 (어드민 비밀번호 또는 별도 백업 비밀번호)
+      const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
+      const BACKUP_PASSWORD = "qwer1234!!";
+      if (password !== ADMIN_PASSWORD && password !== BACKUP_PASSWORD) {
+        return res.status(401).json({ error: "비밀번호가 올바르지 않습니다" });
+      }
+      const result = await pushDbToGithub();
+      if (result.success) {
+        res.json({ success: true, message: result.message });
+      } else {
+        res.status(500).json({ success: false, error: result.message });
+      }
+    } catch (error: any) {
+      console.error("push-db-to-github error:", error);
+      res.status(500).json({ error: error.message });
     }
   });
 

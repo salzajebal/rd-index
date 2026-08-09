@@ -3,6 +3,7 @@ import { registerRoutes, validateWebSocketSession } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
 import { testConnection, initializeDatabase } from "./db";
+import { restoreDbFromGithub } from "./githubDbSync";
 import { WebSocketServer, WebSocket } from "ws";
 
 // WebSocket clients storage
@@ -122,6 +123,13 @@ app.use((req, res, next) => {
       await initializeDatabase();
     } catch (dbError) {
       console.error("Database initialization failed, continuing anyway:", dbError instanceof Error ? dbError.message : dbError);
+    }
+
+    // 새 환경에서 GitHub의 db-seed.sql로 자동 복원 (DB가 비어있을 때만)
+    try {
+      await restoreDbFromGithub();
+    } catch (restoreError) {
+      console.error("DB restore from GitHub failed (non-fatal):", restoreError instanceof Error ? restoreError.message : restoreError);
     }
 
     console.log("Registering routes...");
