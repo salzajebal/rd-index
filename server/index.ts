@@ -118,18 +118,19 @@ app.use((req, res, next) => {
       console.error("Failed to connect to database. Server will start but may have issues.");
     }
 
+    // 새 환경에서 GitHub의 db-seed.sql로 자동 복원 (DB가 비어있을 때만)
+    // ※ initializeDatabase 보다 먼저 실행해야 admin 시드가 복원을 막지 않음
+    try {
+      await restoreDbFromGithub();
+    } catch (restoreError) {
+      console.error("DB restore from GitHub failed (non-fatal):", restoreError instanceof Error ? restoreError.message : restoreError);
+    }
+
     console.log("Initializing database...");
     try {
       await initializeDatabase();
     } catch (dbError) {
       console.error("Database initialization failed, continuing anyway:", dbError instanceof Error ? dbError.message : dbError);
-    }
-
-    // 새 환경에서 GitHub의 db-seed.sql로 자동 복원 (DB가 비어있을 때만)
-    try {
-      await restoreDbFromGithub();
-    } catch (restoreError) {
-      console.error("DB restore from GitHub failed (non-fatal):", restoreError instanceof Error ? restoreError.message : restoreError);
     }
 
     console.log("Registering routes...");
