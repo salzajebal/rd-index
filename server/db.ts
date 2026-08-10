@@ -246,6 +246,31 @@ export async function initializeDatabase(): Promise<void> {
       console.log('Demo user already exists');
     }
 
+    // SERIAL 시퀀스 자동 재설정
+    // GitHub DB 복원 등으로 시퀀스가 실제 max(id)보다 낮아지면 INSERT 시
+    // "duplicate key" 오류가 발생하므로, 서버 시작마다 항상 max(id)+1로 맞춤
+    try {
+      const client2 = await pool.connect();
+      await client2.query(`
+        SELECT setval(pg_get_serial_sequence('bets', 'id'),
+          GREATEST(COALESCE((SELECT MAX(id) FROM bets), 0) + 1, 1), false);
+        SELECT setval(pg_get_serial_sequence('round_forced_directions', 'id'),
+          GREATEST(COALESCE((SELECT MAX(id) FROM round_forced_directions), 0) + 1, 1), false);
+        SELECT setval(pg_get_serial_sequence('transaction_requests', 'id'),
+          GREATEST(COALESCE((SELECT MAX(id) FROM transaction_requests), 0) + 1, 1), false);
+        SELECT setval(pg_get_serial_sequence('login_history', 'id'),
+          GREATEST(COALESCE((SELECT MAX(id) FROM login_history), 0) + 1, 1), false);
+        SELECT setval(pg_get_serial_sequence('messages', 'id'),
+          GREATEST(COALESCE((SELECT MAX(id) FROM messages), 0) + 1, 1), false);
+        SELECT setval(pg_get_serial_sequence('announcements', 'id'),
+          GREATEST(COALESCE((SELECT MAX(id) FROM announcements), 0) + 1, 1), false);
+      `);
+      client2.release();
+      console.log('Serial sequences verified and reset if needed');
+    } catch (seqErr) {
+      console.warn('Sequence reset warning (non-fatal):', seqErr instanceof Error ? seqErr.message : seqErr);
+    }
+
     console.log('Database initialization complete');
 
   } catch (error) {
