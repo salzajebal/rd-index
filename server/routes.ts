@@ -4027,10 +4027,6 @@ export async function registerRoutes(
           const symbol = bet.symbol.toUpperCase();
           let closePrice = getForexPrice(symbol)?.price;
           
-          if (!closePrice || closePrice <= 0) {
-            continue;
-          }
-          
           const strikePrice = parseFloat(bet.strikePrice);
           const betAmount = parseFloat(bet.amount);
           const multiplier = parseFloat(bet.multiplier);
@@ -4044,6 +4040,8 @@ export async function registerRoutes(
           const betDateKey = `${kstBetTime.getFullYear()}-${String(kstBetTime.getMonth() + 1).padStart(2, '0')}-${String(kstBetTime.getDate()).padStart(2, '0')}`;
           
           // Priority: 1) outcomeForced  2) displayForced  3) directionForced  4) globalForced  5) individual forced  6) price-based
+          // NOTE: forced direction lookup must happen BEFORE the closePrice check,
+          // because forced directions calculate their own closePrice from strikePrice.
           const roundForcedList = await storage.getRoundForcedDirectionsForRound(bet.symbol, bet.duration, bet.roundNumber, betDateKey);
           const directionForced = roundForcedList.find(r => r.forcedDirection === 'up' || r.forcedDirection === 'down');
           const outcomeForced = roundForcedList.find(r => r.forcedDirection === 'all_win' || r.forcedDirection === 'all_lose');
@@ -4056,6 +4054,20 @@ export async function registerRoutes(
             if (globalVal === 'all_win' || globalVal === 'all_lose') {
               globalForcedOutcome = globalVal;
             }
+          }
+
+          // Check individual forced outcome on the bet itself
+          const hasAnyForcedSetting = !!(outcomeForced || displayForced || directionForced || globalForcedOutcome ||
+            bet.forcedOutcome === 'win' || bet.forcedOutcome === 'lose');
+
+          // If no market price available AND no forced setting → skip until price recovers
+          if ((!closePrice || closePrice <= 0) && !hasAnyForcedSetting) {
+            continue;
+          }
+          // If no market price but forced setting exists, use strikePrice as temporary closePrice
+          // (forced direction logic will overwrite it with the correct calculated price anyway)
+          if (!closePrice || closePrice <= 0) {
+            closePrice = strikePrice;
           }
           
           let forcedBy = '';
