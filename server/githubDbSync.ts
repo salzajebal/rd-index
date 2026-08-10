@@ -151,6 +151,18 @@ export async function restoreDbFromGithub(): Promise<void> {
     // 임시 파일 삭제
     try { fs.unlinkSync(tmpFile); } catch {}
 
+    // 시퀀스 재설정: pg_dump 복원 후 SERIAL 시퀀스가 기존 데이터와 맞지 않아
+    // INSERT 시 "duplicate key" 오류가 발생하는 것을 방지
+    console.log("[githubDbSync] Resetting sequences after restore...");
+    await execAsync(`psql "${dbUrl}" -c "
+      SELECT setval(pg_get_serial_sequence('bets', 'id'), COALESCE(MAX(id), 0) + 1, false) FROM bets;
+      SELECT setval(pg_get_serial_sequence('round_forced_directions', 'id'), COALESCE(MAX(id), 0) + 1, false) FROM round_forced_directions;
+      SELECT setval(pg_get_serial_sequence('transaction_requests', 'id'), COALESCE(MAX(id), 0) + 1, false) FROM transaction_requests;
+      SELECT setval(pg_get_serial_sequence('login_history', 'id'), COALESCE(MAX(id), 0) + 1, false) FROM login_history;
+      SELECT setval(pg_get_serial_sequence('messages', 'id'), COALESCE(MAX(id), 0) + 1, false) FROM messages;
+      SELECT setval(pg_get_serial_sequence('announcements', 'id'), COALESCE(MAX(id), 0) + 1, false) FROM announcements;
+    " 2>&1`, { timeout: 30000 });
+
     console.log("[githubDbSync] DB restore completed successfully!");
   } catch (err: any) {
     console.error("[githubDbSync] restoreDbFromGithub error:", err.message);
