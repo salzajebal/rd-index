@@ -863,6 +863,47 @@ function RoundForcedTab() {
         )}
 
         <div className="space-y-6">
+          {/* 전체적중 / 전체미적중 (회차별) */}
+          <div className="space-y-3">
+            <label className="text-sm text-muted-foreground font-medium">전체적중 / 전체미적중 (이 회차만)</label>
+            <p className="text-xs text-muted-foreground">이 회차의 모든 베팅을 일괄 적중 또는 미적중 처리합니다. 이미 정산된 베팅도 재정산됩니다.</p>
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                type="button"
+                disabled={isToggling}
+                className={cn(
+                  "h-14 text-base font-bold transition-all",
+                  hasOutcome?.forcedDirection === 'all_win'
+                    ? "bg-green-600 hover:bg-green-700 text-white ring-2 ring-green-500 ring-offset-2 ring-offset-background"
+                    : "bg-transparent border-2 border-green-600/50 text-green-500 hover:bg-green-600/10"
+                )}
+                onClick={() => handleToggle('all_win')}
+                data-testid="toggle-round-all-win"
+              >
+                <Check className="w-5 h-5 mr-2" />
+                전체적중
+                {hasOutcome?.forcedDirection === 'all_win' && <Check className="w-4 h-4 ml-2" />}
+              </Button>
+              <Button
+                type="button"
+                disabled={isToggling}
+                className={cn(
+                  "h-14 text-base font-bold transition-all",
+                  hasOutcome?.forcedDirection === 'all_lose'
+                    ? "bg-red-600 hover:bg-red-700 text-white ring-2 ring-red-500 ring-offset-2 ring-offset-background"
+                    : "bg-transparent border-2 border-red-600/50 text-red-500 hover:bg-red-600/10"
+                )}
+                onClick={() => handleToggle('all_lose')}
+                data-testid="toggle-round-all-lose"
+              >
+                <X className="w-5 h-5 mr-2" />
+                전체미적중
+                {hasOutcome?.forcedDirection === 'all_lose' && <Check className="w-4 h-4 ml-2" />}
+              </Button>
+            </div>
+          </div>
+
+          {/* 결과 방향 강제 (display_up / display_down) */}
           <div className="space-y-3">
             <label className="text-sm text-muted-foreground font-medium">결과 방향 강제 (표시 + 정산 연동)</label>
             <p className="text-xs text-muted-foreground">이 회차의 결과 방향을 강제합니다. 매수 설정 시 매수 베팅 유저는 적중, 매도 유저는 미적중 처리됩니다.</p>
