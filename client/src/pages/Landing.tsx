@@ -2240,7 +2240,7 @@ export default function Landing() {
       </Dialog>
 
       {/* Customer Service Modal - 고객센터 메뉴 */}
-      <Dialog open={showCustomerServiceModal} onOpenChange={setShowCustomerServiceModal}>
+      <Dialog open={showCustomerServiceModal} onOpenChange={(open) => { setShowCustomerServiceModal(open); if (open) refetchInquiries(); }}>
         <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
           <DialogTitle className="sr-only">고객센터</DialogTitle>
           <div className="relative">
