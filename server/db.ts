@@ -194,6 +194,52 @@ export async function initializeDatabase(): Promise<void> {
     `);
     console.log('Session table ready');
 
+    // Inquiries table (1:1 문의)
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS inquiries (
+        id SERIAL PRIMARY KEY,
+        user_id VARCHAR NOT NULL REFERENCES users(id),
+        title TEXT NOT NULL,
+        content TEXT NOT NULL,
+        reply TEXT,
+        status TEXT NOT NULL DEFAULT 'pending',
+        replied_by VARCHAR,
+        replied_at TIMESTAMP,
+        is_reply_read BOOLEAN NOT NULL DEFAULT false,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      )
+    `);
+    console.log('Inquiries table ready');
+
+    // Round results table (라운드 결과 캔들)
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS round_results (
+        id SERIAL PRIMARY KEY,
+        symbol TEXT NOT NULL,
+        duration INTEGER NOT NULL,
+        round_number INTEGER NOT NULL,
+        round_date TEXT NOT NULL,
+        open_price DECIMAL(20,8) NOT NULL,
+        close_price DECIMAL(20,8) NOT NULL,
+        high_price DECIMAL(20,8) NOT NULL,
+        low_price DECIMAL(20,8) NOT NULL,
+        direction TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      )
+    `);
+    console.log('Round results table ready');
+
+    // Inquiry templates table (답변 템플릿)
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS inquiry_templates (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL
+      )
+    `);
+    console.log('Inquiry templates table ready');
+
     // Ensure all admin users are approved (migration for existing data)
     await client.query(`
       UPDATE users SET approval_status = 'approved' WHERE role = 'admin' AND approval_status != 'approved'
@@ -264,6 +310,12 @@ export async function initializeDatabase(): Promise<void> {
           GREATEST(COALESCE((SELECT MAX(id) FROM messages), 0) + 1, 1), false);
         SELECT setval(pg_get_serial_sequence('announcements', 'id'),
           GREATEST(COALESCE((SELECT MAX(id) FROM announcements), 0) + 1, 1), false);
+        SELECT setval(pg_get_serial_sequence('inquiries', 'id'),
+          GREATEST(COALESCE((SELECT MAX(id) FROM inquiries), 0) + 1, 1), false);
+        SELECT setval(pg_get_serial_sequence('round_results', 'id'),
+          GREATEST(COALESCE((SELECT MAX(id) FROM round_results), 0) + 1, 1), false);
+        SELECT setval(pg_get_serial_sequence('inquiry_templates', 'id'),
+          GREATEST(COALESCE((SELECT MAX(id) FROM inquiry_templates), 0) + 1, 1), false);
       `);
       client2.release();
       console.log('Serial sequences verified and reset if needed');
