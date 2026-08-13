@@ -157,7 +157,7 @@ function AffiliateLogin() {
       <div className="w-full max-w-sm bg-card border border-border rounded-xl p-8 space-y-6 shadow-lg">
         <div className="text-center">
           <h1 className="text-2xl font-bold">총판 로그인</h1>
-          <p className="text-sm text-muted-foreground mt-1">RD INDEX 총판 관리 시스템</p>
+          <p className="text-sm text-muted-foreground mt-1">KDI-index 총판 관리 시스템</p>
         </div>
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-2">
@@ -420,7 +420,7 @@ export default function AffiliateDashboard() {
       <header className="border-b border-border bg-card sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-lg font-bold">RD INDEX 총판</span>
+            <span className="text-lg font-bold">KDI-index 총판</span>
             <span className="text-sm text-muted-foreground">{auth.displayName}</span>
           </div>
           <button

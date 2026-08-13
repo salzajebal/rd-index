@@ -990,7 +990,7 @@ export default function Landing() {
                 </div>
                 <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-4" data-testid="text-hero-title">
                   글로벌 시장의 중심,<br />
-                  <span className="bg-gradient-to-r from-white to-[#E4DBFF] bg-clip-text text-transparent">RD-INDEX</span>에서 투자하세요
+                  <span className="bg-gradient-to-r from-white to-[#E4DBFF] bg-clip-text text-transparent">KDI-index</span>에서 투자하세요
                 </h1>
                 <p className="text-white/80 text-sm md:text-base mb-8" data-testid="text-hero-description">
                   S&amp;P500 · 다우존스 · 달러지수 5분 거래
@@ -1217,7 +1217,7 @@ export default function Landing() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-[#A78BFA] font-medium mb-2">02. INVESTMENT PHILOSOPHY</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-white" data-testid="text-features-title">왜 RD-INDEX인가?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white" data-testid="text-features-title">왜 KDI-index인가?</h2>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -1314,11 +1314,11 @@ export default function Landing() {
         <section className="py-20 px-4 bg-[#F7F6FD]">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#181A2A]" data-testid="text-cta-title">
-              RD INDEX에 가입하고<br />지금 바로 시작해보세요
+              KDI-index에 가입하고<br />지금 바로 시작해보세요
             </h2>
             <p className="text-gray-500 text-lg mb-10">
               당신의 첫 투자,<br />
-              믿을 수 있는 RD INDEX에서 시작하세요!
+              믿을 수 있는 KDI-index에서 시작하세요!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
@@ -1350,7 +1350,7 @@ export default function Landing() {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <h3 className="text-xl font-bold bg-gradient-to-r from-[#A78BFA] to-[#8B5CF6] bg-clip-text text-transparent">
-                  RD INDEX
+                  KDI-index
                 </h3>
               </div>
               <p className="text-gray-400 text-sm">
@@ -1419,7 +1419,7 @@ export default function Landing() {
           </div>
 
           <div className="border-t border-white/10 pt-6 text-center text-gray-500 text-sm space-y-2">
-            <p>© 2024 RD INDEX. All rights reserved.</p>
+            <p>© 2024 KDI-index. All rights reserved.</p>
           </div>
         </div>
       </footer>
