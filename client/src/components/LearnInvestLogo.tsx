@@ -39,21 +39,21 @@ export function LearnInvestLogo({
           fontWeight="800"
           fill="#FFFFFF"
         >
-          R
+          K
         </text>
       </svg>
     );
   }
 
   const h = size ?? height ?? 32;
-  const aspectRatio = 118 / 32;
+  const aspectRatio = 132 / 32;
   const w = Math.round(h * aspectRatio);
 
   return (
     <svg
       width={w}
       height={h}
-      viewBox="0 0 118 32"
+      viewBox="0 0 132 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
@@ -67,9 +67,9 @@ export function LearnInvestLogo({
         letterSpacing="0.5"
         fill="#14328C"
       >
-        RD
+        KDI
         <tspan fontWeight="600" fill="#3454D1" letterSpacing="0.8">
-          -INDEX
+          -index
         </tspan>
       </text>
     </svg>
