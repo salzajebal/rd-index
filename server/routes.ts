@@ -2700,6 +2700,7 @@ export async function registerRoutes(
       });
       res.json(announcement);
     } catch (error) {
+      console.error("Create announcement error:", error);
       res.status(500).json({ error: "공지사항 등록에 실패했습니다" });
     }
   });

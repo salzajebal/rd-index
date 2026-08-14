@@ -329,6 +329,8 @@ export default function Landing() {
       if (!res.ok) return [];
       return res.json();
     },
+    refetchInterval: 30000, // 30초마다 자동 갱신
+    staleTime: 0,
   });
 
   // Fetch user messages
