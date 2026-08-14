@@ -165,6 +165,7 @@ export default function Landing() {
   const [isIpBlocked, setIsIpBlocked] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [showPendingApprovalModal, setShowPendingApprovalModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [showCustomerServiceModal, setShowCustomerServiceModal] = useState(false);
   const [showAnnouncementsModal, setShowAnnouncementsModal] = useState(false);
@@ -463,7 +464,14 @@ export default function Landing() {
         setPassword("");
       },
       onError: (error: Error) => {
-        setLoginErrorMessage(error.message || "아이디 또는 비밀번호가 일치하지 않습니다");
+        const msg = error.message || "아이디 또는 비밀번호가 일치하지 않습니다";
+        // Show dedicated pending-approval dialog instead of generic error
+        if (msg.includes("승인 대기") || msg.includes("pending")) {
+          setShowLoginModal(false);
+          setShowPendingApprovalModal(true);
+        } else {
+          setLoginErrorMessage(msg);
+        }
       }
     });
   };
@@ -568,6 +576,8 @@ export default function Landing() {
         setUsernameChecked(false);
         setUsernameCheckMessage("");
         setUsernameAvailable(false);
+        // Show dedicated pending-approval modal
+        setShowPendingApprovalModal(true);
       },
       onError: (error: Error) => {
         setRegisterErrorMessage(error.message);
@@ -3071,6 +3081,35 @@ export default function Landing() {
             <AlertDialogAction 
               onClick={() => setLoginErrorMessage("")}
               className="bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white"
+            >
+              확인
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Pending Approval Dialog */}
+      <AlertDialog open={showPendingApprovalModal} onOpenChange={setShowPendingApprovalModal}>
+        <AlertDialogContent className="bg-white border border-amber-300/50 max-w-sm">
+          <AlertDialogHeader>
+            <div className="flex justify-center mb-2">
+              <div className="w-14 h-14 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center">
+                <Clock className="w-7 h-7 text-amber-500" />
+              </div>
+            </div>
+            <AlertDialogTitle className="text-center text-gray-900 text-lg">
+              승인 대기 중
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-center text-gray-600 leading-relaxed">
+              회원가입이 완료되었습니다.<br />
+              <span className="font-semibold text-amber-600">관리자 승인 후 로그인이 가능합니다.</span><br />
+              <span className="text-sm text-gray-500 mt-1 block">승인까지 잠시 기다려 주세요.</span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="justify-center">
+            <AlertDialogAction
+              onClick={() => setShowPendingApprovalModal(false)}
+              className="bg-gradient-to-r from-amber-500 to-amber-600 hover:opacity-90 text-white px-8"
             >
               확인
             </AlertDialogAction>
