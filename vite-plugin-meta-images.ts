@@ -4,40 +4,39 @@ import path from 'path';
 
 /**
  * Vite plugin that updates og:image and twitter:image meta tags
- * to point to the app's opengraph image with the correct Replit domain.
+ * to point to the app's opengraph image with the correct domain.
  */
 export function metaImagesPlugin(): Plugin {
   return {
     name: 'vite-plugin-meta-images',
     transformIndexHtml(html) {
-      const baseUrl = getDeploymentUrl();
-      if (!baseUrl) {
-        log('[meta-images] no Replit deployment domain found, skipping meta tag updates');
-        return html;
-      }
-
-      // Check if opengraph image exists in public directory
       const publicDir = path.resolve(process.cwd(), 'client', 'public');
-      const opengraphPngPath = path.join(publicDir, 'opengraph.png');
-      const opengraphJpgPath = path.join(publicDir, 'opengraph.jpg');
-      const opengraphJpegPath = path.join(publicDir, 'opengraph.jpeg');
 
-      let imageExt: string | null = null;
-      if (fs.existsSync(opengraphPngPath)) {
-        imageExt = 'png';
-      } else if (fs.existsSync(opengraphJpgPath)) {
-        imageExt = 'jpg';
-      } else if (fs.existsSync(opengraphJpegPath)) {
-        imageExt = 'jpeg';
+      // Preferred image filenames in order
+      const candidates = ['kdi-social.png', 'opengraph.png', 'opengraph.jpg', 'opengraph.jpeg'];
+      let imageFile: string | null = null;
+      for (const candidate of candidates) {
+        if (fs.existsSync(path.join(publicDir, candidate))) {
+          imageFile = candidate;
+          break;
+        }
       }
 
-      if (!imageExt) {
-        log('[meta-images] OpenGraph image not found, skipping meta tag updates');
+      if (!imageFile) {
+        log('[meta-images] No OG image found, skipping meta tag updates');
         return html;
       }
 
-      const imageUrl = `${baseUrl}/opengraph.${imageExt}`;
+      // Use the canonical custom domain first, then fall back to Replit domain
+      const CUSTOM_DOMAIN = 'https://kdi-index.com';
+      const baseUrl = CUSTOM_DOMAIN || getDeploymentUrl();
 
+      if (!baseUrl) {
+        log('[meta-images] No domain found, skipping meta tag updates');
+        return html;
+      }
+
+      const imageUrl = `${baseUrl}/${imageFile}`;
       log('[meta-images] updating meta image tags to:', imageUrl);
 
       html = html.replace(
@@ -72,7 +71,5 @@ function getDeploymentUrl(): string | null {
 }
 
 function log(...args: any[]): void {
-  if (process.env.NODE_ENV === 'production') {
-    console.log(...args);
-  }
+  console.log(...args);
 }
