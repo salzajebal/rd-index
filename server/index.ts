@@ -298,11 +298,10 @@ app.use((req, res, next) => {
       },
     );
 
-    // ── 자동 DB 백업 (12시간마다) ──────────────────────────────────
-    const BACKUP_INTERVAL_MS = 12 * 60 * 60 * 1000; // 12시간
-
+    // ── 자동 DB 백업 (한국시간 00:00 / 12:00 정각) ────────────────
     const runBackup = async () => {
-      console.log("[autoBackup] Starting scheduled DB backup to GitHub...");
+      const kstNow = new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
+      console.log(`[autoBackup] Starting scheduled DB backup to GitHub... (KST: ${kstNow})`);
       const result = await pushDbToGithub();
       if (result.success) {
         console.log("[autoBackup] ✅", result.message);
@@ -311,13 +310,31 @@ app.use((req, res, next) => {
       }
     };
 
-    // 서버 시작 30초 후 첫 백업 실행 (DB 완전 초기화 대기)
-    setTimeout(runBackup, 30 * 1000);
+    const scheduleNextBackup = () => {
+      const nowUtc = Date.now();
+      // KST = UTC+9 → 한국 00:00 = UTC 15:00 전날, 한국 12:00 = UTC 03:00
+      // 다음 정각(KST 기준 00:00 또는 12:00)까지의 ms 계산
+      const kstOffsetMs = 9 * 60 * 60 * 1000;
+      const nowKst = nowUtc + kstOffsetMs;
+      const msInDay = 24 * 60 * 60 * 1000;
+      const msInHalfDay = 12 * 60 * 60 * 1000;
 
-    // 이후 12시간마다 반복 실행
-    setInterval(runBackup, BACKUP_INTERVAL_MS);
+      // 오늘 KST 기준 경과한 ms (자정부터)
+      const msSinceMidnightKst = nowKst % msInDay;
+      // 다음 12시간 단위 정각까지 남은 ms
+      const msUntilNext = msInHalfDay - (msSinceMidnightKst % msInHalfDay);
 
-    console.log("[autoBackup] Scheduled: first run in 30s, then every 12 hours");
+      const nextKst = new Date(nowUtc + msUntilNext).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
+      console.log(`[autoBackup] Next backup scheduled at KST: ${nextKst} (in ${Math.round(msUntilNext / 60000)}min)`);
+
+      setTimeout(async () => {
+        await runBackup();
+        // 이후 12시간마다 반복
+        setInterval(runBackup, msInHalfDay);
+      }, msUntilNext);
+    };
+
+    scheduleNextBackup();
     // ──────────────────────────────────────────────────────────────
   } catch (error) {
     console.error("Failed to start server:", error);
