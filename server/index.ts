@@ -297,6 +297,28 @@ app.use((req, res, next) => {
         console.log(`WebSocket server ready at /ws/admin`);
       },
     );
+
+    // ── 자동 DB 백업 (12시간마다) ──────────────────────────────────
+    const BACKUP_INTERVAL_MS = 12 * 60 * 60 * 1000; // 12시간
+
+    const runBackup = async () => {
+      console.log("[autoBackup] Starting scheduled DB backup to GitHub...");
+      const result = await pushDbToGithub();
+      if (result.success) {
+        console.log("[autoBackup] ✅", result.message);
+      } else {
+        console.error("[autoBackup] ❌", result.message);
+      }
+    };
+
+    // 서버 시작 30초 후 첫 백업 실행 (DB 완전 초기화 대기)
+    setTimeout(runBackup, 30 * 1000);
+
+    // 이후 12시간마다 반복 실행
+    setInterval(runBackup, BACKUP_INTERVAL_MS);
+
+    console.log("[autoBackup] Scheduled: first run in 30s, then every 12 hours");
+    // ──────────────────────────────────────────────────────────────
   } catch (error) {
     console.error("Failed to start server:", error);
     process.exit(1);
