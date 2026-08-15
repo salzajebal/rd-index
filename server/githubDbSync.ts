@@ -55,23 +55,39 @@ export async function pushDbToGithub(): Promise<{ success: boolean; message: str
       // 파일 없으면 새로 생성
     }
 
-    // GitHub에 업로드
+    // GitHub에 업로드 (SHA 충돌 시 1회 재시도)
     const now = new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
-    const body: any = {
-      message: `DB backup ${now} (KST)`,
-      content,
-      branch: "main",
-    };
-    if (sha) body.sha = sha;
 
-    const uploadRes = await fetch(
-      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${DB_SEED_PATH}`,
-      {
-        method: "PUT",
-        headers: getGithubApiHeaders(),
-        body: JSON.stringify(body),
-      }
-    );
+    const doUpload = async (currentSha: string | undefined) => {
+      const body: any = {
+        message: `DB backup ${now} (KST)`,
+        content,
+        branch: "main",
+      };
+      if (currentSha) body.sha = currentSha;
+      return fetch(
+        `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${DB_SEED_PATH}`,
+        { method: "PUT", headers: getGithubApiHeaders(), body: JSON.stringify(body) }
+      );
+    };
+
+    let uploadRes = await doUpload(sha);
+
+    // SHA 충돌(409) 발생 시 최신 SHA를 다시 가져와서 1회 재시도
+    if (uploadRes.status === 409) {
+      console.log("[githubDbSync] SHA conflict, retrying with fresh SHA...");
+      try {
+        const refetch = await fetch(
+          `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${DB_SEED_PATH}`,
+          { headers: getGithubApiHeaders() }
+        );
+        if (refetch.ok) {
+          const data = await refetch.json() as any;
+          sha = data.sha;
+        }
+      } catch { /* 파일이 없으면 SHA 없이 재시도 */ }
+      uploadRes = await doUpload(sha);
+    }
 
     if (!uploadRes.ok) {
       const err = await uploadRes.json() as any;
