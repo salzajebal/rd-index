@@ -13,7 +13,7 @@ export function metaImagesPlugin(): Plugin {
       const publicDir = path.resolve(process.cwd(), 'client', 'public');
 
       // Preferred image filenames in order
-      const candidates = ['kdi-social.png', 'opengraph.png', 'opengraph.jpg', 'opengraph.jpeg'];
+      const candidates = ['vora-social.png'];
       let imageFile: string | null = null;
       for (const candidate of candidates) {
         if (fs.existsSync(path.join(publicDir, candidate))) {
@@ -27,9 +27,7 @@ export function metaImagesPlugin(): Plugin {
         return html;
       }
 
-      // Use the canonical custom domain first, then fall back to Replit domain
-      const CUSTOM_DOMAIN = 'https://kdi-index.com';
-      const baseUrl = CUSTOM_DOMAIN || getDeploymentUrl();
+      const baseUrl = getDeploymentUrl();
 
       if (!baseUrl) {
         log('[meta-images] No domain found, skipping meta tag updates');
