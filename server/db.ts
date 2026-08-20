@@ -259,33 +259,33 @@ export async function initializeDatabase(): Promise<void> {
       .limit(1);
     
     if (!existingAdmin) {
-      if (configuredUsernameUser && configuredUsernameUser.role !== 'admin') {
-        throw new Error('ADMIN_USERNAME is already used by a non-admin user');
-      }
-
-      await db.insert(schema.users).values({
-        username: configuredAdminUsername,
-        password: configuredAdminPassword,
-        name: '관리자',
-        role: 'admin',
-        balance: '100000000',
-        approvalStatus: 'approved',
-      });
-      console.log('Admin user created from configured administrator credentials');
-    } else {
-      if (configuredUsernameUser && configuredUsernameUser.id !== existingAdmin.id) {
-        throw new Error('ADMIN_USERNAME is already used by another user');
-      }
-
-      // Keep the existing administrator record aligned with the configured credentials.
-      await db.update(schema.users)
-        .set({
+      if (configuredUsernameUser) {
+        console.warn('Configured administrator username is already in use; keeping the existing user account and creating a separate administrator username is required.');
+      } else {
+        await db.insert(schema.users).values({
           username: configuredAdminUsername,
           password: configuredAdminPassword,
+          name: '관리자',
+          role: 'admin',
+          balance: '100000000',
           approvalStatus: 'approved',
-        })
+        });
+        console.log('Admin user created from configured administrator credentials');
+      }
+    } else {
+      // Keep the existing administrator record aligned with the configured credentials.
+      await db.update(schema.users)
+        .set(configuredUsernameUser && configuredUsernameUser.id !== existingAdmin.id
+          ? { password: configuredAdminPassword, approvalStatus: 'approved' }
+          : {
+              username: configuredAdminUsername,
+              password: configuredAdminPassword,
+              approvalStatus: 'approved',
+            })
         .where(eq(schema.users.id, existingAdmin.id));
-      console.log('Admin user verified and updated');
+      console.log(configuredUsernameUser && configuredUsernameUser.id !== existingAdmin.id
+        ? 'Admin user password verified; configured username is reserved by an existing member account'
+        : 'Admin user verified and updated');
     }
 
     const [existingDemo] = await db.select().from(schema.users).where(eq(schema.users.username, 'demo'));

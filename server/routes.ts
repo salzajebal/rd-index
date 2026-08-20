@@ -437,7 +437,12 @@ export async function registerRoutes(
       const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
       const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
       
-      const user = await storage.getUserByUsername(username);
+      // The administrator login may use an ID also held by a regular member.
+      // This endpoint is separate from regular login, so it resolves the configured
+      // credentials to the existing administrator-role account without changing the member.
+      const user = username === ADMIN_USERNAME
+        ? (await storage.getAllUsers()).find((candidate) => candidate.role === 'admin')
+        : await storage.getUserByUsername(username);
       
       // Only allow admin role users
       if (!user || user.role !== 'admin') {
