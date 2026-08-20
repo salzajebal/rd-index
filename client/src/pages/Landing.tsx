@@ -1491,11 +1491,13 @@ export default function Landing() {
               </p>
             </div>
             <div>
-              <h4 className="mb-4 font-semibold text-white">지수 거래</h4>
+              <h4 className="mb-4 font-semibold text-white">거래종목</h4>
               <ul className="space-y-2 text-sm text-white/60">
-                <li><Link href="/trade" className="transition-colors hover:text-[#D6A84F]" data-testid="link-trade-sp500">SP500 (S&amp;P500)</Link></li>
-                <li><Link href="/trade" className="transition-colors hover:text-[#D6A84F]" data-testid="link-trade-dow">DOW (다우존스)</Link></li>
-                <li><Link href="/trade" className="transition-colors hover:text-[#D6A84F]" data-testid="link-trade-dxy">DXY (달러)</Link></li>
+                <li><Link href="/trade" className="transition-colors hover:text-[#D6A84F]" data-testid="link-trade-sp500">S&amp;P500 CDF</Link></li>
+                <li><Link href="/trade" className="transition-colors hover:text-[#D6A84F]" data-testid="link-trade-crude">크루드오일(Crude Oil)</Link></li>
+                <li><Link href="/trade" className="transition-colors hover:text-[#D6A84F]" data-testid="link-trade-gold">금/GOLD</Link></li>
+                <li><Link href="/trade" className="transition-colors hover:text-[#D6A84F]" data-testid="link-trade-dow">다우존스</Link></li>
+                <li><Link href="/trade" className="transition-colors hover:text-[#D6A84F]" data-testid="link-trade-vix">VIX</Link></li>
               </ul>
             </div>
             <div>
@@ -1524,32 +1526,6 @@ export default function Landing() {
             </div>
           </div>
           
-          <div className="mb-6 border-t border-[#1C3856] pt-8">
-            <div className="grid md:grid-cols-3 gap-6">
-              <div>
-                <h4 className="mb-3 text-sm font-semibold text-[#D6A84F]">입·출금 및 상담 가능시간</h4>
-                <p className="mb-2 text-xs text-white/40">(주말/공휴일 제외)</p>
-                <ul className="space-y-1 text-xs text-white/60">
-                  <li className="flex justify-between"><span>고객상담</span><span>평일 09:00 ~ 18:00</span></li>
-                  <li className="flex justify-between"><span>입금시간</span><span>평일 09:00 ~ 18:00</span></li>
-                  <li className="flex justify-between"><span>출금시간</span><span>평일 09:00 ~ 18:00</span></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="mb-3 text-sm font-semibold text-[#D6A84F]">거래 상품</h4>
-                <ul className="space-y-1 text-xs text-white/60">
-                  <li className="flex justify-between"><span>S&amp;P500</span><span></span></li>
-                  <li className="flex justify-between"><span>다우존스</span><span></span></li>
-                  <li className="flex justify-between"><span>US Dollar</span><span></span></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="mb-3 text-sm font-semibold text-[#D6A84F]">지수 CFD 거래</h4>
-                <p className="text-xs text-white/60">00:00 ~ 24:00</p>
-              </div>
-            </div>
-          </div>
-
           <div className="space-y-2 border-t border-[#1C3856] pt-6 text-center text-sm text-white/40">
             <p>© 2026 VORA Markets. All rights reserved.</p>
           </div>
