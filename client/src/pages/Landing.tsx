@@ -1948,11 +1948,11 @@ export default function Landing() {
 
       {/* ===== 입금 신청 모달 ===== */}
       <Dialog open={showDepositPageModal} onOpenChange={(open) => { if (!open) { setShowDepositPageModal(false); setDepositAmount(''); setDepositSenderName(''); } }}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg min-w-0 p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">입금 신청</DialogTitle>
-          <div className="relative">
+          <div className="relative min-w-0 max-w-full overflow-x-hidden">
             <div className="absolute -inset-1 bg-gradient-to-r from-green-500/10 via-green-500/10 to-green-500/10 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl">
+            <div className="relative min-w-0 max-w-full backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl">
               {/* 헤더 */}
               <div className="flex items-center justify-between mb-5">
                 <button onClick={() => { setShowDepositPageModal(false); setDepositAmount(''); setDepositSenderName(''); }}
@@ -1995,10 +1995,10 @@ export default function Landing() {
 
               {/* 입금 계좌 정보 */}
               <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-5">
-                <div className="flex items-center justify-between">
-                  <div>
+                  <div className="flex min-w-0 items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
                     <p className="text-gray-600 text-sm font-medium mb-1">입금 계좌 정보</p>
-                    <p className="text-gray-500 text-xs">입금 계좌 정보는 고객센터를 통해 개별 안내드립니다.</p>
+                      <p className="text-gray-500 text-xs break-words">입금 계좌 정보는 고객센터를 통해 개별 안내드립니다.</p>
                   </div>
                   <button
                     onClick={async () => {
@@ -2023,7 +2023,7 @@ export default function Landing() {
                         toast.error(err.message || '문의 생성에 실패했습니다');
                       }
                     }}
-                    className="text-xs bg-[#4F3CC9]/10 border border-[#4F3CC9]/30 text-[#4F3CC9] px-3 py-1 rounded-full hover:bg-[#4F3CC9]/20 transition-colors whitespace-nowrap"
+                      className="shrink-0 text-xs bg-[#4F3CC9]/10 border border-[#4F3CC9]/30 text-[#4F3CC9] px-3 py-1 rounded-full hover:bg-[#4F3CC9]/20 transition-colors whitespace-nowrap"
                     data-testid="button-deposit-inquiry"
                   >
                     계좌번호 문의하기
@@ -2125,7 +2125,7 @@ export default function Landing() {
                   }
                   return (
                     <div className="rounded-lg overflow-hidden border border-gray-200">
-                      <table className="w-full text-xs">
+                      <table className="w-full table-fixed text-xs">
                         <thead>
                           <tr className="bg-gray-50">
                             <th className="text-left text-gray-500 px-3 py-2">신청금액</th>
@@ -2164,11 +2164,11 @@ export default function Landing() {
 
       {/* ===== 출금 신청 모달 ===== */}
       <Dialog open={showWithdrawalPageModal} onOpenChange={(open) => { if (!open) { setShowWithdrawalPageModal(false); setWithdrawalAmount(''); } }}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg min-w-0 p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">출금 신청</DialogTitle>
-          <div className="relative">
+          <div className="relative min-w-0 max-w-full overflow-x-hidden">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/10 via-blue-500/10 to-blue-500/10 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl">
+            <div className="relative min-w-0 max-w-full backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl">
               {/* 헤더 */}
               <div className="flex items-center justify-between mb-5">
                 <button onClick={() => { setShowWithdrawalPageModal(false); setWithdrawalAmount(''); }}
@@ -2222,17 +2222,17 @@ export default function Landing() {
                   </div>
                 ) : (
                   <>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500 text-xs">거래은행</span>
-                      <span className="text-gray-900 text-xs font-medium">{user?.bankName || '-'}</span>
+                    <div className="flex min-w-0 justify-between gap-3">
+                      <span className="shrink-0 text-gray-500 text-xs">거래은행</span>
+                      <span className="min-w-0 break-words text-right text-gray-900 text-xs font-medium">{user?.bankName || '-'}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500 text-xs">계좌번호</span>
-                      <span className="text-gray-900 text-xs font-medium">{user?.accountNumber || '-'}</span>
+                    <div className="flex min-w-0 justify-between gap-3">
+                      <span className="shrink-0 text-gray-500 text-xs">계좌번호</span>
+                      <span className="min-w-0 break-all text-right text-gray-900 text-xs font-medium">{user?.accountNumber || '-'}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500 text-xs">예금주</span>
-                      <span className="text-gray-900 text-xs font-medium">{user?.accountHolder || '-'}</span>
+                    <div className="flex min-w-0 justify-between gap-3">
+                      <span className="shrink-0 text-gray-500 text-xs">예금주</span>
+                      <span className="min-w-0 break-words text-right text-gray-900 text-xs font-medium">{user?.accountHolder || '-'}</span>
                     </div>
                   </>
                 )}
@@ -2334,7 +2334,7 @@ export default function Landing() {
                   }
                   return (
                     <div className="rounded-lg overflow-hidden border border-gray-200">
-                      <table className="w-full text-xs">
+                      <table className="w-full table-fixed text-xs">
                         <thead>
                           <tr className="bg-gray-50">
                             <th className="text-left text-gray-500 px-3 py-2">신청금액</th>
