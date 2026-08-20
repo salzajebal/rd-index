@@ -607,27 +607,27 @@ export default function Landing() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-[#181A2A]">
+    <div className="min-h-screen bg-[#03070D] text-white">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-black/5 shadow-sm">
-        <div className="max-w-7xl mx-auto px-3 md:px-4 h-14 md:h-16 flex items-center justify-between">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#071525]/95 backdrop-blur-sm border-b border-[#D6A84F]/20">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 md:h-16 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-3 md:gap-5 min-w-0">
-            <Link href="/" data-testid="link-logo">
-              <LearnInvestLogo variant="full" height={36} />
+            <Link href="/" data-testid="link-logo" className="font-mono font-bold tracking-[0.18em] text-[#D6A84F] text-base">
+              QUAD
             </Link>
             
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-3">
+            <nav className="hidden md:flex items-center gap-4">
               <DropdownMenu>
-                <DropdownMenuTrigger className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium flex items-center gap-1 whitespace-nowrap" data-testid="nav-options-trading">
+                <DropdownMenuTrigger className="text-white/70 hover:text-[#D6A84F] transition-colors text-xs font-medium flex items-center gap-1 whitespace-nowrap" data-testid="nav-options-trading">
                   옵션거래 <ChevronDown className="w-3 h-3" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-white border-black/10">
                   {CRYPTO_ASSETS.map((stock) => (
                     <DropdownMenuItem 
                       key={stock.symbol}
-                      className="text-gray-700 hover:text-[#6D4FD9] hover:bg-[#F5F3FF] cursor-pointer"
+                      className="text-gray-700 hover:text-[#071525] hover:bg-[#D6A84F]/10 cursor-pointer"
                       onClick={() => {
                         if (user) {
                           setLocation("/trade");
@@ -636,7 +636,7 @@ export default function Landing() {
                         }
                       }}
                     >
-                      <span className="font-medium text-[#6D4FD9] mr-2">{stock.symbol}</span>
+                      <span className="font-medium text-[#126BFF] mr-2">{stock.symbol}</span>
                       {stock.name}
                     </DropdownMenuItem>
                   ))}
@@ -650,7 +650,7 @@ export default function Landing() {
                     setShowLoginModal(true);
                   }
                 }}
-                className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap" 
+                className="text-white/70 hover:text-[#D6A84F] transition-colors text-xs font-medium whitespace-nowrap" 
                 data-testid="nav-trade-history"
               >
                 거래내역
@@ -661,7 +661,7 @@ export default function Landing() {
                   if (!isWithinOperatingHours()) { toast.error("입출금 신청은 오전 09:00 ~ 18:00 사이에만 가능합니다"); return; }
                   setDepositAmount(''); setDepositSenderName(user?.name || user?.accountHolder || ''); setShowDepositPageModal(true);
                 }}
-                className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap" 
+                className="text-white/70 hover:text-[#D6A84F] transition-colors text-xs font-medium whitespace-nowrap" 
                 data-testid="nav-deposit"
               >
                 입금신청
@@ -673,14 +673,14 @@ export default function Landing() {
                   if (!isWithinOperatingHours()) { toast.error("입출금 신청은 오전 09:00 ~ 18:00 사이에만 가능합니다"); return; }
                   setWithdrawalAmount(''); setShowWithdrawalPageModal(true);
                 }}
-                className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap" 
+                className="text-white/70 hover:text-[#D6A84F] transition-colors text-xs font-medium whitespace-nowrap" 
                 data-testid="nav-withdrawal"
               >
                 출금신청
               </button>
               <button 
                 onClick={() => setShowAnnouncementsModal(true)}
-                className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap" 
+                className="text-white/70 hover:text-[#D6A84F] transition-colors text-xs font-medium whitespace-nowrap" 
                 data-testid="nav-announcements"
               >
                 공지사항
@@ -688,7 +688,7 @@ export default function Landing() {
               {user && (
                 <button 
                   onClick={openMyPage}
-                  className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap" 
+                  className="text-white/70 hover:text-[#D6A84F] transition-colors text-xs font-medium whitespace-nowrap" 
                   data-testid="nav-mypage"
                 >
                   마이페이지
@@ -696,7 +696,7 @@ export default function Landing() {
               )}
               <button 
                 onClick={() => setShowCustomerServiceModal(true)}
-                className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap" 
+                className="text-white/70 hover:text-[#D6A84F] transition-colors text-xs font-medium whitespace-nowrap" 
                 data-testid="nav-customer-service"
               >
                 고객센터
@@ -709,7 +709,7 @@ export default function Landing() {
                     setShowLoginModal(true);
                   }
                 }}
-                className="text-gray-600 hover:text-[#6D4FD9] transition-colors text-xs font-medium whitespace-nowrap relative" 
+                className="text-white/70 hover:text-[#D6A84F] transition-colors text-xs font-medium whitespace-nowrap relative" 
                 data-testid="nav-messages"
               >
                 쪽지함
@@ -727,10 +727,10 @@ export default function Landing() {
             {user ? (
               <>
                 {/* Balance Display */}
-                <div className="flex items-center gap-2 bg-[#F5F3FF] border border-[#6D4FD9]/15 rounded-lg px-3 py-1.5">
-                  <Wallet className="w-4 h-4 text-[#6D4FD9]" />
-                  <span className="text-gray-500 text-xs">보유금액</span>
-                  <span className="text-[#181A2A] font-bold text-sm" data-testid="text-header-balance">
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-none px-3 py-1.5">
+                  <Wallet className="w-4 h-4 text-[#D6A84F]" />
+                  <span className="text-white/55 text-xs">보유금액</span>
+                  <span className="text-white font-bold text-sm" data-testid="text-header-balance">
                     {balanceData?.balance ? Math.floor(parseFloat(balanceData.balance)).toLocaleString() : '0'}원
                   </span>
                 </div>
@@ -769,7 +769,7 @@ export default function Landing() {
                 </span>
                 {user.role === 'admin' ? (
                   <Button 
-                    className="bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white font-semibold" 
+                    className="bg-[#D6A84F] hover:bg-[#e3bb69] text-[#071525] font-semibold rounded-none" 
                     data-testid="button-header-admin"
                     onClick={() => setLocation("/admin")}
                   >
@@ -777,7 +777,7 @@ export default function Landing() {
                   </Button>
                 ) : (
                   <Button 
-                    className="bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white font-semibold" 
+                    className="bg-[#D6A84F] hover:bg-[#e3bb69] text-[#071525] font-semibold rounded-none" 
                     data-testid="button-header-trade"
                     onClick={() => setLocation("/trade")}
                   >
@@ -786,7 +786,7 @@ export default function Landing() {
                 )}
                 <Button 
                   variant="ghost" 
-                  className="text-gray-500 hover:text-[#181A2A] hover:bg-black/5" 
+                    className="text-white/65 hover:text-white hover:bg-white/5 rounded-none" 
                   data-testid="button-header-logout"
                   onClick={() => logout.mutate()}
                 >
@@ -797,14 +797,14 @@ export default function Landing() {
               <>
                 <Button 
                   variant="ghost" 
-                  className="text-gray-500 hover:text-[#181A2A] hover:bg-black/5" 
+                    className="text-white/65 hover:text-white hover:bg-white/5 rounded-none" 
                   data-testid="button-header-login"
                   onClick={() => setShowLoginModal(true)}
                 >
                   로그인
                 </Button>
                 <Button 
-                  className="bg-gradient-to-r from-[#4F3CC9] to-[#8B5CF6] hover:opacity-90 text-white font-semibold" 
+                    className="bg-[#D6A84F] hover:bg-[#e3bb69] text-[#071525] font-semibold rounded-none" 
                   data-testid="button-header-register"
                   onClick={() => setShowRegisterModal(true)}
                 >
@@ -987,6 +987,158 @@ export default function Landing() {
         </div>
       </header>
 
+      <main className="pt-14 md:pt-16 bg-[#03070D]">
+        <section className="relative overflow-hidden px-4 py-10 md:px-6 md:py-16">
+          <div className="pointer-events-none absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,255,255,.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.045)_1px,transparent_1px)] [background-size:48px_48px]" />
+          <div className="relative mx-auto max-w-7xl">
+            <div className="grid overflow-hidden border border-[#D6A84F]/50 lg:grid-cols-[1.15fr_.85fr]">
+              <div className="relative min-h-[420px] bg-[#071525] p-8 md:min-h-[500px] md:p-14">
+                <div className="absolute inset-x-0 top-0 h-1 bg-[#D6A84F]" />
+                <div className="absolute right-0 top-0 h-24 w-24 border-b border-l border-[#D6A84F]/30" />
+                <p className="font-mono text-[11px] tracking-[0.22em] text-[#D6A84F]">QUAD-TRAINING / 01</p>
+                <div className="mt-16 max-w-xl">
+                  <p className="font-mono text-xs tracking-[0.18em] text-[#126BFF]">GLOBAL MULTI-ASSET TRADING</p>
+                  <h1 className="mt-5 text-4xl font-semibold leading-[1.12] text-white md:text-6xl" data-testid="text-hero-title">
+                    글로벌 시장을<br />
+                    <span className="text-[#D6A84F]">한 곳에서</span> 확인하세요
+                  </h1>
+                  <p className="mt-6 max-w-md text-sm leading-7 text-white/60 md:text-base">
+                    주요 글로벌 지수의 흐름을 실시간으로 확인하고, 필요한 순간 바로 거래를 시작하세요.
+                  </p>
+                </div>
+                <div className="mt-12 flex flex-wrap gap-3">
+                  <Button
+                    className="h-11 rounded-none border border-[#D6A84F] bg-[#D6A84F] px-6 font-mono text-xs font-bold tracking-[0.12em] text-[#071525] hover:bg-[#e3bb69]"
+                    data-testid="button-trade"
+                    onClick={handleTradeClick}
+                  >
+                    [ 거래하기 ]
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="h-11 rounded-none border border-white/30 px-6 font-mono text-xs tracking-[0.12em] text-white hover:border-[#126BFF] hover:bg-[#126BFF]/10 hover:text-white"
+                    data-testid="button-register-hero"
+                    onClick={() => setShowRegisterModal(true)}
+                  >
+                    [ 회원가입 ]
+                  </Button>
+                </div>
+                <div className="absolute bottom-8 left-8 flex items-center gap-3 font-mono text-[10px] tracking-[0.16em] text-white/40 md:left-14">
+                  <span className="h-px w-10 bg-[#D6A84F]" />
+                  LIVE MARKET ACCESS
+                </div>
+              </div>
+
+              <div className="relative flex min-h-[340px] flex-col justify-between border-t border-[#D6A84F]/30 bg-[#03070D] p-8 lg:border-l lg:border-t-0 md:p-10">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(18,107,255,.2),transparent_45%)]" />
+                <div className="relative flex items-center justify-between border-b border-white/15 pb-4">
+                  <span className="font-mono text-xs tracking-[0.15em] text-white">LIVE SNAPSHOT</span>
+                  <span className="flex items-center gap-2 font-mono text-[10px] text-[#D6A84F]"><i className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#D6A84F]" /> REAL-TIME</span>
+                </div>
+                <div className="relative my-8 space-y-5">
+                  {marketData.map((item) => {
+                    const positive = item.changePercent >= 0;
+                    const decimals = item.symbol === "DXY" ? 4 : 2;
+                    return (
+                      <div className="flex items-end justify-between border-b border-white/10 pb-4" key={item.symbol}>
+                        <div>
+                          <p className="font-mono text-xs text-white/55">{item.symbol}</p>
+                          <p className="mt-1 text-sm text-white">{item.name}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-mono text-lg font-semibold text-white">{item.price.toLocaleString("ko-KR", { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}</p>
+                          <p className={`mt-1 font-mono text-xs ${positive ? "text-[#D6A84F]" : "text-[#126BFF]"}`}>{positive ? "▲" : "▼"} {Math.abs(item.changePercent).toFixed(2)}%</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="relative font-mono text-[10px] tracking-[0.14em] text-white/35">DATA REFRESHES AUTOMATICALLY</p>
+              </div>
+            </div>
+
+            <a href="#market-overview" className="mx-auto mt-10 flex w-fit flex-col items-center gap-2 font-mono text-[11px] tracking-[0.18em] text-white/55 transition-colors hover:text-[#D6A84F]">
+              SCROLL TO EXPLORE
+              <span className="text-xl text-[#D6A84F]">↓</span>
+            </a>
+          </div>
+        </section>
+
+        <section id="market-overview" className="px-4 pb-20 pt-6 md:px-6 md:pb-28">
+          <div className="mx-auto max-w-7xl">
+            <div className="border border-white/20 bg-[#071525]">
+              <div className="flex flex-col justify-between gap-3 border-b border-white/20 px-5 py-4 md:flex-row md:items-center md:px-7">
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.18em] text-[#D6A84F]">02 / MARKETS</p>
+                  <h2 className="mt-1 font-mono text-lg tracking-[0.08em] text-white">MARKET OVERVIEW</h2>
+                </div>
+                <p className="font-mono text-[10px] text-white/45">LIVE INDICATIVE PRICES · KRW</p>
+              </div>
+              <div className="grid divide-y divide-white/15 md:grid-cols-3 md:divide-x md:divide-y-0">
+                {marketData.map((item) => {
+                  const positive = item.changePercent >= 0;
+                  const decimals = item.symbol === "DXY" ? 4 : 2;
+                  return (
+                    <div className="flex items-center justify-between px-5 py-5 md:px-7" key={item.symbol}>
+                      <div>
+                        <p className="font-mono text-xs text-white">{item.symbol}</p>
+                        <p className="mt-1 text-xs text-white/45">{item.name}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-mono text-base text-white">{item.price.toLocaleString("ko-KR", { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}</p>
+                        <p className={`mt-1 font-mono text-xs ${positive ? "text-[#D6A84F]" : "text-[#126BFF]"}`}>{positive ? "▲" : "▼"} {Math.abs(item.changePercent).toFixed(2)}%</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="mt-8 grid gap-6 md:grid-cols-2">
+              {marketData.slice(0, 2).map((item, index) => {
+                const positive = item.changePercent >= 0;
+                const decimals = item.symbol === "DXY" ? 4 : 2;
+                return (
+                  <article className="relative min-h-[280px] overflow-hidden border border-white/25 bg-[#071525] p-6 md:p-8" key={item.symbol} data-testid={`card-market-chart-${item.symbol}`}>
+                    <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] [background-size:36px_36px]" />
+                    <div className="relative flex items-start justify-between">
+                      <div>
+                        <p className="font-mono text-xs tracking-[0.12em] text-[#D6A84F]">0{index + 1} / INDEX</p>
+                        <h3 className="mt-2 font-mono text-xl text-white">{item.name}</h3>
+                      </div>
+                      <span className={`border px-2 py-1 font-mono text-[10px] ${positive ? "border-[#D6A84F]/50 text-[#D6A84F]" : "border-[#126BFF]/50 text-[#126BFF]"}`}>{positive ? "UP" : "DOWN"}</span>
+                    </div>
+                    <svg viewBox="0 0 120 50" preserveAspectRatio="none" className="relative mt-8 h-28 w-full overflow-visible">
+                      <defs>
+                        <linearGradient id={`chartFill-${item.symbol}`} x1="0" x2="0" y1="0" y2="1">
+                          <stop offset="0%" stopColor={positive ? "#D6A84F" : "#126BFF"} stopOpacity="0.32" />
+                          <stop offset="100%" stopColor={positive ? "#D6A84F" : "#126BFF"} stopOpacity="0" />
+                        </linearGradient>
+                      </defs>
+                      <path d={`${generateSparklinePath(item.priceHistory)} L120,50 L0,50 Z`} fill={`url(#chartFill-${item.symbol})`} />
+                      <path d={generateSparklinePath(item.priceHistory)} fill="none" stroke={positive ? "#D6A84F" : "#126BFF"} strokeWidth="1.35" vectorEffect="non-scaling-stroke" />
+                    </svg>
+                    <div className="relative mt-3 flex items-end justify-between border-t border-white/15 pt-4">
+                      <p className="font-mono text-lg text-white">{item.price.toLocaleString("ko-KR", { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}</p>
+                      <Button variant="ghost" className="h-8 rounded-none border border-white/25 px-3 font-mono text-[10px] text-white hover:border-[#D6A84F] hover:bg-[#D6A84F]/10 hover:text-[#D6A84F]" onClick={handleTradeClick}>
+                        TRADE →
+                      </Button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+        <footer className="border-t border-white/15 px-4 py-8 md:px-6">
+          <div className="mx-auto flex max-w-7xl flex-col justify-between gap-3 font-mono text-[10px] tracking-[0.12em] text-white/40 sm:flex-row">
+            <span>QUAD / GLOBAL MULTI-ASSET TRADING</span>
+            <span>© 2026 QUAD. ALL RIGHTS RESERVED.</span>
+          </div>
+        </footer>
+      </main>
+
+      <div className="hidden">
       {/* Hero Section */}
       <section className="relative pt-28 pb-16 px-4 overflow-hidden bg-gradient-to-b from-[#F5F3FF] via-white to-white">
         <div className="max-w-7xl mx-auto">
@@ -1354,6 +1506,8 @@ export default function Landing() {
           </div>
         </section>
       )}
+
+      </div>
 
       {/* Footer */}
       <footer className="bg-[#14103A] py-16 px-4 border-t border-white/5">
