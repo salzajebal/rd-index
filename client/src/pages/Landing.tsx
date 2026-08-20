@@ -1000,15 +1000,14 @@ export default function Landing() {
             <div className="pointer-events-none absolute bottom-8 right-[7%] h-24 w-24 border-b border-r border-[#126BFF]/40 md:bottom-12 md:h-32 md:w-32" />
 
             <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col">
-              <div className="flex items-center justify-between border-b border-white/15 pb-4 font-mono text-[10px] tracking-[0.18em] text-white/45 md:text-xs">
-                <span><span className="text-[#D6A84F]">01</span> / VORA MARKETS</span>
-                <span className="hidden sm:inline">LIVE MARKET ACCESS / 24H</span>
+              <div className="flex items-center justify-center border-b border-white/15 pb-4 text-center font-mono text-[10px] tracking-[0.18em] text-white/45 md:text-xs">
+                <span><span className="text-[#D6A84F]">01</span> / VORA MARKETS · 실시간 시장 접근</span>
               </div>
 
-              <div className="flex flex-1 items-center py-20 md:py-24">
-                <div className="max-w-5xl">
+              <div className="flex flex-1 items-center justify-center py-20 text-center md:py-24">
+                <div className="mx-auto max-w-5xl">
                   <p className="font-mono text-xs tracking-[0.28em] text-[#126BFF] md:text-sm">
-                    GLOBAL MULTI-ASSET TRADING
+                    글로벌 다중자산 거래
                   </p>
                   <h1 className="mt-6 text-5xl font-semibold leading-[1.08] tracking-[-0.04em] text-white sm:text-6xl md:text-8xl lg:text-[7.5rem]" data-testid="text-hero-title">
                     글로벌 시장을
@@ -1017,19 +1016,19 @@ export default function Landing() {
                     <br />
                     확인하세요
                   </h1>
-                  <div className="mt-10 flex max-w-2xl flex-col gap-6 border-t border-white/15 pt-6 sm:flex-row sm:items-end sm:justify-between">
+                  <div className="mx-auto mt-10 flex max-w-2xl flex-col items-center gap-6 border-t border-white/15 pt-6">
                     <p className="max-w-sm text-sm leading-relaxed text-white/55 md:text-base">
                       시장의 움직임을 빠르게 확인하고
                       <br className="hidden sm:block" />
                       VORA Markets에서 거래를 시작하세요.
                     </p>
-                    <div className="flex shrink-0 gap-3">
+                    <div className="flex shrink-0 justify-center gap-3">
                       <Button
                         className="h-11 rounded-none border border-[#D6A84F] bg-[#D6A84F] px-6 font-mono text-xs font-bold tracking-[0.12em] text-[#071525] hover:bg-[#e3bb69]"
                         data-testid="button-trade"
                         onClick={handleTradeClick}
                       >
-                        START TRADING
+                        거래하기
                       </Button>
                       <Button
                         variant="ghost"
@@ -1037,17 +1036,17 @@ export default function Landing() {
                         data-testid="button-register-hero"
                         onClick={() => setShowRegisterModal(true)}
                       >
-                        JOIN VORA
+                        회원가입
                       </Button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="grid border-t border-white/15 pt-4 font-mono text-[10px] tracking-[0.14em] text-white/40 sm:grid-cols-3">
-                <span><span className="text-[#D6A84F]">LIVE</span> / REAL-TIME DATA</span>
-                <span className="mt-2 sm:mt-0 sm:text-center">05 ASSETS</span>
-                <span className="mt-2 sm:mt-0 sm:text-right">120 SEC ROUND</span>
+              <div className="grid border-t border-white/15 pt-4 text-center font-mono text-[10px] tracking-[0.14em] text-white/40 sm:grid-cols-3">
+                <span><span className="text-[#D6A84F]">실시간</span> / 시장 데이터</span>
+                <span className="mt-2 sm:mt-0">거래종목 5개</span>
+                <span className="mt-2 sm:mt-0">120초 라운드</span>
               </div>
             </div>
           </section>
