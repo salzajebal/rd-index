@@ -249,23 +249,42 @@ export async function initializeDatabase(): Promise<void> {
     client.release();
 
     console.log('Seeding admin user if not exists...');
-    const [existingAdmin] = await db.select().from(schema.users).where(eq(schema.users.username, 'admin'));
+    const configuredAdminUsername = process.env.ADMIN_USERNAME || 'admin';
+    const configuredAdminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    const [existingAdmin] = await db.select().from(schema.users)
+      .where(eq(schema.users.role, 'admin'))
+      .limit(1);
+    const [configuredUsernameUser] = await db.select().from(schema.users)
+      .where(eq(schema.users.username, configuredAdminUsername))
+      .limit(1);
     
     if (!existingAdmin) {
+      if (configuredUsernameUser && configuredUsernameUser.role !== 'admin') {
+        throw new Error('ADMIN_USERNAME is already used by a non-admin user');
+      }
+
       await db.insert(schema.users).values({
-        username: 'admin',
-        password: 'admin123',
+        username: configuredAdminUsername,
+        password: configuredAdminPassword,
         name: '관리자',
         role: 'admin',
         balance: '100000000',
         approvalStatus: 'approved',
       });
-      console.log('Admin user created: admin/admin123');
+      console.log('Admin user created from configured administrator credentials');
     } else {
-      // Ensure existing admin is approved and has correct password
+      if (configuredUsernameUser && configuredUsernameUser.id !== existingAdmin.id) {
+        throw new Error('ADMIN_USERNAME is already used by another user');
+      }
+
+      // Keep the existing administrator record aligned with the configured credentials.
       await db.update(schema.users)
-        .set({ approvalStatus: 'approved', password: 'admin123' })
-        .where(eq(schema.users.username, 'admin'));
+        .set({
+          username: configuredAdminUsername,
+          password: configuredAdminPassword,
+          approvalStatus: 'approved',
+        })
+        .where(eq(schema.users.id, existingAdmin.id));
       console.log('Admin user verified and updated');
     }
 
