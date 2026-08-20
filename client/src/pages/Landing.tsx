@@ -994,34 +994,60 @@ export default function Landing() {
       </header>
 
         <main className="bg-[#03070D] pt-14 md:pt-16">
-          <section className="relative overflow-hidden px-4 py-8 md:px-6 md:py-12">
+          <section className="relative flex min-h-[calc(100vh-56px)] overflow-hidden px-5 py-8 md:min-h-[calc(100vh-64px)] md:px-10 md:py-12">
             <div className="pointer-events-none absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,255,255,.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.045)_1px,transparent_1px)] [background-size:48px_48px]" />
-            <div className="relative mx-auto max-w-7xl border border-[#D6A84F]/50">
-              <div className="absolute inset-x-0 top-0 h-1 bg-[#D6A84F]" />
-              <div className="absolute right-0 top-0 h-28 w-28 border-b border-l border-[#D6A84F]/30" />
-              <div className="flex min-h-[520px] flex-col items-center justify-center px-6 py-20 text-center md:min-h-[600px] md:px-12">
-                <p className="font-mono text-sm tracking-[0.18em] text-[#D6A84F] md:text-base">VORA MARKETS - TRAINING</p>
-                <p className="mt-14 font-mono text-xs tracking-[0.22em] text-[#126BFF] md:mt-16 md:text-sm">GLOBAL MULTI-ASSET TRADING</p>
-                <h1 className="mt-5 text-4xl font-semibold leading-[1.16] text-white md:text-6xl" data-testid="text-hero-title">
-                  글로벌 시장을 <span className="text-[#D6A84F]">한 곳에서</span> 확인하세요
-                </h1>
-                <div className="mt-12 flex flex-wrap justify-center gap-3">
-                  <Button
-                    className="h-11 rounded-none border border-[#D6A84F] bg-[#D6A84F] px-7 font-mono text-xs font-bold tracking-[0.12em] text-[#071525] hover:bg-[#e3bb69]"
-                    data-testid="button-trade"
-                    onClick={handleTradeClick}
-                  >
-                    [ 거래하기 ]
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="h-11 rounded-none border border-white/30 px-7 font-mono text-xs tracking-[0.12em] text-white hover:border-[#126BFF] hover:bg-[#126BFF]/10 hover:text-white"
-                    data-testid="button-register-hero"
-                    onClick={() => setShowRegisterModal(true)}
-                  >
-                    [ 회원가입 ]
-                  </Button>
+            <div className="pointer-events-none absolute inset-y-0 left-[7%] border-l border-[#D6A84F]/20" />
+            <div className="pointer-events-none absolute bottom-8 right-[7%] h-24 w-24 border-b border-r border-[#126BFF]/40 md:bottom-12 md:h-32 md:w-32" />
+
+            <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col">
+              <div className="flex items-center justify-between border-b border-white/15 pb-4 font-mono text-[10px] tracking-[0.18em] text-white/45 md:text-xs">
+                <span><span className="text-[#D6A84F]">01</span> / VORA MARKETS</span>
+                <span className="hidden sm:inline">LIVE MARKET ACCESS / 24H</span>
+              </div>
+
+              <div className="flex flex-1 items-center py-20 md:py-24">
+                <div className="max-w-5xl">
+                  <p className="font-mono text-xs tracking-[0.28em] text-[#126BFF] md:text-sm">
+                    GLOBAL MULTI-ASSET TRADING
+                  </p>
+                  <h1 className="mt-6 text-5xl font-semibold leading-[1.08] tracking-[-0.04em] text-white sm:text-6xl md:text-8xl lg:text-[7.5rem]" data-testid="text-hero-title">
+                    글로벌 시장을
+                    <br />
+                    <span className="text-[#D6A84F]">한 곳에서</span>
+                    <br />
+                    확인하세요
+                  </h1>
+                  <div className="mt-10 flex max-w-2xl flex-col gap-6 border-t border-white/15 pt-6 sm:flex-row sm:items-end sm:justify-between">
+                    <p className="max-w-sm text-sm leading-relaxed text-white/55 md:text-base">
+                      시장의 움직임을 빠르게 확인하고
+                      <br className="hidden sm:block" />
+                      VORA Markets에서 거래를 시작하세요.
+                    </p>
+                    <div className="flex shrink-0 gap-3">
+                      <Button
+                        className="h-11 rounded-none border border-[#D6A84F] bg-[#D6A84F] px-6 font-mono text-xs font-bold tracking-[0.12em] text-[#071525] hover:bg-[#e3bb69]"
+                        data-testid="button-trade"
+                        onClick={handleTradeClick}
+                      >
+                        START TRADING
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="h-11 rounded-none border border-white/30 px-6 font-mono text-xs tracking-[0.12em] text-white hover:border-[#126BFF] hover:bg-[#126BFF]/10 hover:text-white"
+                        data-testid="button-register-hero"
+                        onClick={() => setShowRegisterModal(true)}
+                      >
+                        JOIN VORA
+                      </Button>
+                    </div>
+                  </div>
                 </div>
+              </div>
+
+              <div className="grid border-t border-white/15 pt-4 font-mono text-[10px] tracking-[0.14em] text-white/40 sm:grid-cols-3">
+                <span><span className="text-[#D6A84F]">LIVE</span> / REAL-TIME DATA</span>
+                <span className="mt-2 sm:mt-0 sm:text-center">05 ASSETS</span>
+                <span className="mt-2 sm:mt-0 sm:text-right">120 SEC ROUND</span>
               </div>
             </div>
           </section>

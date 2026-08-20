@@ -1,1 +1,2 @@
 - [VORA modal design language](modal-design-language.md) — Modals and every nested control use sharp, square corners to match the product’s grid-led interface.
+- [VORA hero design direction](hero-design-direction.md) — The landing opens with full-screen typography, not a boxed hero card.
