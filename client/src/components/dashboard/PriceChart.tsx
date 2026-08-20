@@ -79,13 +79,11 @@ function generateFallbackCandles(
 
 function getDecimalPlaces(symbol: string): number {
   const base = symbol.split('-')[0];
-  if (base === 'DXY') return 4;
   return 2;
 }
 
 function getMinMove(symbol: string): number {
   const base = symbol.split('-')[0];
-  if (base === 'DXY') return 0.0001;
   return 0.01;
 }
 

@@ -105,8 +105,10 @@ interface AffiliateInquiry {
 
 const SYMBOL_NAMES: Record<string, string> = {
   SP500: 'S&P 500',
+  CRUDE: '크루드오일',
+  GOLD: 'GOLD',
   DOW: '다우존스',
-  DXY: '달러 인덱스',
+  VIX: 'VIX',
 };
 
 const formatMoney = (amount: string | number) => {

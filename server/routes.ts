@@ -308,8 +308,8 @@ export async function registerRoutes(
       }
 
       // Admin login restriction: fixed credentials (ignoring env vars due to swap issue)
-      const ADMIN_USERNAME = "admin";
-      const ADMIN_PASSWORD = "admin123";
+      const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
+      const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
       
       console.log("Querying database for user...");
       const user = await storage.getUserByUsername(username);
@@ -434,8 +434,8 @@ export async function registerRoutes(
       }
 
       // Admin login restriction: fixed credentials (ignoring env vars due to swap issue)
-      const ADMIN_USERNAME = "admin";
-      const ADMIN_PASSWORD = "admin123";
+      const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
+      const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
       
       const user = await storage.getUserByUsername(username);
       
@@ -602,13 +602,13 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Direction must be 'long' or 'short'" });
       }
 
-      if (![300].includes(duration)) {
-        return res.status(400).json({ error: "Duration must be 300 seconds" });
+      if (![120].includes(duration)) {
+        return res.status(400).json({ error: "Duration must be 120 seconds" });
       }
 
-      const VALID_SYMBOLS = ['SP500', 'DOW', 'DXY'];
+      const VALID_SYMBOLS = ['SP500', 'CRUDE', 'GOLD', 'DOW', 'VIX'];
       if (!VALID_SYMBOLS.includes(symbol)) {
-        return res.status(400).json({ error: "Invalid symbol. Only SP500, DOW, DXY are available." });
+        return res.status(400).json({ error: "Invalid symbol." });
       }
 
       // 종목 서버 점검 중 차단
@@ -620,6 +620,9 @@ export async function registerRoutes(
       let betAmount = parseFloat(amount);
       if (isNaN(betAmount) || betAmount <= 0) {
         return res.status(400).json({ error: "Invalid bet amount" });
+      }
+      if (betAmount < 10000) {
+        return res.status(400).json({ error: "최소 주문금액은 10,000원입니다" });
       }
 
       const user = await storage.getUser(userId);
@@ -2419,8 +2422,8 @@ export async function registerRoutes(
   // Affiliate: Global forced (read)
   app.get("/api/affiliate/global-forced", requireAffiliate, async (req, res) => {
     try {
-      const symbols = ['SP500', 'DOW', 'DXY'];
-      const durations = [180, 300];
+      const symbols = ['SP500', 'CRUDE', 'GOLD', 'DOW', 'VIX'];
+      const durations = [120];
       const result: Record<string, string> = {};
       for (const sym of symbols) {
         for (const dur of durations) {
@@ -2988,8 +2991,8 @@ export async function registerRoutes(
   // Global forced outcome settings (applies to ALL rounds for a symbol+duration)
   app.get("/api/admin/global-forced", requireAdmin, async (req, res) => {
     try {
-      const symbols = ['SP500', 'DOW', 'DXY'];
-      const durations = [180, 300];
+      const symbols = ['SP500', 'CRUDE', 'GOLD', 'DOW', 'VIX'];
+      const durations = [120];
       const result: Record<string, string> = {};
       for (const sym of symbols) {
         for (const dur of durations) {
@@ -3336,10 +3339,13 @@ export async function registerRoutes(
         return res.status(400).json({ error: "방향은 long 또는 short이어야 합니다" });
       }
 
-      const validDurations = [300];
+      const validDurations = [120];
       const parsedDuration = parseInt(duration);
       if (!validDurations.includes(parsedDuration)) {
-        return res.status(400).json({ error: "유효하지 않은 배팅 시간입니다 (5분만 가능)" });
+        return res.status(400).json({ error: "유효하지 않은 배팅 시간입니다 (2분만 가능)" });
+      }
+      if (!['SP500', 'CRUDE', 'GOLD', 'DOW', 'VIX'].includes(symbol)) {
+        return res.status(400).json({ error: "유효하지 않은 거래 종목입니다" });
       }
 
       const user = await storage.getUser(userId);
@@ -3352,6 +3358,9 @@ export async function registerRoutes(
 
       if (isNaN(betAmount) || betAmount <= 0) {
         return res.status(400).json({ error: "배팅 금액은 0보다 커야 합니다" });
+      }
+      if (betAmount < 10000) {
+        return res.status(400).json({ error: "최소 주문금액은 10,000원입니다" });
       }
 
       if (betAmount > currentBalance) {
@@ -3591,21 +3600,27 @@ export async function registerRoutes(
   // Yahoo Finance symbols for reverse lookup (kept as FOREX_TO_FINNHUB for compatibility)
   const FOREX_TO_FINNHUB: Record<string, string> = {
     SP500: '^GSPC',
+    CRUDE: 'CL=F',
+    GOLD: 'GC=F',
     DOW: '^DJI',
-    DXY: 'DX-Y.NYB',
+    VIX: '^VIX',
   };
 
   // App symbol → Yahoo Finance symbol
   const YAHOO_SYMBOLS: Record<string, string> = {
     SP500: '^GSPC',
+    CRUDE: 'CL=F',
+    GOLD: 'GC=F',
     DOW: '^DJI',
-    DXY: 'DX-Y.NYB',
+    VIX: '^VIX',
   };
 
   const forexPrices: { [key: string]: { price: number; change: number; changePercent: number; high: number; low: number; volume: number; updatedAt: number; openPrice: number } } = {
     SP500: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
+    CRUDE: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
+    GOLD: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
     DOW: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
-    DXY: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
+    VIX: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
   };
 
   function getForexPrice(forexSymbol: string) {
@@ -3625,15 +3640,17 @@ export async function registerRoutes(
     close: number;
   }
   const candleStore: Record<string, Record<number, CandleData[]>> = {
-    SP500: { 300: [] },
-    DOW: { 300: [] },
-    DXY: { 300: [] },
+    SP500: { 120: [] },
+    CRUDE: { 120: [] },
+    GOLD: { 120: [] },
+    DOW: { 120: [] },
+    VIX: { 120: [] },
   };
   const MAX_CANDLES = 200;
 
   async function loadCandlesFromDB() {
-    const symbols = ['SP500', 'DOW', 'DXY'];
-    const durations = [300];
+    const symbols = ['SP500', 'CRUDE', 'GOLD', 'DOW', 'VIX'];
+    const durations = [120];
     for (const symbol of symbols) {
       for (const dur of durations) {
         try {
@@ -3669,8 +3686,8 @@ export async function registerRoutes(
     const BELOW_THRESHOLD = 0.08; // 캔들 최솟값이 현재가 8% 아래
     const ABOVE_THRESHOLD = 0.04; // 캔들 최댓값이 현재가 4% 위
     const FILTER_THRESHOLD = 0.10; // 개별 캔들 ±10% 범위 밖 제거
-    const symbols = ['SP500', 'DOW', 'DXY'];
-    const durations = [300];
+    const symbols = ['SP500', 'CRUDE', 'GOLD', 'DOW', 'VIX'];
+    const durations = [120];
     let cleaned = 0;
     for (const symbol of symbols) {
       const realPrice = forexPrices[symbol]?.price;
@@ -3746,8 +3763,8 @@ export async function registerRoutes(
           }
         }
 
-        for (const sym of ['SP500', 'DOW', 'DXY']) {
-          for (const d of [300]) {
+        for (const sym of ['SP500', 'CRUDE', 'GOLD', 'DOW', 'VIX']) {
+          for (const d of [120]) {
             if (candleStore[sym][d].length > MAX_CANDLES + 50) {
               try { await storage.deleteOldForexCandles(sym, d, MAX_CANDLES); } catch (e) {}
             }
@@ -3758,7 +3775,7 @@ export async function registerRoutes(
   }
 
   function updateCandles(symbol: string, price: number, timestamp: number) {
-    const durations = [300];
+    const durations = [120];
     for (const dur of durations) {
       const candles = candleStore[symbol]?.[dur];
       if (!candles) continue;
@@ -3900,7 +3917,7 @@ export async function registerRoutes(
       if (updated > 0) {
         lastYahooFetch = Date.now();
         isConnected = true;
-        console.log(`💹 [Yahoo] 실시간 시세: SP500=${forexPrices.SP500.price.toFixed(2)}, DOW=${forexPrices.DOW.price.toFixed(2)}, DXY=${forexPrices.DXY.price.toFixed(4)}`);
+        console.log(`💹 [Yahoo] 실시간 시세: ${Object.entries(forexPrices).map(([symbol, value]) => `${symbol}=${value.price.toFixed(2)}`).join(', ')}`);
         // 최초 실시간 가격 수신 후 DB 캔들 오염 여부 검증
         if (!candleValidationDone) {
           validateCandleStore().catch(e => console.warn('[Candle] 검증 중 오류:', e));
@@ -3915,10 +3932,10 @@ export async function registerRoutes(
   // 1초마다 미세 변동 적용 (시세 폴링 사이 자연스러운 움직임)
   function applyMicroFluctuation() {
     const now = Date.now();
-    for (const symbol of ['SP500', 'DOW', 'DXY']) {
+    for (const symbol of ['SP500', 'CRUDE', 'GOLD', 'DOW', 'VIX']) {
       const prev = forexPrices[symbol];
       if (prev.price <= 0) continue;
-      const vol = symbol === 'DXY' ? 0.000025 : 0.00004;
+      const vol = symbol === 'VIX' ? 0.0001 : 0.00004;
       const micro = prev.price * vol * (Math.random() - 0.5) * 2;
       const newPrice = prev.price + micro;
       forexPrices[symbol] = {
@@ -3945,8 +3962,10 @@ export async function registerRoutes(
   // ==================== FALLBACK SIMULATION (Yahoo Finance 장애 시) ====================
   const DEFAULT_PRICES: Record<string, number> = {
     SP500: 6575.0,
+    CRUDE: 75.0,
+    GOLD: 2300.0,
     DOW: 46500.0,
-    DXY: 100.1,
+    VIX: 18.0,
   };
 
   let simulationTimer: NodeJS.Timeout | null = null;
@@ -3956,7 +3975,7 @@ export async function registerRoutes(
   function startSimulation() {
     if (simulationActive) return;
     simulationActive = true;
-    for (const symbol of ['SP500', 'DOW', 'DXY']) {
+    for (const symbol of ['SP500', 'CRUDE', 'GOLD', 'DOW', 'VIX']) {
       const currentPrice = forexPrices[symbol].price;
       simulationAnchorPrices[symbol] = currentPrice > 0 ? currentPrice : DEFAULT_PRICES[symbol];
     }
@@ -3968,11 +3987,11 @@ export async function registerRoutes(
         return;
       }
       const now = Date.now();
-      for (const symbol of ['SP500', 'DOW', 'DXY']) {
+      for (const symbol of ['SP500', 'CRUDE', 'GOLD', 'DOW', 'VIX']) {
         const prev = forexPrices[symbol];
         const currentPrice = prev.price > 0 ? prev.price : DEFAULT_PRICES[symbol];
         const anchor = simulationAnchorPrices[symbol] || currentPrice;
-        const vol = symbol === 'DXY' ? 0.00005 : 0.0001;
+        const vol = symbol === 'VIX' ? 0.0002 : 0.0001;
         let delta = currentPrice * vol * (Math.random() - 0.5) * 2;
         const drift = (currentPrice - anchor) / anchor;
         delta -= drift * 0.05 * currentPrice;
@@ -4217,7 +4236,7 @@ export async function registerRoutes(
     const prices = [];
     let hasFallback = false;
 
-    for (const forexSymbol of ['SP500', 'DOW', 'DXY']) {
+    for (const forexSymbol of ['SP500', 'CRUDE', 'GOLD', 'DOW', 'VIX']) {
       const data = getForexPrice(forexSymbol);
       if (data && data.price > 0) {
         const isStale = (now - data.updatedAt) > 60000;
@@ -4253,7 +4272,7 @@ export async function registerRoutes(
     const { symbol } = req.params;
     const upperSymbol = symbol.toUpperCase();
     
-    const VALID_FOREX = ['SP500', 'DOW', 'DXY'];
+    const VALID_FOREX = ['SP500', 'CRUDE', 'GOLD', 'DOW', 'VIX'];
     if (!VALID_FOREX.includes(upperSymbol)) {
       return res.status(400).json({ error: "지원하지 않는 심볼입니다" });
     }
@@ -4288,15 +4307,15 @@ export async function registerRoutes(
   app.get("/api/market/candles/:symbol", (req, res) => {
     const { symbol } = req.params;
     const upperSymbol = symbol.toUpperCase();
-    const duration = parseInt(req.query.duration as string) || 60;
+    const duration = parseInt(req.query.duration as string) || 120;
     
-    const VALID_FOREX = ['SP500', 'DOW', 'DXY'];
+    const VALID_FOREX = ['SP500', 'CRUDE', 'GOLD', 'DOW', 'VIX'];
     if (!VALID_FOREX.includes(upperSymbol)) {
       return res.status(400).json({ error: "지원하지 않는 심볼입니다" });
     }
 
-    const validDurations = [300];
-    const dur = validDurations.includes(duration) ? duration : 300;
+    const validDurations = [120];
+    const dur = validDurations.includes(duration) ? duration : 120;
 
     const ticker = FOREX_TO_FINNHUB[upperSymbol];
     const candles = candleStore[upperSymbol]?.[dur] || [];
@@ -4450,6 +4469,9 @@ export async function registerRoutes(
       
       if (!amount || parseFloat(amount) <= 0) {
         return res.status(400).json({ error: "유효한 금액을 입력해주세요" });
+      }
+      if (type === 'withdrawal' && parseFloat(amount) < 10000) {
+        return res.status(400).json({ error: "최소 출금금액은 10,000원입니다" });
       }
 
       // For withdrawal, check if user has enough balance and pre-deduct

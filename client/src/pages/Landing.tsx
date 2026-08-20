@@ -28,9 +28,11 @@ import { format } from "date-fns";
 import { LearnInvestLogo } from "@/components/LearnInvestLogo";
 
 const CRYPTO_ASSETS = [
-  { symbol: "SP500", name: "S&P500" },
+  { symbol: "SP500", name: "S&P500 CFD" },
+  { symbol: "CRUDE", name: "크루드오일" },
+  { symbol: "GOLD", name: "GOLD" },
   { symbol: "DOW", name: "다우존스" },
-  { symbol: "DXY", name: "달러" },
+  { symbol: "VIX", name: "VIX" },
 ];
 
 const KOREAN_BANKS = [
@@ -62,15 +64,19 @@ interface LandingMarketData {
 
 function useLandingMarketData() {
   const [markets, setMarkets] = useState<LandingMarketData[]>([
-    { symbol: "SP500", name: "S&P500", price: 5320.0, changePercent: 0, priceHistory: [] },
+    { symbol: "SP500", name: "S&P500 CFD", price: 5320.0, changePercent: 0, priceHistory: [] },
+    { symbol: "CRUDE", name: "크루드오일", price: 75.0, changePercent: 0, priceHistory: [] },
+    { symbol: "GOLD", name: "GOLD", price: 2300.0, changePercent: 0, priceHistory: [] },
     { symbol: "DOW", name: "다우존스", price: 39500.0, changePercent: 0, priceHistory: [] },
-    { symbol: "DXY", name: "달러", price: 104.5, changePercent: 0, priceHistory: [] },
+    { symbol: "VIX", name: "VIX", price: 18.0, changePercent: 0, priceHistory: [] },
   ]);
   
   const historyRef = useRef<Record<string, number[]>>({
     SP500: [],
+    CRUDE: [],
+    GOLD: [],
     DOW: [],
-    DXY: [],
+    VIX: [],
   });
   
   const lastApiPrices = useRef<Record<string, { price: number; changePercent: number }>>({});
@@ -614,7 +620,7 @@ export default function Landing() {
           {/* Logo */}
           <div className="flex items-center gap-3 md:gap-5 min-w-0">
             <Link href="/" data-testid="link-logo" className="font-mono font-bold tracking-[0.18em] text-[#D6A84F] text-base">
-              QUAD
+              VORA MARKETS
             </Link>
             
             {/* Desktop Navigation */}
@@ -995,7 +1001,7 @@ export default function Landing() {
               <div className="relative min-h-[420px] bg-[#071525] p-8 md:min-h-[500px] md:p-14">
                 <div className="absolute inset-x-0 top-0 h-1 bg-[#D6A84F]" />
                 <div className="absolute right-0 top-0 h-24 w-24 border-b border-l border-[#D6A84F]/30" />
-                <p className="font-mono text-[11px] tracking-[0.22em] text-[#D6A84F]">QUAD-TRAINING / 01</p>
+                <p className="font-mono text-[11px] tracking-[0.22em] text-[#D6A84F]">VORA MARKETS / 01</p>
                 <div className="mt-16 max-w-xl">
                   <p className="font-mono text-xs tracking-[0.18em] text-[#126BFF]">GLOBAL MULTI-ASSET TRADING</p>
                   <h1 className="mt-5 text-4xl font-semibold leading-[1.12] text-white md:text-6xl" data-testid="text-hero-title">
@@ -1038,7 +1044,7 @@ export default function Landing() {
                 <div className="relative my-8 space-y-5">
                   {marketData.map((item) => {
                     const positive = item.changePercent >= 0;
-                    const decimals = item.symbol === "DXY" ? 4 : 2;
+                    const decimals = 2;
                     return (
                       <div className="flex items-end justify-between border-b border-white/10 pb-4" key={item.symbol}>
                         <div>
@@ -1077,7 +1083,7 @@ export default function Landing() {
               <div className="grid divide-y divide-white/15 md:grid-cols-3 md:divide-x md:divide-y-0">
                 {marketData.map((item) => {
                   const positive = item.changePercent >= 0;
-                  const decimals = item.symbol === "DXY" ? 4 : 2;
+                  const decimals = 2;
                   return (
                     <div className="flex items-center justify-between px-5 py-5 md:px-7" key={item.symbol}>
                       <div>
@@ -1097,7 +1103,7 @@ export default function Landing() {
             <div className="mt-8 grid gap-6 md:grid-cols-2">
               {marketData.slice(0, 2).map((item, index) => {
                 const positive = item.changePercent >= 0;
-                const decimals = item.symbol === "DXY" ? 4 : 2;
+                const decimals = 2;
                 return (
                   <article className="relative min-h-[280px] overflow-hidden border border-white/25 bg-[#071525] p-6 md:p-8" key={item.symbol} data-testid={`card-market-chart-${item.symbol}`}>
                     <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] [background-size:36px_36px]" />
@@ -1132,8 +1138,8 @@ export default function Landing() {
         </section>
         <footer className="border-t border-white/15 px-4 py-8 md:px-6">
           <div className="mx-auto flex max-w-7xl flex-col justify-between gap-3 font-mono text-[10px] tracking-[0.12em] text-white/40 sm:flex-row">
-            <span>QUAD / GLOBAL MULTI-ASSET TRADING</span>
-            <span>© 2026 QUAD. ALL RIGHTS RESERVED.</span>
+            <span>VORA MARKETS / GLOBAL MULTI-ASSET TRADING</span>
+            <span>© 2026 VORA MARKETS. ALL RIGHTS RESERVED.</span>
           </div>
         </footer>
       </main>

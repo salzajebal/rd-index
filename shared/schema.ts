@@ -123,7 +123,7 @@ export const bets = pgTable("bets", {
   symbol: text("symbol").notNull(),
   direction: text("direction").notNull(), // 'long' or 'short'
   amount: decimal("amount", { precision: 20, scale: 8 }).notNull(), // bet amount
-  duration: integer("duration").notNull(), // duration in seconds (60, 120, 180, 300)
+  duration: integer("duration").notNull(), // duration in seconds
   roundNumber: integer("round_number").notNull().default(1), // round number for the day (KST based): 1min=1440/day, 3min=480/day, 5min=288/day
   strikePrice: decimal("strike_price", { precision: 20, scale: 8 }).notNull(), // price at bet time
   closePrice: decimal("close_price", { precision: 20, scale: 8 }), // price at expiry
@@ -356,7 +356,7 @@ export type Inquiry = typeof inquiries.$inferSelect;
 export const roundResults = pgTable("round_results", {
   id: serial("id").primaryKey(),
   symbol: text("symbol").notNull(),
-  duration: integer("duration").notNull(), // 60, 180, 300 seconds
+  duration: integer("duration").notNull(), // round duration in seconds
   roundNumber: integer("round_number").notNull(),
   roundDate: text("round_date").notNull(), // YYYY-MM-DD in KST
   openPrice: decimal("open_price", { precision: 20, scale: 8 }).notNull(),

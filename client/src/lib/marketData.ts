@@ -13,9 +13,11 @@ export interface MarketData {
 }
 
 export const INITIAL_MARKET_DATA: MarketData[] = [
-  { symbol: 'SP500', name: 'S&P500', price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, category: '통화' },
+  { symbol: 'SP500', name: 'S&P500 CFD', price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, category: '통화' },
+  { symbol: 'CRUDE', name: '크루드오일', price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, category: '통화' },
+  { symbol: 'GOLD', name: 'GOLD', price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, category: '통화' },
   { symbol: 'DOW', name: '다우존스', price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, category: '통화' },
-  { symbol: 'DXY', name: '달러(DXY)', price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, category: '통화' },
+  { symbol: 'VIX', name: 'VIX', price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, category: '통화' },
 ];
 
 export function useMarketData() {

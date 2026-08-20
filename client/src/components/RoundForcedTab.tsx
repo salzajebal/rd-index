@@ -9,8 +9,10 @@ import {
 
 const SYMBOL_NAMES: Record<string, string> = {
   SP500: 'S&P 500',
+  CRUDE: '크루드오일',
+  GOLD: 'GOLD',
   DOW: '다우존스',
-  DXY: '달러 인덱스',
+  VIX: 'VIX',
 };
 
 interface RoundForcedTabProps {
@@ -19,7 +21,7 @@ interface RoundForcedTabProps {
 
 export function RoundForcedTab({ apiBase = 'admin' }: RoundForcedTabProps) {
   const [selectedSymbol, setSelectedSymbol] = useState<string>('SP500');
-  const [selectedDuration, setSelectedDuration] = useState<number>(300);
+  const [selectedDuration, setSelectedDuration] = useState<number>(120);
   const [timeLeft, setTimeLeft] = useState({ minutes: 0, seconds: 0 });
   const [currentRound, setCurrentRound] = useState(1);
   const [isToggling, setIsToggling] = useState(false);
@@ -321,7 +323,7 @@ export function RoundForcedTab({ apiBase = 'admin' }: RoundForcedTabProps) {
             <div className="space-y-3">
               <label className="text-sm text-muted-foreground font-medium">종목 선택</label>
               <div className="grid grid-cols-3 gap-2">
-                {[{ s: 'SP500', l: 'S&P 500' }, { s: 'DOW', l: '다우존스' }, { s: 'DXY', l: '달러 인덱스' }].map(({ s, l }) => (
+                {[{ s: 'SP500', l: 'S&P 500' }, { s: 'CRUDE', l: '크루드오일' }, { s: 'GOLD', l: 'GOLD' }, { s: 'DOW', l: '다우존스' }, { s: 'VIX', l: 'VIX' }].map(({ s, l }) => (
                   <Button
                     key={s}
                     type="button"
@@ -337,7 +339,7 @@ export function RoundForcedTab({ apiBase = 'admin' }: RoundForcedTabProps) {
             <div className="space-y-3">
               <label className="text-sm text-muted-foreground font-medium">시간 선택</label>
               <div className="flex gap-2">
-                {[300].map(d => (
+                {[120].map(d => (
                   <Button
                     key={d}
                     type="button"

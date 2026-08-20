@@ -7,8 +7,6 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getForexDecimals(symbol?: string): number {
   if (!symbol) return 2;
-  const base = symbol.split('-')[0].toUpperCase();
-  if (base === 'DXY') return 4;
   return 2;
 }
 

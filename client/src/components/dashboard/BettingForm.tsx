@@ -46,7 +46,7 @@ interface GameResult {
   displayAfter?: number;
 }
 
-const MULTIPLIER = 1.95;
+const MULTIPLIER = 2.00;
 
 // Get KST Date
 const getKSTDate = (): Date => {
@@ -513,7 +513,7 @@ export function BettingForm({ currentPrice, game, balance, onBet, isBetting = fa
     return `${seconds / 60}분`;
   };
 
-  const lockThreshold = game.duration <= 60 ? 10 : game.duration <= 180 ? 15 : 60;
+  const lockThreshold = 15;
   const isBettingLocked = timeRemaining <= lockThreshold;
 
   // Clear justPlacedBet when the round changes (new round started = previous bet settled or expired)
