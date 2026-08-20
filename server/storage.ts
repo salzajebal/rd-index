@@ -1,6 +1,6 @@
 import { type User, type InsertUser, type Bet, type InsertBet, type Setting, type Message, type InsertMessage, type Affiliate, type InsertAffiliate, type AffiliateCommission, type AffiliateSettlement, type InsertAffiliateSettlement, type Announcement, type InsertAnnouncement, type BlockedIp, type InsertBlockedIp, type MaintenanceSymbol, type InsertMaintenanceSymbol, type TransactionRequest, type InsertTransactionRequest, type Inquiry, type InsertInquiry, type RoundResult, type InsertRoundResult, type LoginHistory, type InsertLoginHistory, type InquiryTemplate, type InsertInquiryTemplate, type RoundForcedDirection, type InsertRoundForcedDirection, type ForexCandle, type InsertForexCandle, type Branch, type InsertBranch, users, bets, settings, messages, affiliates, affiliateCommissions, affiliateSettlements, announcements, blockedIps, maintenanceSymbols, transactionRequests, inquiries, roundResults, loginHistory, inquiryTemplates, roundForcedDirections, forexCandles, branches } from "@shared/schema";
 import { db, pool } from "./db";
-import { eq, and, desc, lt, gt, sql, gte, inArray, ilike, or } from "drizzle-orm";
+import { eq, and, desc, lt, gt, sql, gte, inArray, ilike, or, ne } from "drizzle-orm";
 
 export interface UserVolume {
   userId: string;
@@ -40,6 +40,29 @@ export interface DailyStats {
   loseCount: number;
 }
 
+export const ADMIN_BULK_DELETE_TARGETS = [
+  "users",
+  "pending-users",
+  "bets",
+  "deposits",
+  "withdrawals",
+  "inquiries",
+  "messages",
+  "announcements",
+  "affiliates",
+  "branches",
+  "blocked-ips",
+  "maintenance",
+  "round-forced",
+] as const;
+
+export type AdminBulkDeleteTarget = typeof ADMIN_BULK_DELETE_TARGETS[number];
+
+export interface AdminBulkDeleteResult {
+  deletedCount: number;
+  deletedUserIds?: string[];
+}
+
 export interface IStorage {
   // User methods
   getUser(id: string): Promise<User | undefined>;
@@ -53,6 +76,7 @@ export interface IStorage {
   holdUser(userId: string): Promise<User>;
   updateUser(id: string, data: Partial<User>): Promise<User>;
   deleteUser(id: string): Promise<void>;
+  bulkDeleteAdminRecords(target: AdminBulkDeleteTarget): Promise<AdminBulkDeleteResult>;
   updateLastLogin(userId: string, ip?: string): Promise<void>;
   updateUserStats(userId: string, betAmount: number, winAmount: number): Promise<void>;
   setPendingBalanceAdjustment(userId: string, amount: string): Promise<void>;
@@ -287,6 +311,108 @@ export class DatabaseStorage implements IStorage {
     await db.delete(affiliateCommissions).where(eq(affiliateCommissions.userId, id));
     // Finally delete the user
     await db.delete(users).where(eq(users.id, id));
+  }
+
+  async bulkDeleteAdminRecords(target: AdminBulkDeleteTarget): Promise<AdminBulkDeleteResult> {
+    return db.transaction(async (tx) => {
+      const deleteUsersByIds = async (userIds: string[]): Promise<AdminBulkDeleteResult> => {
+        if (userIds.length === 0) {
+          return { deletedCount: 0, deletedUserIds: [] };
+        }
+
+        await tx.delete(affiliateCommissions).where(inArray(affiliateCommissions.userId, userIds));
+        await tx.delete(bets).where(inArray(bets.userId, userIds));
+        await tx.delete(transactionRequests).where(inArray(transactionRequests.userId, userIds));
+        await tx.delete(inquiries).where(inArray(inquiries.userId, userIds));
+        await tx.delete(loginHistory).where(inArray(loginHistory.userId, userIds));
+        await tx.delete(messages).where(or(
+          inArray(messages.senderId, userIds),
+          inArray(messages.receiverId, userIds),
+        ));
+
+        const deletedUsers = await tx.delete(users)
+          .where(inArray(users.id, userIds))
+          .returning({ id: users.id });
+
+        return { deletedCount: deletedUsers.length, deletedUserIds: deletedUsers.map((user) => user.id) };
+      };
+
+      switch (target) {
+        case "users": {
+          // Admin accounts stay intact so bulk cleanup can never lock out every administrator.
+          const removableUsers = await tx.select({ id: users.id })
+            .from(users)
+            .where(ne(users.role, "admin"));
+          return deleteUsersByIds(removableUsers.map((user) => user.id));
+        }
+        case "pending-users": {
+          const removableUsers = await tx.select({ id: users.id })
+            .from(users)
+            .where(and(
+              ne(users.role, "admin"),
+              or(eq(users.approvalStatus, "pending"), eq(users.approvalStatus, "hold")),
+            ));
+          return deleteUsersByIds(removableUsers.map((user) => user.id));
+        }
+        case "bets": {
+          await tx.delete(affiliateCommissions);
+          const deleted = await tx.delete(bets).returning({ id: bets.id });
+          return { deletedCount: deleted.length };
+        }
+        case "deposits": {
+          const deleted = await tx.delete(transactionRequests)
+            .where(eq(transactionRequests.type, "deposit"))
+            .returning({ id: transactionRequests.id });
+          return { deletedCount: deleted.length };
+        }
+        case "withdrawals": {
+          const deleted = await tx.delete(transactionRequests)
+            .where(eq(transactionRequests.type, "withdrawal"))
+            .returning({ id: transactionRequests.id });
+          return { deletedCount: deleted.length };
+        }
+        case "inquiries": {
+          const deletedInquiries = await tx.delete(inquiries).returning({ id: inquiries.id });
+          await tx.delete(inquiryTemplates);
+          return { deletedCount: deletedInquiries.length };
+        }
+        case "messages": {
+          const deleted = await tx.delete(messages).returning({ id: messages.id });
+          return { deletedCount: deleted.length };
+        }
+        case "announcements": {
+          const deleted = await tx.delete(announcements).returning({ id: announcements.id });
+          return { deletedCount: deleted.length };
+        }
+        case "affiliates": {
+          await tx.update(users).set({ affiliateId: null }).where(sql`${users.affiliateId} IS NOT NULL`);
+          await tx.delete(affiliateCommissions);
+          await tx.delete(affiliateSettlements);
+          const deleted = await tx.delete(affiliates).returning({ id: affiliates.id });
+          return { deletedCount: deleted.length };
+        }
+        case "branches": {
+          const deleted = await tx.delete(branches).returning({ id: branches.id });
+          return { deletedCount: deleted.length };
+        }
+        case "blocked-ips": {
+          const deleted = await tx.delete(blockedIps).returning({ id: blockedIps.id });
+          return { deletedCount: deleted.length };
+        }
+        case "maintenance": {
+          const deleted = await tx.delete(maintenanceSymbols).returning({ id: maintenanceSymbols.id });
+          return { deletedCount: deleted.length };
+        }
+        case "round-forced": {
+          const deletedDirections = await tx.delete(roundForcedDirections)
+            .returning({ id: roundForcedDirections.id });
+          const deletedGlobalSettings = await tx.delete(settings)
+            .where(sql`${settings.key} LIKE 'global_forced:%'`)
+            .returning({ key: settings.key });
+          return { deletedCount: deletedDirections.length + deletedGlobalSettings.length };
+        }
+      }
+    });
   }
 
   async updateLastLogin(userId: string, ip?: string): Promise<void> {

@@ -1,6 +1,6 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
+import { ADMIN_BULK_DELETE_TARGETS, storage, type AdminBulkDeleteTarget } from "./storage";
 import { insertBetSchema, loginSchema } from "@shared/schema";
 import { z } from "zod";
 import session from "express-session";
@@ -1498,6 +1498,55 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Delete user error:", error);
       res.status(500).json({ error: "회원 삭제에 실패했습니다" });
+    }
+  });
+
+  app.delete("/api/admin/bulk-delete/:target", requireAdmin, async (req, res) => {
+    try {
+      const target = req.params.target as AdminBulkDeleteTarget;
+      if (!ADMIN_BULK_DELETE_TARGETS.includes(target)) {
+        return res.status(400).json({ error: "유효하지 않은 전체삭제 대상입니다" });
+      }
+
+      const result = await storage.bulkDeleteAdminRecords(target);
+
+      if (target === "blocked-ips") {
+        blockedIpSet.clear();
+      }
+
+      for (const userId of result.deletedUserIds || []) {
+        broadcastToUser(userId, "force_logout", { message: "관리자에 의해 계정이 삭제되었습니다." });
+        onlineUsers.delete(userId);
+      }
+
+      if (result.deletedUserIds?.length) {
+        await Promise.all(result.deletedUserIds.map(async (userId) => {
+          try {
+            await sessionPool.query(
+              `DELETE FROM user_sessions WHERE sess::text LIKE $1`,
+              [`%"userId":"${userId}"%`],
+            );
+          } catch (sessionError) {
+            console.error(`Failed to delete session during bulk user deletion (${userId}):`, sessionError);
+          }
+        }));
+      }
+
+      broadcastToAdmins("admin_bulk_deleted", {
+        target,
+        deletedCount: result.deletedCount,
+        initiatorId: req.session.adminUserId,
+      });
+
+      res.json({
+        success: true,
+        target,
+        deletedCount: result.deletedCount,
+        message: `${result.deletedCount}건이 삭제되었습니다`,
+      });
+    } catch (error) {
+      console.error("Admin bulk delete error:", error);
+      res.status(500).json({ error: "전체삭제 처리에 실패했습니다" });
     }
   });
 

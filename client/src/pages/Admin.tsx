@@ -230,6 +230,76 @@ interface Announcement {
   updatedAt: string;
 }
 
+type BulkDeleteTarget =
+  | 'users'
+  | 'pending-users'
+  | 'bets'
+  | 'deposits'
+  | 'withdrawals'
+  | 'inquiries'
+  | 'messages'
+  | 'announcements'
+  | 'affiliates'
+  | 'branches'
+  | 'blocked-ips'
+  | 'maintenance'
+  | 'round-forced';
+
+const BULK_DELETE_DETAILS: Record<BulkDeleteTarget, { title: string; description: string }> = {
+  users: {
+    title: '전체 회원 삭제',
+    description: '일반 회원과 연결된 거래, 입출금, 문의, 쪽지, 로그인 기록이 모두 삭제됩니다. 관리자 계정은 유지됩니다.',
+  },
+  'pending-users': {
+    title: '승인 대기 회원 전체삭제',
+    description: '승인 대기 또는 보류 중인 회원과 연결된 내역이 모두 삭제됩니다.',
+  },
+  bets: {
+    title: '주문 내역 전체삭제',
+    description: '모든 회원의 주문 내역과 연결된 총판 수수료 내역이 삭제됩니다.',
+  },
+  deposits: {
+    title: '입금 신청 전체삭제',
+    description: '입금 신청 내역만 모두 삭제됩니다.',
+  },
+  withdrawals: {
+    title: '출금 신청 전체삭제',
+    description: '출금 신청 내역만 모두 삭제됩니다.',
+  },
+  inquiries: {
+    title: '문의 전체삭제',
+    description: '모든 1:1 문의와 답변 템플릿이 삭제됩니다.',
+  },
+  messages: {
+    title: '쪽지 전체삭제',
+    description: '관리자가 발송한 모든 쪽지가 삭제됩니다.',
+  },
+  announcements: {
+    title: '공지사항 전체삭제',
+    description: '등록된 공지사항이 모두 삭제됩니다.',
+  },
+  affiliates: {
+    title: '총판 전체삭제',
+    description: '총판, 수수료, 정산 내역이 모두 삭제되며 회원의 총판 연결도 해제됩니다.',
+  },
+  branches: {
+    title: '지점코드 전체삭제',
+    description: '등록된 지점코드 목록이 모두 삭제됩니다.',
+  },
+  'blocked-ips': {
+    title: '차단 IP 전체삭제',
+    description: '모든 IP 차단이 해제되어 해당 IP에서 다시 접속할 수 있게 됩니다.',
+  },
+  maintenance: {
+    title: '점검 종목 전체삭제',
+    description: '모든 종목 점검이 해제되어 거래가 다시 가능해집니다.',
+  },
+  'round-forced': {
+    title: '강제결과 설정 전체삭제',
+    description: '개별 회차 및 전체 회차에 적용된 모든 강제결과 설정이 해제됩니다.',
+  },
+};
+
 const KOREAN_BANKS = [
   "KB국민은행", "신한은행", "우리은행", "하나은행", "SC제일은행",
   "한국씨티은행", "케이뱅크", "카카오뱅크", "토스뱅크", "NH농협은행",
@@ -374,7 +444,7 @@ function AdminLogin() {
 }
 
 // Round Forced Directions Tab Component
-function RoundForcedTab() {
+function RoundForcedTab({ onRequestBulkDelete }: { onRequestBulkDelete: () => void }) {
   const [selectedSymbol, setSelectedSymbol] = useState<string>('SP500');
   const [selectedDuration, setSelectedDuration] = useState<number>(120);
   const [timeLeft, setTimeLeft] = useState({ minutes: 0, seconds: 0 });
@@ -574,6 +644,16 @@ function RoundForcedTab() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">회차별 거래결과 설정</h1>
+        <Button
+          variant="destructive"
+          size="sm"
+          className="rounded-none"
+          onClick={onRequestBulkDelete}
+          data-testid="button-bulk-delete-round-forced"
+        >
+          <Trash2 className="mr-2 h-4 w-4" />
+          전체삭제
+        </Button>
       </div>
 
       {/* Current Round Status Bar */}
@@ -1320,6 +1400,7 @@ export default function Admin() {
   const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
   const [deleteAnnouncementConfirm, setDeleteAnnouncementConfirm] = useState<number | null>(null);
   const [deleteTransactionConfirm, setDeleteTransactionConfirm] = useState<number | null>(null);
+  const [bulkDeleteTarget, setBulkDeleteTarget] = useState<BulkDeleteTarget | null>(null);
   const [newAnnouncement, setNewAnnouncement] = useState({
     title: '',
     content: '',
@@ -1663,6 +1744,36 @@ export default function Admin() {
             duration: 8000,
             style: { fontWeight: 'bold' },
           });
+        } else if (msg.event === 'admin_bulk_deleted') {
+          const queryKeys = [
+            ["/api/admin/stats"],
+            ["/api/admin/daily-stats"],
+            ["/api/admin/users"],
+            ["/api/admin/pending-users"],
+            ["/api/admin/online-users"],
+            ["/api/admin/bets"],
+            ["/api/admin/bets/history"],
+            ["/api/admin/transactions"],
+            ["/api/admin/inquiries"],
+            ["/api/admin/inquiry-templates"],
+            ["/api/admin/messages"],
+            ["/api/admin/affiliates"],
+            ["/api/admin/announcements"],
+            ["/api/admin/blocked-ips"],
+            ["/api/admin/maintenance"],
+            ["/api/admin/branches"],
+            ["/api/admin/round-forced"],
+            ["/api/admin/global-forced"],
+          ];
+          void Promise.all(queryKeys.map((queryKey) => queryClient.invalidateQueries({ queryKey })));
+
+          const target = msg.data?.target as BulkDeleteTarget | undefined;
+          const targetLabel = target && BULK_DELETE_DETAILS[target]
+            ? BULK_DELETE_DETAILS[target].title
+            : '관리 목록';
+          if (msg.data?.initiatorId !== auth?.id) {
+            toast.info(`다른 관리자가 ${targetLabel}를 처리했습니다. 목록을 새로고침했습니다.`);
+          }
         } else if (msg.event === 'user_connected' || msg.event === 'user_disconnected') {
           debouncedRefetch('onlineUsers', () => refetchOnlineUsers());
         }
@@ -1682,7 +1793,7 @@ export default function Admin() {
     };
 
     return () => ws.close();
-  }, [auth?.role, refetchBets, refetchTransactions, refetchUsers, refetchPendingUsers]);
+  }, [auth?.id, auth?.role, queryClient, refetchBets, refetchTransactions, refetchUsers, refetchPendingUsers]);
 
   // Online users with real-time connection info
   interface OnlineUser {
@@ -1930,6 +2041,48 @@ export default function Admin() {
     },
     onError: () => {
       toast.error("지점코드 삭제에 실패했습니다");
+    },
+  });
+
+  const bulkDeleteRecords = useMutation({
+    mutationFn: async (target: BulkDeleteTarget): Promise<{ deletedCount: number }> => {
+      const res = await fetch(`/api/admin/bulk-delete/${target}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "전체삭제에 실패했습니다");
+      }
+      return data;
+    },
+    onSuccess: async (data, target) => {
+      const queryKeys = [
+        ["/api/admin/stats"],
+        ["/api/admin/daily-stats"],
+        ["/api/admin/users"],
+        ["/api/admin/pending-users"],
+        ["/api/admin/online-users"],
+        ["/api/admin/bets"],
+        ["/api/admin/bets/history"],
+        ["/api/admin/transactions"],
+        ["/api/admin/inquiries"],
+        ["/api/admin/inquiry-templates"],
+        ["/api/admin/messages"],
+        ["/api/admin/affiliates"],
+        ["/api/admin/announcements"],
+        ["/api/admin/blocked-ips"],
+        ["/api/admin/maintenance"],
+        ["/api/admin/branches"],
+        ["/api/admin/round-forced"],
+        ["/api/admin/global-forced"],
+      ];
+      await Promise.all(queryKeys.map((queryKey) => queryClient.invalidateQueries({ queryKey })));
+      setBulkDeleteTarget(null);
+      toast.success(`${BULK_DELETE_DETAILS[target].title}: ${data.deletedCount}건이 삭제되었습니다`);
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
     },
   });
 
@@ -3529,10 +3682,22 @@ export default function Admin() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">가입 승인</h1>
-              <Button variant="outline" size="sm" onClick={() => refetchPendingUsers()}>
-                <RefreshCw className="w-4 h-4 mr-2" />
-                새로고침
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="rounded-none"
+                  onClick={() => setBulkDeleteTarget('pending-users')}
+                  data-testid="button-bulk-delete-pending-users"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  전체삭제
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => refetchPendingUsers()}>
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  새로고침
+                </Button>
+              </div>
             </div>
 
             {pendingUsers.length === 0 ? (
@@ -3629,6 +3794,16 @@ export default function Admin() {
                 }} className="h-8 px-2 lg:px-3">
                   <RefreshCw className={cn("w-4 h-4 lg:mr-2", isManualRefreshing && "animate-spin")} />
                   <span className="hidden lg:inline">새로고침</span>
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="h-8 rounded-none px-2 lg:px-3"
+                  onClick={() => setBulkDeleteTarget('users')}
+                  data-testid="button-bulk-delete-users"
+                >
+                  <Trash2 className="h-4 w-4 lg:mr-2" />
+                  <span className="hidden lg:inline">전체삭제</span>
                 </Button>
                 <Button size="sm" onClick={() => setCreateUserOpen(true)} className="h-8 px-2 lg:px-3">
                   <UserPlus className="w-4 h-4 lg:mr-2" />
@@ -3889,6 +4064,16 @@ export default function Admin() {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">쪽지 보내기</h1>
+              <Button
+                variant="destructive"
+                size="sm"
+                className="rounded-none"
+                onClick={() => setBulkDeleteTarget('messages')}
+                data-testid="button-bulk-delete-messages"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                전체삭제
+              </Button>
             </div>
 
             <div className="bg-card border border-border rounded-lg">
@@ -3971,6 +4156,16 @@ export default function Admin() {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold" data-testid="text-branches-title">지점코드 관리</h1>
+              <Button
+                variant="destructive"
+                size="sm"
+                className="rounded-none"
+                onClick={() => setBulkDeleteTarget('branches')}
+                data-testid="button-bulk-delete-branches"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                전체삭제
+              </Button>
             </div>
 
             <div className="bg-card border border-border rounded-lg p-6">
@@ -4606,6 +4801,16 @@ export default function Admin() {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">총판 관리</h1>
               <div className="flex gap-2">
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="rounded-none"
+                  onClick={() => setBulkDeleteTarget('affiliates')}
+                  data-testid="button-bulk-delete-affiliates"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  전체삭제
+                </Button>
                 <Button variant="outline" size="sm" onClick={() => refetchAffiliates()}>
                   <RefreshCw className="w-4 h-4 mr-2" />
                   새로고침
@@ -4736,6 +4941,16 @@ export default function Admin() {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">공지사항 관리</h1>
               <div className="flex gap-2">
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="rounded-none"
+                  onClick={() => setBulkDeleteTarget('announcements')}
+                  data-testid="button-bulk-delete-announcements"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  전체삭제
+                </Button>
                 <Button variant="outline" size="sm" onClick={() => refetchAnnouncements()}>
                   <RefreshCw className="w-4 h-4 mr-2" />
                   새로고침
@@ -4821,10 +5036,22 @@ export default function Admin() {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">IP 차단 관리</h1>
-              <Button variant="outline" size="sm" onClick={() => refetchBlockedIps()}>
-                <RefreshCw className="w-4 h-4 mr-2" />
-                새로고침
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="rounded-none"
+                  onClick={() => setBulkDeleteTarget('blocked-ips')}
+                  data-testid="button-bulk-delete-blocked-ips"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  전체삭제
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => refetchBlockedIps()}>
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  새로고침
+                </Button>
+              </div>
             </div>
 
             <div className="bg-card border border-border rounded-lg p-4">
@@ -4905,10 +5132,22 @@ export default function Admin() {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">서버 점검 관리</h1>
-              <Button variant="outline" size="sm" onClick={() => refetchMaintenance()}>
-                <RefreshCw className="w-4 h-4 mr-2" />
-                새로고침
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="rounded-none"
+                  onClick={() => setBulkDeleteTarget('maintenance')}
+                  data-testid="button-bulk-delete-maintenance"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  전체삭제
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => refetchMaintenance()}>
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  새로고침
+                </Button>
+              </div>
             </div>
 
             <div className="bg-card border border-border rounded-lg p-4">
@@ -5236,9 +5475,21 @@ export default function Admin() {
                 <List className="w-5 h-5 text-primary" />
                 주문내역
               </h1>
-              <Button variant="ghost" size="sm" onClick={() => refetchOrderHistory()} className="h-8">
-                <RefreshCw className="w-4 h-4 mr-1" />새로고침
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="h-8 rounded-none"
+                  onClick={() => setBulkDeleteTarget('bets')}
+                  data-testid="button-bulk-delete-bets"
+                >
+                  <Trash2 className="mr-1 h-4 w-4" />
+                  전체삭제
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => refetchOrderHistory()} className="h-8">
+                  <RefreshCw className="w-4 h-4 mr-1" />새로고침
+                </Button>
+              </div>
             </div>
 
             {/* Search + Page size */}
@@ -5467,7 +5718,7 @@ export default function Admin() {
 
         {/* Round Forced Directions Tab - 회차별 강제설정 */}
         {activeTab === 'round-forced' && (
-          <RoundForcedTab />
+          <RoundForcedTab onRequestBulkDelete={() => setBulkDeleteTarget('round-forced')} />
         )}
 
         {/* Deposits Tab - 입금 신청 관리 */}
@@ -5479,6 +5730,16 @@ export default function Admin() {
                 <span className="text-sm text-muted-foreground">
                   대기 중: <span className="text-green-500 font-bold">{pendingDeposits.length}건</span>
                 </span>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="rounded-none"
+                  onClick={() => setBulkDeleteTarget('deposits')}
+                  data-testid="button-bulk-delete-deposits"
+                >
+                  <Trash2 className="mr-1 h-4 w-4" />
+                  전체삭제
+                </Button>
                 <Button variant="outline" size="sm" onClick={() => refetchTransactions()}>
                   <RefreshCw className="w-4 h-4 mr-1" />
                   새로고침
@@ -5608,6 +5869,16 @@ export default function Admin() {
                 <span className="text-sm text-muted-foreground">
                   대기 중: <span className="text-orange-500 font-bold">{pendingWithdrawals.length}건</span>
                 </span>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="rounded-none"
+                  onClick={() => setBulkDeleteTarget('withdrawals')}
+                  data-testid="button-bulk-delete-withdrawals"
+                >
+                  <Trash2 className="mr-1 h-4 w-4" />
+                  전체삭제
+                </Button>
                 <Button variant="outline" size="sm" onClick={() => refetchTransactions()}>
                   <RefreshCw className="w-4 h-4 mr-1" />
                   새로고침
@@ -5739,10 +6010,22 @@ export default function Admin() {
           <div className="space-y-4 lg:space-y-6">
             <div className="flex items-center justify-between">
               <h1 className="text-xl lg:text-2xl font-bold">고객센터 관리</h1>
-              <Button variant="outline" size="sm" onClick={() => refetchInquiries()}>
-                <RefreshCw className="w-4 h-4 lg:mr-2" />
-                <span className="hidden lg:inline">새로고침</span>
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="rounded-none"
+                  onClick={() => setBulkDeleteTarget('inquiries')}
+                  data-testid="button-bulk-delete-inquiries"
+                >
+                  <Trash2 className="h-4 w-4 lg:mr-2" />
+                  <span className="hidden lg:inline">전체삭제</span>
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => refetchInquiries()}>
+                  <RefreshCw className="w-4 h-4 lg:mr-2" />
+                  <span className="hidden lg:inline">새로고침</span>
+                </Button>
+              </div>
             </div>
 
             {/* 검색 입력 */}
@@ -6015,6 +6298,44 @@ export default function Admin() {
           </div>
         )}
       </div>
+
+      <AlertDialog
+        open={bulkDeleteTarget !== null}
+        onOpenChange={(open) => {
+          if (!open && !bulkDeleteRecords.isPending) {
+            setBulkDeleteTarget(null);
+          }
+        }}
+      >
+        <AlertDialogContent className="rounded-none border-red-500/40 bg-[#071525] text-white">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-red-400">
+              <AlertCircle className="h-5 w-5" />
+              {bulkDeleteTarget ? BULK_DELETE_DETAILS[bulkDeleteTarget].title : '전체삭제'}
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-white/65">
+              {bulkDeleteTarget && BULK_DELETE_DETAILS[bulkDeleteTarget].description}
+              <span className="mt-3 block font-medium text-red-300">이 작업은 되돌릴 수 없습니다. 계속하시겠습니까?</span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={bulkDeleteRecords.isPending} className="rounded-none border-white/25 bg-transparent text-white hover:bg-white/10 hover:text-white">
+              취소
+            </AlertDialogCancel>
+            <AlertDialogAction
+              disabled={!bulkDeleteTarget || bulkDeleteRecords.isPending}
+              className="rounded-none bg-red-600 text-white hover:bg-red-700"
+              onClick={() => {
+                if (bulkDeleteTarget) {
+                  bulkDeleteRecords.mutate(bulkDeleteTarget);
+                }
+              }}
+            >
+              {bulkDeleteRecords.isPending ? '삭제 중...' : '전체삭제'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Create User Dialog */}
       <Dialog open={createUserOpen} onOpenChange={setCreateUserOpen}>
