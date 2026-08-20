@@ -62,22 +62,31 @@ interface LandingMarketData {
   priceHistory: number[];
 }
 
-function useLandingMarketData() {
-  const [markets, setMarkets] = useState<LandingMarketData[]>([
-    { symbol: "SP500", name: "S&P500 CFD", price: 5320.0, changePercent: 0, priceHistory: [] },
-    { symbol: "CRUDE", name: "크루드오일", price: 75.0, changePercent: 0, priceHistory: [] },
-    { symbol: "GOLD", name: "GOLD", price: 2300.0, changePercent: 0, priceHistory: [] },
-    { symbol: "DOW", name: "다우존스", price: 39500.0, changePercent: 0, priceHistory: [] },
-    { symbol: "VIX", name: "VIX", price: 18.0, changePercent: 0, priceHistory: [] },
-  ]);
-  
-  const historyRef = useRef<Record<string, number[]>>({
-    SP500: [],
-    CRUDE: [],
-    GOLD: [],
-    DOW: [],
-    VIX: [],
-  });
+const TRADING_MARKETS: LandingMarketData[] = [
+  { symbol: "SP500", name: "S&P500 CFD", price: 5320.0, changePercent: 0, priceHistory: [] },
+  { symbol: "CRUDE", name: "크루드오일", price: 75.0, changePercent: 0, priceHistory: [] },
+  { symbol: "GOLD", name: "GOLD", price: 2300.0, changePercent: 0, priceHistory: [] },
+  { symbol: "DOW", name: "다우존스", price: 39500.0, changePercent: 0, priceHistory: [] },
+  { symbol: "VIX", name: "VIX", price: 18.0, changePercent: 0, priceHistory: [] },
+];
+
+const MARKET_OVERVIEW_MARKETS: LandingMarketData[] = [
+  { symbol: "KOSPI", name: "KOSPI", price: 0, changePercent: 0, priceHistory: [] },
+  { symbol: "KOSDAQ", name: "KOSDAQ", price: 0, changePercent: 0, priceHistory: [] },
+  { symbol: "GOLD", name: "GOLD", price: 0, changePercent: 0, priceHistory: [] },
+  { symbol: "SP500", name: "S&P500", price: 0, changePercent: 0, priceHistory: [] },
+  { symbol: "NASDAQ", name: "NASDAQ", price: 0, changePercent: 0, priceHistory: [] },
+  { symbol: "WTI", name: "WTI", price: 0, changePercent: 0, priceHistory: [] },
+];
+
+function useLandingMarketData(endpoint: string, initialMarkets: LandingMarketData[]) {
+  const [markets, setMarkets] = useState<LandingMarketData[]>(() =>
+    initialMarkets.map((market) => ({ ...market, priceHistory: [] })),
+  );
+
+  const historyRef = useRef<Record<string, number[]>>(
+    Object.fromEntries(initialMarkets.map(({ symbol }) => [symbol, []])) as Record<string, number[]>,
+  );
   
   const lastApiPrices = useRef<Record<string, { price: number; changePercent: number }>>({});
 
@@ -88,7 +97,7 @@ function useLandingMarketData() {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000);
         
-        const response = await fetch('/api/market/prices', {
+        const response = await fetch(endpoint, {
           signal: controller.signal,
           cache: 'no-store',
           headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
@@ -146,7 +155,7 @@ function useLandingMarketData() {
     return () => {
       clearInterval(apiInterval);
     };
-  }, []);
+  }, [endpoint]);
 
   return markets;
 }
@@ -235,7 +244,8 @@ export default function Landing() {
   const queryClient = useQueryClient();
   const { data: user } = useAuth();
   const [, setLocation] = useLocation();
-  const marketData = useLandingMarketData();
+  const marketData = useLandingMarketData('/api/market/prices', TRADING_MARKETS);
+  const overviewData = useLandingMarketData('/api/market/overview', MARKET_OVERVIEW_MARKETS);
 
   // 입금신청 "보내시는 분" 자동 세팅
   // IP 차단 여부 확인 (페이지 최초 로드 시)
@@ -1027,7 +1037,7 @@ export default function Landing() {
                 <p className="font-mono text-[10px] text-white/45">LIVE INDICATIVE PRICES · KRW</p>
               </div>
               <div className="grid divide-y divide-white/15 md:grid-cols-3 md:divide-x md:divide-y-0">
-                {marketData.map((item) => {
+                {overviewData.map((item) => {
                   const positive = item.changePercent >= 0;
                   const decimals = 2;
                   return (
@@ -1047,7 +1057,10 @@ export default function Landing() {
             </div>
 
             <div className="mt-8 grid gap-6 md:grid-cols-2">
-              {marketData.slice(0, 2).map((item, index) => {
+              {overviewData
+                .filter((item) => item.symbol === 'SP500' || item.symbol === 'GOLD')
+                .sort((a, b) => ['SP500', 'GOLD'].indexOf(a.symbol) - ['SP500', 'GOLD'].indexOf(b.symbol))
+                .map((item, index) => {
                 const positive = item.changePercent >= 0;
                 const decimals = 2;
                 return (
@@ -1462,81 +1475,82 @@ export default function Landing() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-[#14103A] py-16 px-4 border-t border-white/5">
+      <footer className="border-t border-[#1C3856] bg-[#03070D] px-4 py-16">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-10 mb-12">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <h3 className="text-xl font-bold bg-gradient-to-r from-[#A78BFA] to-[#8B5CF6] bg-clip-text text-transparent">
-                  VORA Markets
+                <span className="h-7 w-1 bg-[#D6A84F]" aria-hidden="true" />
+                <h3 className="text-xl font-bold tracking-[0.18em] text-[#D6A84F]">
+                  VORA <span className="text-white/75">MARKETS</span>
                 </h3>
               </div>
-              <p className="text-gray-400 text-sm">
+              <p className="text-sm leading-relaxed text-white/60">
                 안전하고 투명한 시스템으로<br />
                 빠르고 편리한 옵션 거래를 제공합니다.
               </p>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-gray-300">지수 거래</h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li><Link href="/trade" className="hover:text-[#A78BFA] transition-colors" data-testid="link-trade-sp500">SP500 (S&amp;P500)</Link></li>
-                <li><Link href="/trade" className="hover:text-[#A78BFA] transition-colors" data-testid="link-trade-dow">DOW (다우존스)</Link></li>
-                <li><Link href="/trade" className="hover:text-[#A78BFA] transition-colors" data-testid="link-trade-dxy">DXY (달러)</Link></li>
+              <h4 className="mb-4 font-semibold text-white">지수 거래</h4>
+              <ul className="space-y-2 text-sm text-white/60">
+                <li><Link href="/trade" className="transition-colors hover:text-[#D6A84F]" data-testid="link-trade-sp500">SP500 (S&amp;P500)</Link></li>
+                <li><Link href="/trade" className="transition-colors hover:text-[#D6A84F]" data-testid="link-trade-dow">DOW (다우존스)</Link></li>
+                <li><Link href="/trade" className="transition-colors hover:text-[#D6A84F]" data-testid="link-trade-dxy">DXY (달러)</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-gray-300">입출금</h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
+              <h4 className="mb-4 font-semibold text-white">입출금</h4>
+              <ul className="space-y-2 text-sm text-white/60">
                 <li><button onClick={() => { 
                   if (!user) { setShowLoginModal(true); return; }
                   if (!isWithinOperatingHours()) { toast.error("입출금 신청은 오전 09:00 ~ 18:00 사이에만 가능합니다"); return; }
                   setDepositAmount(''); setDepositSenderName(user?.name || user?.accountHolder || ''); setShowDepositPageModal(true);
-                }} className="hover:text-[#A78BFA] transition-colors" data-testid="link-deposit">입금신청</button></li>
+                }} className="transition-colors hover:text-[#126BFF]" data-testid="link-deposit">입금신청</button></li>
                 <li><button onClick={() => { 
                   if (!user) { setShowLoginModal(true); return; }
                   if ((user as any)?.isBettingBlocked) { toast.error("거래정지 해제 이후 다시 시도해 주세요."); return; }
                   if (!isWithinOperatingHours()) { toast.error("입출금 신청은 오전 09:00 ~ 18:00 사이에만 가능합니다"); return; }
                   setWithdrawalAmount(''); setShowWithdrawalPageModal(true);
-                }} className="hover:text-[#A78BFA] transition-colors" data-testid="link-withdraw">출금신청</button></li>
-                <li><button onClick={() => { if (user) { setShowHistoryModal(true); } else { setShowLoginModal(true); } }} className="hover:text-[#A78BFA] transition-colors" data-testid="link-transaction-history">입출금내역</button></li>
+                }} className="transition-colors hover:text-[#126BFF]" data-testid="link-withdraw">출금신청</button></li>
+                <li><button onClick={() => { if (user) { setShowHistoryModal(true); } else { setShowLoginModal(true); } }} className="transition-colors hover:text-[#126BFF]" data-testid="link-transaction-history">입출금내역</button></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-gray-300">고객센터</h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li><button onClick={() => setShowAnnouncementsModal(true)} className="hover:text-[#A78BFA] transition-colors" data-testid="link-notice">공지사항</button></li>
-                <li><button onClick={() => setShowCustomerServiceModal(true)} className="hover:text-[#A78BFA] transition-colors" data-testid="link-inquiry">고객센터</button></li>
+              <h4 className="mb-4 font-semibold text-white">고객센터</h4>
+              <ul className="space-y-2 text-sm text-white/60">
+                <li><button onClick={() => setShowAnnouncementsModal(true)} className="transition-colors hover:text-[#D6A84F]" data-testid="link-notice">공지사항</button></li>
+                <li><button onClick={() => setShowCustomerServiceModal(true)} className="transition-colors hover:text-[#D6A84F]" data-testid="link-inquiry">고객센터</button></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-white/10 pt-8 mb-6">
+          <div className="mb-6 border-t border-[#1C3856] pt-8">
             <div className="grid md:grid-cols-3 gap-6">
               <div>
-                <h4 className="font-semibold mb-3 text-gray-300 text-sm">입·출금 및 상담 가능시간</h4>
-                <p className="text-gray-500 text-xs mb-2">(주말/공휴일 제외)</p>
-                <ul className="space-y-1 text-gray-400 text-xs">
+                <h4 className="mb-3 text-sm font-semibold text-[#D6A84F]">입·출금 및 상담 가능시간</h4>
+                <p className="mb-2 text-xs text-white/40">(주말/공휴일 제외)</p>
+                <ul className="space-y-1 text-xs text-white/60">
                   <li className="flex justify-between"><span>고객상담</span><span>평일 09:00 ~ 18:00</span></li>
                   <li className="flex justify-between"><span>입금시간</span><span>평일 09:00 ~ 18:00</span></li>
                   <li className="flex justify-between"><span>출금시간</span><span>평일 09:00 ~ 18:00</span></li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold mb-3 text-gray-300 text-sm">거래 상품</h4>
-                <ul className="space-y-1 text-gray-400 text-xs">
+                <h4 className="mb-3 text-sm font-semibold text-[#D6A84F]">거래 상품</h4>
+                <ul className="space-y-1 text-xs text-white/60">
                   <li className="flex justify-between"><span>S&amp;P500</span><span></span></li>
                   <li className="flex justify-between"><span>다우존스</span><span></span></li>
                   <li className="flex justify-between"><span>US Dollar</span><span></span></li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold mb-3 text-gray-300 text-sm">지수 CFD 거래</h4>
-                <p className="text-gray-400 text-xs">00:00 ~ 24:00</p>
+                <h4 className="mb-3 text-sm font-semibold text-[#D6A84F]">지수 CFD 거래</h4>
+                <p className="text-xs text-white/60">00:00 ~ 24:00</p>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-white/10 pt-6 text-center text-gray-500 text-sm space-y-2">
+          <div className="space-y-2 border-t border-[#1C3856] pt-6 text-center text-sm text-white/40">
             <p>© 2026 VORA Markets. All rights reserved.</p>
           </div>
         </div>

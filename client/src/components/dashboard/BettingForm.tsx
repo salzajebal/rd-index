@@ -701,12 +701,12 @@ export function BettingForm({ currentPrice, game, balance, onBet, isBetting = fa
             </div>
             <div className={cn(
               "flex items-center justify-center gap-2 rounded py-2 px-2",
-              isBettingLocked ? "bg-red-500/20 animate-pulse" : "bg-blue-500/20"
+              isBettingLocked ? "animate-pulse bg-[#D6A84F]/20" : "bg-[#126BFF]/20"
             )}>
-              <Timer className={cn("w-3.5 h-3.5", isBettingLocked ? "text-red-500" : "text-blue-500")} />
+              <Timer className={cn("w-3.5 h-3.5", isBettingLocked ? "text-[#D6A84F]" : "text-[#126BFF]")} />
               <span className={cn(
                 "text-lg font-bold font-mono",
-                isBettingLocked ? "text-red-500" : "text-blue-500"
+                isBettingLocked ? "text-[#D6A84F]" : "text-[#126BFF]"
               )}>
                 {formatTime(timeRemaining)}
               </span>
@@ -779,8 +779,8 @@ export function BettingForm({ currentPrice, game, balance, onBet, isBetting = fa
             </div>
 
             {isBettingLocked && (
-              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-2 text-center">
-                <span className="text-red-500 font-medium text-xs">거래 마감 ({formatDuration(game.duration)} 회차) - 다음 회차를 기다려주세요</span>
+              <div className="rounded-lg border border-[#D6A84F]/30 bg-[#D6A84F]/10 p-2 text-center">
+                <span className="text-xs font-medium text-[#D6A84F]">거래 마감 ({formatDuration(game.duration)} 회차) - 다음 회차를 기다려주세요</span>
               </div>
             )}
 

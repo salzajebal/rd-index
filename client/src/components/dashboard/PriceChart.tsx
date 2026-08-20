@@ -3,7 +3,6 @@ import { createChart, ColorType, CandlestickData, Time, CandlestickSeries } from
 import type { IChartApi, ISeriesApi } from "lightweight-charts";
 import { MarketData } from "@/lib/marketData";
 import { FOREX_DISPLAY, type ForexSymbol } from "@/lib/tradingGames";
-import { useTheme } from "@/lib/theme";
 
 interface PriceChartProps {
   symbol: string;
@@ -11,22 +10,13 @@ interface PriceChartProps {
   duration?: number;
 }
 
-const DARK_COLORS = {
-  background: '#131722',
-  text: '#787b86',
-  grid: '#1e222d',
-  crosshair: '#505050',
-  crosshairLabel: '#363a45',
-  border: '#1e222d',
-};
-
-const LIGHT_COLORS = {
-  background: '#ffffff',
-  text: '#333333',
-  grid: '#e8e8e8',
-  crosshair: '#9a9a9a',
-  crosshairLabel: '#d0d0d0',
-  border: '#e0e0e0',
+const VORA_CHART_COLORS = {
+  background: '#03070D',
+  text: '#FFFFFFB3',
+  grid: '#10233A',
+  crosshair: '#D6A84F',
+  crosshairLabel: '#071525',
+  border: '#1C3856',
 };
 
 const KST_OFFSET = 9 * 60 * 60;
@@ -132,9 +122,7 @@ function PriceChartComponent({ symbol, data, duration = 60 }: PriceChartProps) {
   // UI 상태
   const [isLoading, setIsLoading] = useState(true);
 
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
-  const C = isDark ? DARK_COLORS : LIGHT_COLORS;
+  const C = VORA_CHART_COLORS;
 
   const durationMinutes = duration / 60;
   const isUp = data.change >= 0;
@@ -185,12 +173,12 @@ function PriceChartComponent({ symbol, data, duration = 60 }: PriceChartProps) {
     });
 
     const series = (chart as any).addSeries(CandlestickSeries, {
-      upColor: '#ef4444',
-      downColor: '#3b82f6',
-      borderUpColor: '#ef4444',
-      borderDownColor: '#3b82f6',
-      wickUpColor: '#ef4444',
-      wickDownColor: '#3b82f6',
+      upColor: '#D6A84F',
+      downColor: '#126BFF',
+      borderUpColor: '#D6A84F',
+      borderDownColor: '#126BFF',
+      wickUpColor: '#D6A84F',
+      wickDownColor: '#126BFF',
       priceFormat: {
         type: 'price',
         precision: getDecimalPlaces(symbol),
@@ -244,7 +232,7 @@ function PriceChartComponent({ symbol, data, duration = 60 }: PriceChartProps) {
       rightPriceScale: { borderColor: C.border },
       timeScale: { borderColor: C.border },
     });
-  }, [theme]);
+  }, []);
 
   // ── priceRef 동기화 (렌더 없이 항상 최신 가격 유지) ─────────────────
   useEffect(() => {
@@ -415,10 +403,10 @@ function PriceChartComponent({ symbol, data, duration = 60 }: PriceChartProps) {
     return () => clearInterval(tick);
   }, [duration]);
 
-  const headerBg = isDark ? 'bg-[#131722] border-[#1e222d]' : 'bg-white border-gray-200';
-  const headerText = isDark ? 'text-white' : 'text-gray-900';
-  const subText = isDark ? 'text-gray-400' : 'text-gray-500';
-  const subBorder = isDark ? 'border-[#1e222d]' : 'border-gray-200';
+  const headerBg = 'bg-[#071525] border-[#1C3856]';
+  const headerText = 'text-white';
+  const subText = 'text-white/55';
+  const subBorder = 'border-[#1C3856]';
 
   return (
     <div
@@ -432,13 +420,13 @@ function PriceChartComponent({ symbol, data, duration = 60 }: PriceChartProps) {
           <span className={`font-bold text-lg ${headerText}`}>{displayInfo?.name || symbol}</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className={`text-xl font-bold ${isUp ? 'text-red-500' : 'text-blue-500'}`}>
+          <span className={`text-xl font-bold ${isUp ? 'text-[#D6A84F]' : 'text-[#126BFF]'}`}>
             {data.price.toFixed(decimals)}
           </span>
-          <span className={`text-sm ${isUp ? 'text-red-500' : 'text-blue-500'}`}>
+          <span className={`text-sm ${isUp ? 'text-[#D6A84F]' : 'text-[#126BFF]'}`}>
             {isUp ? '+' : ''}{data.change.toFixed(decimals)} ({isUp ? '+' : ''}{data.changePercent.toFixed(2)}%)
           </span>
-          <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded font-semibold">
+          <span className="rounded bg-[#D6A84F] px-2 py-0.5 text-xs font-semibold text-[#071525]">
             {durationMinutes}분봉
           </span>
         </div>
@@ -446,10 +434,10 @@ function PriceChartComponent({ symbol, data, duration = 60 }: PriceChartProps) {
 
       {/* 서브 헤더 */}
       <div className={`flex items-center gap-2 px-3 py-1.5 border-b ${subBorder} text-xs ${subText} shrink-0`}>
-        <span className="text-blue-400">{durationMinutes}분</span>
+        <span className="text-[#126BFF]">{durationMinutes}분</span>
         <span>|</span>
         <span>서버 동기화 (KST)</span>
-        {isLoading && <span className="text-yellow-500 ml-2">로딩중...</span>}
+        {isLoading && <span className="ml-2 text-[#D6A84F]">로딩중...</span>}
       </div>
 
       {/* 차트 영역: 파괴되지 않음 — 항상 살아있음 */}

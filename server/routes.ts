@@ -3615,12 +3615,30 @@ export async function registerRoutes(
     VIX: '^VIX',
   };
 
+  const MARKET_OVERVIEW_SYMBOLS: Record<string, string> = {
+    KOSPI: '^KS11',
+    KOSDAQ: '^KQ11',
+    GOLD: 'GC=F',
+    SP500: '^GSPC',
+    NASDAQ: '^IXIC',
+    WTI: 'CL=F',
+  };
+
   const forexPrices: { [key: string]: { price: number; change: number; changePercent: number; high: number; low: number; volume: number; updatedAt: number; openPrice: number } } = {
     SP500: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
     CRUDE: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
     GOLD: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
     DOW: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
     VIX: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
+  };
+
+  const marketOverviewPrices: { [key: string]: { price: number; change: number; changePercent: number; high: number; low: number; volume: number; updatedAt: number; openPrice: number } } = {
+    KOSPI: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
+    KOSDAQ: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
+    GOLD: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
+    SP500: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
+    NASDAQ: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
+    WTI: { price: 0, change: 0, changePercent: 0, high: 0, low: 0, volume: 0, updatedAt: 0, openPrice: 0 },
   };
 
   function getForexPrice(forexSymbol: string) {
@@ -3846,7 +3864,8 @@ export async function registerRoutes(
         }
       }
 
-      const symbolList = Object.values(YAHOO_SYMBOLS).map(s => encodeURIComponent(s)).join(',');
+      const allYahooSymbols = { ...YAHOO_SYMBOLS, ...MARKET_OVERVIEW_SYMBOLS };
+      const symbolList = Array.from(new Set(Object.values(allYahooSymbols))).map(s => encodeURIComponent(s)).join(',');
       const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbolList}&fields=regularMarketPrice,regularMarketChange,regularMarketChangePercent,regularMarketDayHigh,regularMarketDayLow,regularMarketPreviousClose&crumb=${encodeURIComponent(yahooCrumb)}`;
 
       const response = await fetch(url, {
@@ -3880,15 +3899,16 @@ export async function registerRoutes(
         return;
       }
 
-      const reverseMap: Record<string, string> = {};
-      for (const [appSym, yahooSym] of Object.entries(YAHOO_SYMBOLS)) {
-        reverseMap[yahooSym] = appSym;
+      const reverseMap: Record<string, string[]> = {};
+      for (const [appSym, yahooSym] of Object.entries(allYahooSymbols)) {
+        reverseMap[yahooSym] ??= [];
+        reverseMap[yahooSym].push(appSym);
       }
 
       let updated = 0;
       for (const quote of quotes) {
-        const appSymbol = reverseMap[quote.symbol];
-        if (!appSymbol) continue;
+        const appSymbols = reverseMap[quote.symbol];
+        if (!appSymbols) continue;
 
         const price = quote.regularMarketPrice;
         if (!price || price <= 0) continue;
@@ -3899,19 +3919,26 @@ export async function registerRoutes(
         const low = quote.regularMarketDayLow ?? price;
         const openPrice = quote.regularMarketPreviousClose ?? price;
 
-        forexPrices[appSymbol] = {
-          price,
-          change,
-          changePercent,
-          high,
-          low,
-          volume: 0,
-          updatedAt: Date.now(),
-          openPrice,
-        };
-
-        updateCandles(appSymbol, price, Date.now());
-        updated++;
+        for (const appSymbol of appSymbols) {
+          const priceData = {
+            price,
+            change,
+            changePercent,
+            high,
+            low,
+            volume: 0,
+            updatedAt: Date.now(),
+            openPrice,
+          };
+          if (YAHOO_SYMBOLS[appSymbol]) {
+            forexPrices[appSymbol] = priceData;
+            updateCandles(appSymbol, price, Date.now());
+          }
+          if (MARKET_OVERVIEW_SYMBOLS[appSymbol]) {
+            marketOverviewPrices[appSymbol] = priceData;
+          }
+          updated++;
+        }
       }
 
       if (updated > 0) {
@@ -4263,6 +4290,29 @@ export async function registerRoutes(
         });
       }
     }
+
+    res.json({ prices, timestamp: now, fallback: hasFallback, connected: isConnected });
+  });
+
+  // 랜딩 페이지 마켓 오버뷰용 실시간 지수/상품 가격
+  app.get("/api/market/overview", (req, res) => {
+    const now = Date.now();
+    let hasFallback = false;
+    const prices = Object.entries(MARKET_OVERVIEW_SYMBOLS).map(([symbol, ticker]) => {
+      const data = marketOverviewPrices[symbol];
+      const isStale = !data || data.price <= 0 || (now - data.updatedAt) > 60000;
+      if (isStale) hasFallback = true;
+      return {
+        symbol,
+        ticker,
+        price: data?.price || 0,
+        change: data?.change || 0,
+        changePercent: data?.changePercent || 0,
+        high: data?.high || 0,
+        low: data?.low || 0,
+        timestamp: data?.updatedAt || now,
+      };
+    });
 
     res.json({ prices, timestamp: now, fallback: hasFallback, connected: isConnected });
   });

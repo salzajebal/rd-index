@@ -24,12 +24,13 @@ export function LearnInvestLogo({
         className={className}
       >
         <defs>
-          <linearGradient id="rd-ibg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#6D4FD9" />
-            <stop offset="100%" stopColor="#4F3CC9" />
+          <linearGradient id="vora-icon-bg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#071525" />
+            <stop offset="100%" stopColor="#126BFF" />
           </linearGradient>
         </defs>
-        <rect width="64" height="64" rx="16" fill="url(#rd-ibg)" />
+        <rect width="64" height="64" rx="16" fill="url(#vora-icon-bg)" />
+        <rect x="1" y="1" width="62" height="62" rx="15" stroke="#D6A84F" strokeOpacity="0.7" strokeWidth="2" />
         <text
           x="32"
           y="43"
@@ -37,23 +38,23 @@ export function LearnInvestLogo({
           fontFamily="'Helvetica Neue', Helvetica, Arial, sans-serif"
           fontSize="30"
           fontWeight="800"
-          fill="#FFFFFF"
+          fill="#D6A84F"
         >
-          K
+          V
         </text>
       </svg>
     );
   }
 
   const h = size ?? height ?? 32;
-  const aspectRatio = 132 / 32;
+  const aspectRatio = 154 / 32;
   const w = Math.round(h * aspectRatio);
 
   return (
     <svg
       width={w}
       height={h}
-      viewBox="0 0 132 32"
+      viewBox="0 0 154 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
@@ -65,11 +66,11 @@ export function LearnInvestLogo({
         fontSize="20"
         fontWeight="800"
         letterSpacing="0.5"
-        fill="#14328C"
+        fill="#D6A84F"
       >
-        KDI
-        <tspan fontWeight="600" fill="#3454D1" letterSpacing="0.8">
-          -index
+        VORA
+        <tspan fontSize="14" fontWeight="700" fill="#FFFFFF" letterSpacing="1.2">
+          {' '}MARKETS
         </tspan>
       </text>
     </svg>

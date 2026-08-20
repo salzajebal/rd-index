@@ -243,7 +243,7 @@ function HomeInner() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background text-foreground lg:overflow-hidden font-sans">
+    <div className="dark flex h-screen flex-col bg-background text-foreground font-sans lg:overflow-hidden">
       <Navbar onSelectGame={setSelectedGameId} selectedGameId={selectedGameId} />
       <Ticker data={marketData} />
       

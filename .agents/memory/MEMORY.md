@@ -1,0 +1,1 @@
+- [VORA modal design language](modal-design-language.md) — Modals and every nested control use sharp, square corners to match the product’s grid-led interface.
