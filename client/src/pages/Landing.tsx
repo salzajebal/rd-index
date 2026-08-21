@@ -632,7 +632,7 @@ export default function Landing() {
               <img
                 src="/vora-logo.png"
                 alt="VORA Markets"
-                className="h-8 md:h-9 w-auto max-w-[140px] md:max-w-[170px] object-contain object-left"
+                className="h-10 md:h-12 w-auto object-contain"
               />
             </Link>
             
@@ -1010,29 +1010,20 @@ export default function Landing() {
               <div className="flex flex-1 items-center justify-center py-20 text-center md:py-24">
                 <div className="mx-auto max-w-5xl">
                   {/* Hero Logo */}
-                  <div className="flex justify-center mb-8 md:mb-10">
+                  <div className="flex justify-center mb-8 md:mb-12">
                     <img
                       src="/vora-logo.png"
                       alt="VORA Markets"
-                      className="h-16 md:h-20 lg:h-24 w-auto object-contain"
+                      className="h-auto max-h-24 w-auto max-w-[85%] md:max-h-40 md:max-w-none lg:max-h-52 object-contain"
                     />
                   </div>
-                  <p className="font-mono text-xs tracking-[0.28em] text-[#126BFF] md:text-sm">
-                    글로벌 다중자산 거래
-                  </p>
-                  <h1 className="mt-6 text-5xl font-semibold leading-[1.08] tracking-[-0.04em] text-white sm:text-6xl md:text-8xl lg:text-[7.5rem]" data-testid="text-hero-title">
-                    글로벌 시장을
-                    <br />
-                    <span className="text-[#D6A84F]">한 곳에서</span>
-                    <br />
-                    확인하세요
+                  <h1 className="whitespace-normal sm:whitespace-nowrap text-2xl font-semibold leading-snug tracking-[-0.02em] sm:text-3xl md:text-4xl lg:text-5xl mb-4 md:mb-6 bg-gradient-to-r from-white via-[#F0D080] to-[#D6A84F] bg-clip-text text-transparent" data-testid="text-hero-title">
+                    글로벌 시장을 한 곳에서 확인하세요
                   </h1>
+                  <p className="font-mono text-sm tracking-[0.22em] text-[#D6A84F]/70 md:text-base lg:text-lg">
+                    GLOBAL MULTI-ASSET TRADING
+                  </p>
                   <div className="mx-auto mt-10 flex max-w-2xl flex-col items-center gap-6 border-t border-white/15 pt-6">
-                    <p className="max-w-sm text-sm leading-relaxed text-white/55 md:text-base">
-                      시장의 움직임을 빠르게 확인하고
-                      <br className="hidden sm:block" />
-                      VORA Markets에서 거래를 시작하세요.
-                    </p>
                     <div className="flex shrink-0 justify-center gap-3">
                       <Button
                         className="h-11 rounded-none border border-[#D6A84F] bg-[#D6A84F] px-6 font-mono text-xs font-bold tracking-[0.12em] text-[#071525] hover:bg-[#e3bb69]"
@@ -1656,11 +1647,11 @@ export default function Landing() {
 
       {/* Register Modal */}
       <Dialog open={showRegisterModal} onOpenChange={(open) => { setShowRegisterModal(open); if (!open) { setRegisterErrorMessage(""); setUsernameChecked(false); setUsernameCheckMessage(""); setUsernameAvailable(false); } }}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">회원가입</DialogTitle>
-          <div className="relative">
+          <div className="relative min-w-0 max-w-full">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl">
+            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl overflow-x-hidden">
               <button 
                 onClick={() => setShowRegisterModal(false)}
                 className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors z-10"
@@ -1867,11 +1858,11 @@ export default function Landing() {
 
       {/* Trade History Modal */}
       <Dialog open={showHistoryModal} onOpenChange={setShowHistoryModal}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">거래내역</DialogTitle>
-          <div className="relative">
+          <div className="relative min-w-0 max-w-full">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl">
+            <div className="relative backdrop-blur-xl bg-white border border-gray-200 rounded-2xl p-6 shadow-2xl overflow-x-hidden">
               <button 
                 onClick={() => setShowHistoryModal(false)}
                 className="absolute top-4 right-4 text-gray-400 hover:text-gray-900 transition-colors z-10"
@@ -1907,10 +1898,10 @@ export default function Landing() {
                   betHistory.slice(0, 10).map((bet: any) => (
                     <div 
                       key={bet.id} 
-                      className="bg-gray-50 border border-gray-200 rounded-lg p-3 flex items-center justify-between"
+                      className="bg-gray-50 border border-gray-200 rounded-lg p-3 flex items-center justify-between gap-2"
                     >
-                      <div>
-                        <div className="flex items-center gap-2">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <span className={`text-xs px-2 py-0.5 rounded ${bet.direction === 'long' ? 'bg-red-500/20 text-red-400' : 'bg-red-500/20 text-red-400'}`}>
                             {bet.direction === 'long' ? '매수' : '매도'}
                           </span>

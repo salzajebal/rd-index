@@ -1,5 +1,10 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="64" height="64" rx="14" fill="#071525"/>
+  <!-- Dark navy circle background -->
+  <circle cx="32" cy="32" r="32" fill="#071525"/>
+  <!-- Gold border ring -->
+  <circle cx="32" cy="32" r="30" stroke="#D6A84F" stroke-width="2" fill="none"/>
+  <!-- Outer V shape (gold) -->
   <path d="M13 16H24.5L32 38.5L39.5 16H51L35.6 49H28.4L13 16Z" fill="#D6A84F"/>
-  <path d="M23.5 16H32L36.7 30.3L32 38.5L23.5 16Z" fill="#126BFF"/>
+  <!-- Inner V highlight (depth/metallic effect) -->
+  <path d="M23.5 16H32L36.7 30.3L32 38.5L23.5 16Z" fill="#B8832A"/>
 </svg>

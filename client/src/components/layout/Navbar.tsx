@@ -46,7 +46,7 @@ export function Navbar({ onSelectGame, selectedGameId }: NavbarProps) {
           <img
             src="/vora-logo.png"
             alt="VORA Markets"
-            className="h-7 sm:h-8 w-auto max-w-[120px] sm:max-w-[150px] object-contain object-left"
+            className="h-9 sm:h-10 w-auto object-contain"
           />
         </Link>
         
@@ -75,14 +75,14 @@ export function Navbar({ onSelectGame, selectedGameId }: NavbarProps) {
         </DropdownMenu>
         
         {/* Desktop: Game tabs */}
-        <nav className="hidden lg:flex items-center gap-1 text-sm font-medium">
+        <nav className="hidden lg:flex items-center gap-2 text-sm font-medium">
           {TRADING_GAMES.map(game => (
             <button
               key={game.id}
               onClick={() => onSelectGame?.(game.id)}
               data-testid={`nav-game-${game.id}`}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all text-xs",
+                "flex items-center gap-1.5 px-4 py-1.5 rounded-md transition-all text-xs",
                 selectedGameId === game.id 
                   ? 'bg-primary/20 text-primary' 
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
@@ -97,7 +97,7 @@ export function Navbar({ onSelectGame, selectedGameId }: NavbarProps) {
 
       {/* Desktop: Page navigation links */}
       {user && (
-        <nav className="hidden lg:flex items-center gap-1 border-l border-border pl-4 ml-2 shrink-0">
+        <nav className="hidden lg:flex items-center gap-2 border-l border-border pl-4 ml-2 shrink-0">
           {[
             { label: '거래내역', tab: 'history' },
             { label: '입금신청', tab: 'deposit' },
@@ -109,7 +109,7 @@ export function Navbar({ onSelectGame, selectedGameId }: NavbarProps) {
             <button
               key={tab}
               onClick={() => goTo(tab)}
-              className="text-muted-foreground hover:text-amber-500 transition-colors text-xs font-medium px-2 py-1 rounded hover:bg-muted/30 whitespace-nowrap"
+              className="text-muted-foreground hover:text-amber-500 transition-colors text-xs font-medium px-3 py-1 rounded hover:bg-muted/30 whitespace-nowrap"
             >
               {label}
             </button>

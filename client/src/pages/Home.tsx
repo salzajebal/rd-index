@@ -760,11 +760,11 @@ function HomeInner() {
 
       {/* Transactions Modal - 입출금 내역 */}
       <Dialog open={showTransactionsModal} onOpenChange={(open) => { setShowTransactionsModal(open); if (open) refetchTransactions(); }}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
+        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden overflow-x-hidden">
           <DialogTitle className="sr-only">입출금 내역</DialogTitle>
-          <div className="relative">
+          <div className="relative min-w-0 max-w-full">
             <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 rounded-2xl blur-xl" />
-            <div className="relative backdrop-blur-xl bg-[#1a1a24]/95 border border-white/10 rounded-2xl p-6 shadow-2xl max-h-[85vh] flex flex-col">
+            <div className="relative backdrop-blur-xl bg-[#1a1a24]/95 border border-white/10 rounded-2xl p-6 shadow-2xl max-h-[85vh] flex flex-col overflow-x-hidden">
               <button
                 onClick={() => setShowTransactionsModal(false)}
                 className="absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -850,7 +850,7 @@ function HomeInner() {
                           </span>
                         </div>
                         {tx.bankName && (
-                          <p className="text-gray-400 text-xs mt-1">
+                          <p className="text-gray-400 text-xs mt-1 break-all">
                             {tx.bankName} · {tx.accountHolder} · {tx.accountNumber}
                           </p>
                         )}
