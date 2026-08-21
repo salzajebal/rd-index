@@ -26,6 +26,7 @@ const PgSessionStore = pgSession(session);
 // Create a separate pool for session store
 const sessionPool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
 });
 
 // Get KST Date (Korea Standard Time, UTC+9)
