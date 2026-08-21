@@ -25,7 +25,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { LearnInvestLogo } from "@/components/LearnInvestLogo";
 
 const CRYPTO_ASSETS = [
   { symbol: "SP500", name: "S&P500 CFD" },
@@ -629,8 +628,12 @@ export default function Landing() {
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between border-x border-[#D6A84F]/35 px-4 md:h-16 md:px-6">
           {/* Logo */}
           <div className="flex items-center gap-3 md:gap-5 min-w-0">
-            <Link href="/" data-testid="link-logo" className="font-mono font-bold tracking-[0.18em] text-[#D6A84F] text-base">
-              VORA MARKETS
+            <Link href="/" data-testid="link-logo" className="flex items-center shrink-0">
+              <img
+                src="/vora-logo.png"
+                alt="VORA Markets"
+                className="h-8 md:h-9 w-auto max-w-[140px] md:max-w-[170px] object-contain object-left"
+              />
             </Link>
             
             {/* Desktop Navigation */}
@@ -1006,6 +1009,14 @@ export default function Landing() {
 
               <div className="flex flex-1 items-center justify-center py-20 text-center md:py-24">
                 <div className="mx-auto max-w-5xl">
+                  {/* Hero Logo */}
+                  <div className="flex justify-center mb-8 md:mb-10">
+                    <img
+                      src="/vora-logo.png"
+                      alt="VORA Markets"
+                      className="h-16 md:h-20 lg:h-24 w-auto object-contain"
+                    />
+                  </div>
                   <p className="font-mono text-xs tracking-[0.28em] text-[#126BFF] md:text-sm">
                     글로벌 다중자산 거래
                   </p>
@@ -1574,7 +1585,7 @@ export default function Landing() {
               
               <div className="text-center mb-6">
                 <div className="flex items-center justify-center gap-2 mb-4">
-                  <LearnInvestLogo variant="icon" size={48} className="rounded-lg" />
+                  <img src="/vora-logo.png" alt="VORA Markets" className="h-10 w-auto object-contain" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-1">로그인</h2>
                 <p className="text-gray-500 text-sm">계정에 접속하여 거래를 시작하세요</p>
@@ -1660,7 +1671,7 @@ export default function Landing() {
               
               <div className="text-center mb-4">
                 <div className="flex items-center justify-center gap-2 mb-3">
-                  <LearnInvestLogo variant="icon" size={40} className="rounded-lg" />
+                  <img src="/vora-logo.png" alt="VORA Markets" className="h-9 w-auto object-contain" />
                 </div>
                 <h2 className="text-xl font-bold text-gray-900 mb-1">회원가입</h2>
                 <p className="text-gray-500 text-sm">지금 가입하고 거래를 시작하세요</p>

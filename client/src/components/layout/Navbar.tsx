@@ -1,6 +1,5 @@
 import { Link, useLocation } from "wouter";
 import { Menu, LogOut, Shield, ChevronDown, Wallet } from "lucide-react";
-import { LearnInvestLogo } from "@/components/LearnInvestLogo";
 import { useAuth, useLogout } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -44,8 +43,11 @@ export function Navbar({ onSelectGame, selectedGameId }: NavbarProps) {
     <header className="flex h-14 lg:h-16 items-center border-b border-border bg-card px-3 lg:px-6">
       <div className="flex items-center gap-2 lg:gap-6 flex-1 min-w-0">
         <Link href="/" className="flex items-center hover:opacity-90 transition-opacity shrink-0">
-          <LearnInvestLogo variant="icon" size={32} className="rounded-lg block sm:hidden" />
-          <LearnInvestLogo variant="full" height={36} className="hidden sm:block" />
+          <img
+            src="/vora-logo.png"
+            alt="VORA Markets"
+            className="h-7 sm:h-8 w-auto max-w-[120px] sm:max-w-[150px] object-contain object-left"
+          />
         </Link>
         
         {/* Mobile: Current game dropdown */}
