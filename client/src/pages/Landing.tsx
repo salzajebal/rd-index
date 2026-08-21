@@ -209,6 +209,7 @@ export default function Landing() {
   const [accountHolder, setAccountHolder] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [region, setRegion] = useState("");
+  const [branchCode, setBranchCode] = useState("");
   const [registerErrorMessage, setRegisterErrorMessage] = useState("");
   const [usernameChecked, setUsernameChecked] = useState(false);
   const [usernameCheckMessage, setUsernameCheckMessage] = useState("");
