@@ -349,7 +349,7 @@ function HomeInner() {
 
       {/* Message Popup Notification */}
       <Dialog open={!!messagePopup} onOpenChange={() => handleClosePopup()}>
-        <DialogContent className="bg-card border-border max-w-md">
+        <DialogContent className="bg-card border-border w-[calc(100vw-2rem)] max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-primary" />
@@ -384,7 +384,7 @@ function HomeInner() {
 
       {/* Inbox Dialog */}
       <Dialog open={inboxOpen} onOpenChange={setInboxOpen}>
-        <DialogContent className="bg-card border-border max-w-lg max-h-[80vh] overflow-hidden flex flex-col">
+        <DialogContent className="bg-card border-border w-[calc(100vw-2rem)] max-w-lg max-h-[80vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2">
@@ -477,7 +477,7 @@ function HomeInner() {
 
       {/* Customer Service Modal - 고객센터 메뉴 */}
       <Dialog open={showCustomerServiceModal} onOpenChange={setShowCustomerServiceModal}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">고객센터</DialogTitle>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 via-amber-500/20 to-blue-500/20 rounded-2xl blur-xl" />
@@ -613,7 +613,7 @@ function HomeInner() {
 
       {/* Inquiry Form Modal - 문의 작성 */}
       <Dialog open={showInquiryFormModal} onOpenChange={setShowInquiryFormModal}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">문의 작성하기</DialogTitle>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 via-amber-500/20 to-blue-500/20 rounded-2xl blur-xl" />
@@ -693,7 +693,7 @@ function HomeInner() {
         setShowMyInquiriesModal(open);
         if (open) refetchInquiries();
       }}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">내 문의 내역</DialogTitle>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 via-amber-500/20 to-blue-500/20 rounded-2xl blur-xl" />

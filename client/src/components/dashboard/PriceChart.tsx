@@ -415,18 +415,18 @@ function PriceChartComponent({ symbol, data, duration = 60 }: PriceChartProps) {
       data-testid="chart-container"
     >
       {/* 헤더 */}
-      <div className={`flex items-center justify-between px-3 py-2 border-b ${headerBg} shrink-0`}>
-        <div className="flex items-center gap-3">
-          <span className={`font-bold text-lg ${headerText}`}>{displayInfo?.name || symbol}</span>
+      <div className={`flex items-center justify-between gap-2 px-3 py-2 border-b ${headerBg} shrink-0 min-w-0`}>
+        <div className="flex items-center gap-2 min-w-0 shrink-0">
+          <span className={`font-bold text-sm sm:text-lg truncate ${headerText}`}>{displayInfo?.name || symbol}</span>
         </div>
-        <div className="flex items-center gap-3">
-          <span className={`text-xl font-bold ${isUp ? 'text-[#D6A84F]' : 'text-[#126BFF]'}`}>
+        <div className="flex items-center gap-1.5 sm:gap-3 flex-wrap justify-end min-w-0">
+          <span className={`text-base sm:text-xl font-bold ${isUp ? 'text-[#D6A84F]' : 'text-[#126BFF]'}`}>
             {data.price.toFixed(decimals)}
           </span>
-          <span className={`text-sm ${isUp ? 'text-[#D6A84F]' : 'text-[#126BFF]'}`}>
+          <span className={`text-xs sm:text-sm ${isUp ? 'text-[#D6A84F]' : 'text-[#126BFF]'}`}>
             {isUp ? '+' : ''}{data.change.toFixed(decimals)} ({isUp ? '+' : ''}{data.changePercent.toFixed(2)}%)
           </span>
-          <span className="rounded bg-[#D6A84F] px-2 py-0.5 text-xs font-semibold text-[#071525]">
+          <span className="rounded bg-[#D6A84F] px-2 py-0.5 text-xs font-semibold text-[#071525] shrink-0">
             {durationMinutes}분봉
           </span>
         </div>

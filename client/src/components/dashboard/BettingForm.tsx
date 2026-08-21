@@ -654,12 +654,12 @@ export function BettingForm({ currentPrice, game, balance, onBet, isBetting = fa
         >
           <div className="flex flex-col items-center gap-2">
             {flashDirection === 'up' ? (
-              <TrendingUp className="w-20 h-20 text-up drop-shadow-lg" strokeWidth={2.5} />
+              <TrendingUp className="w-12 h-12 sm:w-20 sm:h-20 text-up drop-shadow-lg" strokeWidth={2.5} />
             ) : (
-              <TrendingDown className="w-20 h-20 text-down drop-shadow-lg" strokeWidth={2.5} />
+              <TrendingDown className="w-12 h-12 sm:w-20 sm:h-20 text-down drop-shadow-lg" strokeWidth={2.5} />
             )}
             <span className={cn(
-              "text-6xl font-black tracking-tight drop-shadow-lg",
+              "text-4xl sm:text-6xl font-black tracking-tight drop-shadow-lg",
               flashDirection === 'up' ? "text-up" : "text-down"
             )}>
               {flashDirection === 'up' ? '매수' : '매도'}
@@ -876,7 +876,7 @@ export function BettingForm({ currentPrice, game, balance, onBet, isBetting = fa
 
       {/* Bet Confirmation Dialog */}
       <Dialog open={betConfirmation.show} onOpenChange={(open) => setBetConfirmation(prev => ({ ...prev, show: open }))}>
-        <DialogContent className="bg-card border-border max-w-sm">
+        <DialogContent className="bg-card border-border w-[calc(100vw-2rem)] max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center justify-center gap-2 text-center">
               <AlertCircle className={cn(
@@ -940,7 +940,7 @@ export function BettingForm({ currentPrice, game, balance, onBet, isBetting = fa
 
       {/* Time Alert Dialog */}
       <Dialog open={timeAlert.show} onOpenChange={(open) => setTimeAlert(prev => ({ ...prev, show: open }))}>
-        <DialogContent className="bg-card border-border max-w-sm">
+        <DialogContent className="bg-card border-border w-[calc(100vw-2rem)] max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center justify-center gap-2 text-center">
               <AlertCircle className="w-8 h-8 text-yellow-500" />
@@ -970,7 +970,7 @@ export function BettingForm({ currentPrice, game, balance, onBet, isBetting = fa
 
       {/* Max Execution Alert Dialog */}
       <Dialog open={maxExecutionAlert} onOpenChange={setMaxExecutionAlert}>
-        <DialogContent className="bg-card border-border max-w-sm">
+        <DialogContent className="bg-card border-border w-[calc(100vw-2rem)] max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center justify-center gap-2 text-center">
               <AlertCircle className="w-8 h-8 text-red-500" />

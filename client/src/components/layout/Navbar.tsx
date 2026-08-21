@@ -117,6 +117,40 @@ export function Navbar({ onSelectGame, selectedGameId }: NavbarProps) {
         </nav>
       )}
 
+      {/* Mobile: Hamburger menu for page navigation */}
+      {user && (
+        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="sm" className="lg:hidden px-2 h-8 ml-1">
+              <Menu className="w-5 h-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-64 p-0 bg-card border-border">
+            <SheetHeader className="p-4 border-b border-border">
+              <SheetTitle className="text-sm font-semibold text-left">메뉴</SheetTitle>
+            </SheetHeader>
+            <nav className="flex flex-col p-3 gap-1">
+              {[
+                { label: '거래내역', tab: 'history' },
+                { label: '입금신청', tab: 'deposit' },
+                { label: '출금신청', tab: 'withdraw' },
+                { label: '공지사항', tab: 'notice' },
+                { label: '고객센터', tab: 'cs' },
+                { label: '쪽지함', tab: 'messages' },
+              ].map(({ label, tab }) => (
+                <button
+                  key={tab}
+                  onClick={() => { goTo(tab); setMobileMenuOpen(false); }}
+                  className="text-left text-sm font-medium text-muted-foreground hover:text-amber-500 px-3 py-2.5 rounded-md hover:bg-muted/30 transition-colors"
+                >
+                  {label}
+                </button>
+              ))}
+            </nav>
+          </SheetContent>
+        </Sheet>
+      )}
+
       <div className="flex items-center gap-2 lg:gap-3 shrink-0 ml-auto">
         {/* Balance Badge */}
         {user && displayBalance !== null && (

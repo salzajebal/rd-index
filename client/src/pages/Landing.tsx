@@ -1561,7 +1561,7 @@ export default function Landing() {
 
       {/* Login Modal */}
       <Dialog open={showLoginModal} onOpenChange={setShowLoginModal}>
-        <DialogContent className="sm:max-w-md p-0 bg-transparent border-none shadow-none [&>button]:hidden">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-md p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">로그인</DialogTitle>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
@@ -2376,7 +2376,7 @@ export default function Landing() {
 
       {/* Customer Service Modal - 고객센터 메뉴 */}
       <Dialog open={showCustomerServiceModal} onOpenChange={(open) => { setShowCustomerServiceModal(open); if (open) refetchInquiries(); }}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">고객센터</DialogTitle>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
@@ -2577,7 +2577,7 @@ export default function Landing() {
 
       {/* Inquiry Form Modal - 문의 작성 */}
       <Dialog open={showInquiryFormModal} onOpenChange={setShowInquiryFormModal}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">문의 작성</DialogTitle>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
@@ -2659,7 +2659,7 @@ export default function Landing() {
 
       {/* My Inquiries Modal - 내 문의 내역 */}
       <Dialog open={showMyInquiriesModal} onOpenChange={setShowMyInquiriesModal}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">내 문의 내역</DialogTitle>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
@@ -2756,7 +2756,7 @@ export default function Landing() {
 
       {/* Transactions Modal - 입출금 내역 */}
       <Dialog open={showTransactionsModal} onOpenChange={(open) => { setShowTransactionsModal(open); if (open) refetchTransactions(); }}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">입출금 내역</DialogTitle>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
@@ -2877,7 +2877,7 @@ export default function Landing() {
 
       {/* Messages Modal - 쪽지함 */}
       <Dialog open={showMessagesModal} onOpenChange={setShowMessagesModal}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-y-auto">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">쪽지함</DialogTitle>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
@@ -2963,7 +2963,7 @@ export default function Landing() {
 
       {/* Announcements Modal */}
       <Dialog open={showAnnouncementsModal} onOpenChange={(open) => { setShowAnnouncementsModal(open); if (!open) setSelectedAnnouncement(null); }}>
-        <DialogContent className="sm:max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden max-h-[90vh] overflow-x-hidden overflow-y-auto">
           <DialogTitle className="sr-only">공지사항</DialogTitle>
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#4F3CC9]/20 via-[#8B5CF6]/20 to-[#4F3CC9]/20 rounded-2xl blur-xl" />
@@ -3043,7 +3043,7 @@ export default function Landing() {
 
       {/* My Page Modal */}
       <Dialog open={showMyPageModal} onOpenChange={setShowMyPageModal}>
-        <DialogContent className="bg-white border border-gray-200 text-gray-900 max-w-lg w-full max-h-[90vh] overflow-y-auto p-0">
+        <DialogContent className="bg-white border border-gray-200 text-gray-900 w-[calc(100vw-2rem)] max-w-lg max-h-[90vh] overflow-x-hidden overflow-y-auto p-0">
           <div className="p-6">
             <DialogTitle className="text-xl font-bold text-gray-900 mb-6">마이페이지</DialogTitle>
 
