@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict ZhuWUcqvwh6cue5Z15UI0lnDQqyQv6b2LNOoaNQ1J8yAbbqolcuUup0UcBhwd9G
+\restrict eAfbfawWh6oamWo6Bfcz9Uy4eA5cTwrYZEAx3weTTkhdPkXpEcfrNwsiECIWeuT
 
 -- Dumped from database version 16.15 (651533a)
 -- Dumped by pg_dump version 16.10
@@ -13069,6 +13069,9 @@ COPY public.forex_candles (id, symbol, duration, "time", open, high, low, close)
 762199	SP500	300	1787451900	7674.434604	7675.956712	7673.236146	7674.441362
 762200	DOW	300	1787451900	53280.659980	53289.707898	53266.223928	53282.083345
 762201	DXY	300	1787451900	98.839964	98.851907	98.830202	98.845602
+764740	SP500	300	1787454000	7674.653597	7675.682464	7672.794400	7673.075347
+764741	DOW	300	1787454000	53277.485468	53286.155302	53271.998282	53280.012122
+764742	DXY	300	1787454000	98.843686	98.849166	98.834572	98.841951
 763648	SP500	300	1787453100	7674.961860	7675.792967	7672.193529	7675.027339
 763649	DOW	300	1787453100	53275.326465	53289.816567	53264.177740	53275.533438
 763650	DXY	300	1787453100	98.840219	98.852806	98.819103	98.840137
@@ -13078,12 +13081,9 @@ COPY public.forex_candles (id, symbol, duration, "time", open, high, low, close)
 764380	SP500	300	1787453700	7673.628645	7675.954074	7672.697776	7674.278584
 764381	DOW	300	1787453700	53276.362543	53286.369207	53265.736480	53279.859207
 764382	DXY	300	1787453700	98.837573	98.852042	98.828361	98.836651
-764740	SP500	300	1787454000	7674.653597	7674.653597	7674.072002	7674.409495
 762922	SP500	300	1787452500	7674.712563	7676.213714	7672.706387	7673.992795
 762923	DOW	300	1787452500	53280.795600	53288.348483	53264.220820	53273.388273
 762924	DXY	300	1787452500	98.841307	98.852466	98.828561	98.843249
-764741	DOW	300	1787454000	53277.485468	53278.091871	53275.939639	53275.939639
-764742	DXY	300	1787454000	98.843686	98.843686	98.834572	98.837242
 762559	SP500	300	1787452200	7674.140277	7675.617572	7673.179892	7674.766262
 \.
 
@@ -13649,18 +13649,18 @@ COPY public.user_sessions (sid, sess, expire) FROM stdin;
 1-ifnUCwr3NMQqARZC2HlULzuH2cGnyh	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-25T00:50:24.155Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"e50051bc-006a-43f5-88d8-a08f020b08be"}	2026-08-25 10:02:53
 WtVuYC5j-1_Q7YDb4Z9sLCBVxYDnGNkm	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-27T01:35:28.611Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"e50051bc-006a-43f5-88d8-a08f020b08be"}	2026-08-27 09:19:46
 Wv6fEqyNdJlMTHEEkPo4oSmOnuwMtLaE	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-28T04:03:48.332Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"0c668b3d-7007-4164-bd7b-16b7521832d5"}	2026-08-29 11:35:51
+RqA8BBxl6oSghStZ_NvqbzmQ8z9yeACI	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-28T01:22:00.207Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"e50051bc-006a-43f5-88d8-a08f020b08be"}	2026-08-30 03:00:37
 5O5O9m5-NSRt0tEgGMzzhBspNlnRI3XY	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-26T07:12:27.991Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"770c2e29-60bc-4019-a913-36e31b40df99"}	2026-08-26 07:14:30
 fmiqoNzFEvXknChISfEswQ4YPTOk3v0p	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-26T07:17:56.838Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"e50051bc-006a-43f5-88d8-a08f020b08be"}	2026-08-26 08:28:10
 Z8IuIVpJIRUaZZL9szDrR-fn3W3FNB8F	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-26T06:47:15.137Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"e50051bc-006a-43f5-88d8-a08f020b08be"}	2026-08-26 07:11:05
 dSObWTokwTsvVMO5pSpmaDLFONgHhmr4	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-26T04:13:40.457Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"97b36905-f052-4d86-90cf-30a4ed8252b2"}	2026-08-27 06:37:52
 jQzRN-a0OJWW2SLtQ8Z1a18x4ONewEK_	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-28T11:47:14.714Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"0c668b3d-7007-4164-bd7b-16b7521832d5"}	2026-08-28 11:49:07
-RqA8BBxl6oSghStZ_NvqbzmQ8z9yeACI	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-28T01:22:00.207Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"e50051bc-006a-43f5-88d8-a08f020b08be"}	2026-08-30 03:00:05
 WUt_tE98--iSNjs0PySVAzrC0lQvCxC0	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-21T06:18:38.270Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"0c668b3d-7007-4164-bd7b-16b7521832d5"}	2026-08-28 13:41:06
 SO5H8hIvnLteipSA37vnFJgYs8HMOQ6w	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-27T10:12:10.605Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"adminUserId":"f4a21243-eb2a-498e-bd25-46b1f19640cf"}	2026-08-27 10:42:35
 O2YB_objHM6BogyxnC4jCuYqyF1Fs1Hc	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-28T00:53:40.218Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"385d08e6-0cce-45ec-a656-de654aa7e170"}	2026-08-28 00:57:22
 dI8mZTUBPc342I-4wfBJYd_x1dkrZkBo	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-21T07:25:34.163Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"b74441c4-1858-43f0-afdc-fbfec02ce9d5","adminUserId":"f4a21243-eb2a-498e-bd25-46b1f19640cf"}	2026-08-30 02:59:49
+r3FjjeKK5_HPREaiVqkcsMbNoWVKPC1W	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-21T06:15:18.265Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"c84ca9f9-1efe-4ff4-a37d-ff9c3237b279"}	2026-08-30 03:00:18
 4MNE7XEseAWs6C46NcEZlKCliJRBFw_s	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-26T05:18:51.991Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"c84ca9f9-1efe-4ff4-a37d-ff9c3237b279","adminUserId":"f4a21243-eb2a-498e-bd25-46b1f19640cf"}	2026-08-28 06:16:47
-r3FjjeKK5_HPREaiVqkcsMbNoWVKPC1W	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-21T06:15:18.265Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"c84ca9f9-1efe-4ff4-a37d-ff9c3237b279"}	2026-08-30 02:59:18
 XgjyjcfolqKAODvm8avYYlAJUFUEvjk7	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-21T06:49:31.872Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"91d27d59-645a-40d4-ae60-f2109c29d5dd"}	2026-08-28 09:52:04
 PadQIRqafKRcBYP6hGA84hVFKRn4wj-q	{"cookie":{"originalMaxAge":604800000,"expires":"2026-08-21T06:20:20.238Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"adminUserId":"f4a21243-eb2a-498e-bd25-46b1f19640cf"}	2026-08-28 08:52:26
 \.
@@ -13765,7 +13765,7 @@ SELECT pg_catalog.setval('public.branches_id_seq', 1, false);
 -- Name: forex_candles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.forex_candles_id_seq', 764748, true);
+SELECT pg_catalog.setval('public.forex_candles_id_seq', 764787, true);
 
 
 --
@@ -14106,5 +14106,5 @@ ALTER TABLE ONLY public.transaction_requests
 -- PostgreSQL database dump complete
 --
 
-\unrestrict ZhuWUcqvwh6cue5Z15UI0lnDQqyQv6b2LNOoaNQ1J8yAbbqolcuUup0UcBhwd9G
+\unrestrict eAfbfawWh6oamWo6Bfcz9Uy4eA5cTwrYZEAx3weTTkhdPkXpEcfrNwsiECIWeuT
 
